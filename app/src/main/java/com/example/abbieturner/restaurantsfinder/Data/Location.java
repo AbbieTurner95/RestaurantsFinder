@@ -8,6 +8,8 @@ public class Location {
     public String city_id;
     public String lat;
     public String longt;
+
+    //hello david
     public String zipcode;
 
     public String getAddress() {
