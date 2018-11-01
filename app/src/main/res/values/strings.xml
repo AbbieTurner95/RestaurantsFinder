@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Restaurants Finder</string>
+    <string name="sign_in_cancelled">Sign in cancelled</string>
+    <string name="connection_error">Connection Error!</string>
+    <string name="signin_error_trya">Sign in error, try again!</string>
+    <string name="check_connection">Please check your connection and try again!</string>
+    <string name="ok"> OK </string>
+    <string name="find_your_place_today">Find your place today!</string>
+    <string name="enter">Enter</string>
+</resources>
