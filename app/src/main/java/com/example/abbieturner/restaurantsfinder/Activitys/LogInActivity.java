@@ -35,6 +35,8 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
 
+    String hi = "hi";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
