@@ -30,12 +30,9 @@ import butterknife.ButterKnife;
 public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.sign_in_btn) Button signin_button;
-// comment
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
-
-    String hi = "hi";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
