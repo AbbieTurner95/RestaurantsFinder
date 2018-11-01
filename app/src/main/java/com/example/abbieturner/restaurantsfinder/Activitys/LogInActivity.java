@@ -30,8 +30,6 @@ public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.sign_in_btn) Button signin_button;
 
-    //hello david
-
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
 
