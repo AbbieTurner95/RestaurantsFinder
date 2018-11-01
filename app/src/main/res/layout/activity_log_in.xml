@@ -70,7 +70,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/signin_btn"
+                android:id="@+id/sign_in_btn"
                 android:layout_width="@dimen/button_enter_wdth"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_top_ten"
