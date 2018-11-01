@@ -4,6 +4,7 @@ public class Cuisine {
 
     private int cuisine_id;
     private String cuisine_name;
+    // new comment
 
 
     public int getCuisine_id(){
