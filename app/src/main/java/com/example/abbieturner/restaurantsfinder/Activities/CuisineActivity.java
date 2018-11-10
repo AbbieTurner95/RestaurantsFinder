@@ -35,7 +35,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
 
     private CuisineAdapter cuisineAdapter;
-    private String TAG = "CUISINE_ID";
+    private final String TAG = "CUISINE_ID";
+    private final String TAG_NAME = "CUISINE_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         cuisineAdapter = new CuisineAdapter(this, this);
         recyclerView.setAdapter(cuisineAdapter);
 
-        fetchCuisines();
-        //cuisineAdapter.setCuisineList(addMockData());
+        //fetchCuisines();
+        cuisineAdapter.setCuisineList(addMockData());
     }
 
 
@@ -77,10 +78,12 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     public void onCuisineItemClick(Cuisine cuisines) {
         int id = cuisines.getCuisine_id();
         String name = cuisines.getCuisine_name();
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(CuisineActivity.this, null);// RestaurantsListActivity.class);
-        //intent.putExtra(TAG, id);
-        //startActivity(intent);
+        //Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(CuisineActivity.this, RestaurantsActivity.class);
+        intent.putExtra(TAG, id);
+        intent.putExtra(TAG_NAME, name);
+        startActivity(intent);
     }
 
     private List<Cuisine> addMockData(){
