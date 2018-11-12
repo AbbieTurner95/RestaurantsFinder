@@ -49,7 +49,7 @@ public class LogInActivity extends AppCompatActivity {
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setAvailableProviders(Arrays.asList(
-                                        new AuthUI.IdpConfig.GoogleBuilder().build()))    //add phone, facebook?
+                                        new AuthUI.IdpConfig.GoogleBuilder().build()))    //add phone, facebook
                                 .build(),
                         RC_SIGN_IN);
             }
