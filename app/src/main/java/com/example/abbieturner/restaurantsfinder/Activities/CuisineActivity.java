@@ -20,6 +20,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.ViewModels.CuisineViewModel;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
+import com.google.android.gms.ads.AdView;
 
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     @BindView(R.id.cuisines_recycler_view)
     RecyclerView recyclerView;
-
+    @BindView(R.id.adView)
+    AdView mAdView;
 
     private CuisineAdapter cuisineAdapter;
     private final String TAG = "CUISINE_ID";

@@ -33,7 +33,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
 
@@ -44,6 +44,9 @@ dependencies {
     //Data libs
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    //GoogleAds
+    implementation 'com.google.android.gms:play-services-ads:17.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -9,6 +9,7 @@
     android:elevation="@dimen/elev_four"
     android:padding="@dimen/padd_2"
     app:cardMaxElevation="@dimen/elev_four">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
