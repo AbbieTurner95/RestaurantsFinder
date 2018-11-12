@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context=".Activitys.LogInActivity">
+    tools:context=".Activities.LogInActivity">
 
     <FrameLayout
         android:layout_width="wrap_content"

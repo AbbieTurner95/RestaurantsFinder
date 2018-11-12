@@ -1,4 +1,4 @@
-package com.example.abbieturner.restaurantsfinder.Activitys;
+package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
