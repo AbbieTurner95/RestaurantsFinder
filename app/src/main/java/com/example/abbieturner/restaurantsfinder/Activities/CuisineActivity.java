@@ -5,110 +5,107 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
-import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
-
+import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.ViewModels.CuisineViewModel;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
+
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick{
 
-    @BindView(R.id.cuisines_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.adView)
-    AdView mAdView;
+public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick {
 
-    private CuisineAdapter cuisineAdapter;
-    private final String TAG = "CUISINE_ID";
-    private final String TAG_NAME = "CUISINE_NAME";
+        @BindView(R.id.adView)
+        AdView mAdView;
+        @BindView(R.id.cuisines_recycler_view)
+        RecyclerView recyclerView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cuisines);
-        ButterKnife.bind(this);
+        private CuisineAdapter cuisineAdapter;
+        private String TAG = "CUISINE_ID";
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_cuisines);
+            ButterKnife.bind(this);
+
+            GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(layoutManager);
+            cuisineAdapter = new CuisineAdapter(this, this);
+            recyclerView.setAdapter(cuisineAdapter);
+
+            fetchCuisines();
+
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            mAdView.loadAd(adRequest);
+        }
 
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(layoutManager);
-        cuisineAdapter = new CuisineAdapter(this, this);
-        recyclerView.setAdapter(cuisineAdapter);
+        public void fetchCuisines() {
+            CuisineViewModel cuisineViewModel = ViewModelProviders.of(this).get(CuisineViewModel.class);
+            cuisineViewModel.getLiveData().observe(this, new Observer<Cuisines>() {
+                @Override
+                public void onChanged(@Nullable Cuisines cuisines) {
+                    cuisineAdapter.setCuisineList(cuisines.getCuisinesList());
+                }
+            });
+        }
 
-        //fetchCuisines();
-        cuisineAdapter.setCuisineList(addMockData());
-    }
-
-
-    public void fetchCuisines() {
-        CuisineViewModel cuisineViewModel = ViewModelProviders.of(this).get(CuisineViewModel.class);
-        cuisineViewModel.getLiveData().observe(this, new Observer<Cuisines>() {
-            @Override
-            public void onChanged(@Nullable Cuisines cuisines) {
-                cuisineAdapter.setCuisineList(cuisines.getCuisinesList());
+      /*  @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.favorites_menu:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                     //   setEnterExitTransition(new Intent(CuisineActivity.this, FavoritesActivity.class));
+                    }
+                   // startActivity(new Intent(this, FavoritesActivity.class));
+                    return true;
+                case R.id.logout:
+                    AuthUI.getInstance()
+                            .signOut(this)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Intent intent = new Intent(CuisineActivity.this, LogInActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                default:
+                    return super.onOptionsItemSelected(item);
             }
-        });
+        } */
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        private void setEnterExitTransition(Intent intent) {
+            getWindow().setExitTransition(new Fade().setDuration(1000));
+            getWindow().setReenterTransition(new Fade().setDuration(1000));
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CuisineActivity.this).toBundle());
+        }
+
+        @Override
+        public void onCuisineItemClick(Cuisine cuisines) {
+            int id = cuisines.getCuisine_id();
+
+          //  Intent intent = new Intent(CuisineActivity.this, RestaurantsListActivity.class);
+          //  intent.putExtra(TAG, id);
+          //  startActivity(intent);
+        }
     }
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setEnterExitTransition(Intent intent) {
-        getWindow().setExitTransition(new Fade().setDuration(1000));
-        getWindow().setReenterTransition(new Fade().setDuration(1000));
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CuisineActivity.this).toBundle());
-    }
-
-    @Override
-    public void onCuisineItemClick(Cuisine cuisines) {
-        int id = cuisines.getCuisine_id();
-        String name = cuisines.getCuisine_name();
-        //Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(CuisineActivity.this, RestaurantsActivity.class);
-        intent.putExtra(TAG, id);
-        intent.putExtra(TAG_NAME, name);
-        startActivity(intent);
-    }
-
-    private List<Cuisine> addMockData(){
-        List<Cuisine> myList = new ArrayList<>();
-
-        myList.add(new Cuisine(1, "Indian"));
-        myList.add(new Cuisine(2, "Greek"));
-        myList.add(new Cuisine(3, "Chinese"));
-        myList.add(new Cuisine(4, "African"));
-        myList.add(new Cuisine(5, "British"));
-        myList.add(new Cuisine(6, "Italian"));
-        myList.add(new Cuisine(7, "Japanese"));
-        myList.add(new Cuisine(8, "American"));
-        myList.add(new Cuisine(9, "Spanish"));
-        myList.add(new Cuisine(10, "Mexican"));
-        myList.add(new Cuisine(11, "Korean"));
-        myList.add(new Cuisine(12, "French"));
-        myList.add(new Cuisine(13, "Caribbean"));
-        myList.add(new Cuisine(14, "East Europe"));
-        myList.add(new Cuisine(15, "Irish"));
-
-
-        return myList;
-    }
-}
-
