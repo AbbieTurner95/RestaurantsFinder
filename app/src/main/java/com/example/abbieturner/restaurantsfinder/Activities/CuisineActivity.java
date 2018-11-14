@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
+import android.util.Log;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
@@ -39,80 +40,83 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick {
 
-        @BindView(R.id.adView)
-        AdView mAdView;
-        @BindView(R.id.cuisines_recycler_view)
-        RecyclerView recyclerView;
+    @BindView(R.id.adView)
+    AdView mAdView;
+    @BindView(R.id.cuisines_recycler_view)
+    RecyclerView recyclerView;
 
-     private String BASE_URL = "https://developers.zomato.com/";
-     private API.ZomatoApiCalls service;
-        private CuisineAdapter cuisineAdapter;
-        private String TAG = "CUISINE_ID";
+    private String BASE_URL = "https://developers.zomato.com/";
+    private API.ZomatoApiCalls service;
+    private CuisineAdapter cuisineAdapter;
+    private String TAG = "CUISINE_ID";
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_cuisines);
-            ButterKnife.bind(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cuisines);
+        ButterKnife.bind(this);
 
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-            recyclerView.setLayoutManager(layoutManager);
-            cuisineAdapter = new CuisineAdapter(this, this);
-            recyclerView.setAdapter(cuisineAdapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
+        cuisineAdapter = new CuisineAdapter(this, this);
+        recyclerView.setAdapter(cuisineAdapter);
 
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
-                    .create();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
+                .create();
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
 
-            service = retrofit.create(API.ZomatoApiCalls.class);
+        service = retrofit.create(API.ZomatoApiCalls.class);
 
-            fetchCuisines();
+        fetchCuisines();
 
-            AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .build();
-            mAdView.loadAd(adRequest);
-        }
-
-
-        public void fetchCuisines() {
-
-            service.getCuisineId("332", "53.382882", "-1.470300")
-                    .enqueue(new Callback<Cuisines>() {
-                        @Override
-                        public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
-                            List<Cuisine> cuisineList = (List<Cuisine>) call;
-                            cuisineAdapter.setCuisineList(cuisineList);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Cuisines> call, Throwable t) {
-                            t.printStackTrace();
-                        }
-                    });
-
-        }
-
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        private void setEnterExitTransition(Intent intent) {
-            getWindow().setExitTransition(new Fade().setDuration(1000));
-            getWindow().setReenterTransition(new Fade().setDuration(1000));
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CuisineActivity.this).toBundle());
-        }
-
-        @Override
-        public void onCuisineItemClick(Cuisine cuisines) {
-            int id = cuisines.getCuisine_id();
-
-          //  Intent intent = new Intent(CuisineActivity.this, RestaurantsListActivity.class);
-          //  intent.putExtra(TAG, id);
-          //  startActivity(intent);
-        }
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mAdView.loadAd(adRequest);
     }
+
+
+    public void fetchCuisines() {
+
+        service.getCuisineId("332", "53.382882", "-1.470300")
+                .enqueue(new Callback<Cuisines>() {
+                    @Override
+                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
+
+                        Log.e("TEST RESPONSE",new Gson().toJson(response.body()));
+
+
+                        //cuisineAdapter.setCuisineList();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Cuisines> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+        /**/
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setEnterExitTransition(Intent intent) {
+        getWindow().setExitTransition(new Fade().setDuration(1000));
+        getWindow().setReenterTransition(new Fade().setDuration(1000));
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CuisineActivity.this).toBundle());
+    }
+
+    @Override
+    public void onCuisineItemClick(Cuisine cuisines) {
+        int id = cuisines.getCuisine_id();
+
+        //  Intent intent = new Intent(CuisineActivity.this, RestaurantsListActivity.class);
+        //  intent.putExtra(TAG, id);
+        //  startActivity(intent);
+    }
+}
