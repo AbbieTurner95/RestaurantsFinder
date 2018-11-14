@@ -87,12 +87,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                 .enqueue(new Callback<Cuisines>() {
                     @Override
                     public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
-
-                        Log.e("TEST RESPONSE",new Gson().toJson(response.body()));
-
-
-                        //cuisineAdapter.setCuisineList();
-
+                        assert response.body() != null;
+                        cuisineAdapter.setCuisineList(response.body().cuisinesList);
                     }
 
                     @Override
