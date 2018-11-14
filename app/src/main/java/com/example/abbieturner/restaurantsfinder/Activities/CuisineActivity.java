@@ -13,19 +13,28 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
 
+import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.R;
-import com.example.abbieturner.restaurantsfinder.ViewModels.CuisineViewModel;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick {
@@ -35,6 +44,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         @BindView(R.id.cuisines_recycler_view)
         RecyclerView recyclerView;
 
+     private String BASE_URL = "https://developers.zomato.com/";
+     private API.ZomatoApiCalls service;
         private CuisineAdapter cuisineAdapter;
         private String TAG = "CUISINE_ID";
 
@@ -49,6 +60,17 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
             cuisineAdapter = new CuisineAdapter(this, this);
             recyclerView.setAdapter(cuisineAdapter);
 
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
+                    .create();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+
+            service = retrofit.create(API.ZomatoApiCalls.class);
+
             fetchCuisines();
 
             AdRequest adRequest = new AdRequest.Builder()
@@ -59,39 +81,24 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
 
         public void fetchCuisines() {
-            CuisineViewModel cuisineViewModel = ViewModelProviders.of(this).get(CuisineViewModel.class);
-            cuisineViewModel.getLiveData().observe(this, new Observer<Cuisines>() {
-                @Override
-                public void onChanged(@Nullable Cuisines cuisines) {
-                    cuisineAdapter.setCuisineList(cuisines.getCuisinesList());
-                }
-            });
+
+            service.getCuisineId("332", "53.382882", "-1.470300")
+                    .enqueue(new Callback<Cuisines>() {
+                        @Override
+                        public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
+                            List<Cuisine> cuisineList = (List<Cuisine>) call;
+                            cuisineAdapter.setCuisineList(cuisineList);
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Cuisines> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+
         }
 
-      /*  @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.favorites_menu:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                     //   setEnterExitTransition(new Intent(CuisineActivity.this, FavoritesActivity.class));
-                    }
-                   // startActivity(new Intent(this, FavoritesActivity.class));
-                    return true;
-                case R.id.logout:
-                    AuthUI.getInstance()
-                            .signOut(this)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Intent intent = new Intent(CuisineActivity.this, LogInActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        } */
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         private void setEnterExitTransition(Intent intent) {
