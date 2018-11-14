@@ -19,16 +19,19 @@
             android:layout_width="50dp"
             android:layout_height="60dp"
             android:src="@drawable/restaurant" />
+
         <TextView
             android:id="@+id/cuisine_title"
+            android:fontFamily="@font/restaurant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="left"
             android:padding="@dimen/padding_eight"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/twentyfive_TS"
+            android:textSize="@dimen/twentyeight_TS"
             android:textStyle="bold" />
+
     </LinearLayout>
 
 

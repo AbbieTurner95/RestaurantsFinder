@@ -1,18 +1,15 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.app.ActivityOptions;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
-import android.util.Log;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
@@ -25,9 +22,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,10 +39,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     @BindView(R.id.cuisines_recycler_view)
     RecyclerView recyclerView;
 
-    private String BASE_URL = "https://developers.zomato.com/";
     private API.ZomatoApiCalls service;
     private CuisineAdapter cuisineAdapter;
-    private String TAG = "CUISINE_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +48,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         setContentView(R.layout.activity_cuisines);
         ButterKnife.bind(this);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         cuisineAdapter = new CuisineAdapter(this, this);
         recyclerView.setAdapter(cuisineAdapter);
@@ -65,6 +57,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                 .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
                 .create();
 
+        String BASE_URL = "https://developers.zomato.com/";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -83,7 +76,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     public void fetchCuisines() {
 
-        service.getCuisineId("332", "53.382882", "-1.470300")
+        service.getCuisineId("332", "53.382882", "-1.470300") //set to yorkshire - later on will use gps of users phone
                 .enqueue(new Callback<Cuisines>() {
                     @Override
                     public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
@@ -96,7 +89,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                         t.printStackTrace();
                     }
                 });
-        /**/
     }
 
 
@@ -109,10 +101,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     @Override
     public void onCuisineItemClick(Cuisine cuisines) {
-        int id = cuisines.getCuisine_id();
 
-        //  Intent intent = new Intent(CuisineActivity.this, RestaurantsListActivity.class);
-        //  intent.putExtra(TAG, id);
-        //  startActivity(intent);
+
     }
 }
