@@ -7,9 +7,9 @@
     android:layout_gravity="center"
     android:background="@color/colorPrimary"
     android:layout_margin="5dp"
-    android:elevation="@dimen/elev_four"
-    android:padding="@dimen/padd_2"
-    app:cardMaxElevation="@dimen/elev_four">
+    android:elevation="4sp"
+    android:padding="2dp"
+    app:cardMaxElevation="4sp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,15 +22,15 @@
             android:src="@drawable/restaurant" />
 
         <TextView
-            android:id="@+id/cuisine_title"
+            android:id="@+id/restaurant_name"
             android:fontFamily="@font/pink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="left"
-            android:padding="@dimen/padding_eight"
+            android:padding="8dp"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/twentyeight_TS"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
     </LinearLayout>
