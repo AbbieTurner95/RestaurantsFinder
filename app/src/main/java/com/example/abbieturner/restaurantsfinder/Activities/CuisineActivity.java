@@ -41,6 +41,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     private API.ZomatoApiCalls service;
     private CuisineAdapter cuisineAdapter;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
         this.setTitle(R.string.title_cuisines);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         cuisineAdapter = new CuisineAdapter(this, this);
         recyclerView.setAdapter(cuisineAdapter);
@@ -59,7 +60,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                 .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
                 .create();
 
-        String BASE_URL = "https://developers.zomato.com/";
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -104,7 +105,15 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     @Override
     public void onCuisineItemClick(Cuisine cuisines) {
 
-        //(TODO) David send id and title to restaurants list activity
+        int id = cuisines.getCuisine_id();
+        String name = cuisines.getCuisine_name();
+
+
+        Intent intent = new Intent(CuisineActivity.this, RestaurantsActivity.class);
+        intent.putExtra(getResources().getString(R.string.TAG_CUISINE_ID), id);
+        intent.putExtra(getResources().getString(R.string.TAG_CUISINE_NAME), name);
+        startActivity(intent);
+
 
     }
 }

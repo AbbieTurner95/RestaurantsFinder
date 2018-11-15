@@ -28,7 +28,6 @@
         </activity>
 
         <activity android:name=".Activities.CuisineActivity"/>
-        <activity android:name=".Activities.RestaurantListActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
