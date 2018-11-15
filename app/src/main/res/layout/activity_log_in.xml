@@ -81,6 +81,16 @@
                 android:text="@string/enter"
                 android:fontFamily="@font/restaurant"
                 android:textColor="@color/colorPrimaryDark" />
+            <Button
+                android:id="@+id/skip_login__btn"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_top_ten"
+                android:background="@android:color/white"
+                android:elevation="4sp"
+                android:text="Skip Login"
+                android:fontFamily="@font/restaurant"
+                android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
     </FrameLayout>

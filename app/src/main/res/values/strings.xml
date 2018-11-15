@@ -8,4 +8,5 @@
     <string name="find_your_place_today">Find your place today!</string>
     <string name="enter">Enter</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="title_cuisines">Select Cuisine</string>
 </resources>

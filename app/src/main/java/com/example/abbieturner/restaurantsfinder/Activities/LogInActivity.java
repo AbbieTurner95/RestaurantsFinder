@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.sign_in_btn) Button signin_button;
+    @BindView(R.id.skip_login__btn) Button skipLoginBtn;
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
@@ -54,6 +55,15 @@ public class LogInActivity extends AppCompatActivity {
                         RC_SIGN_IN);
             }
         });
+
+        skipLoginBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(LogInActivity.this, CuisineActivity.class);
+                LogInActivity.this.startActivity(myIntent);
+            }
+        });
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

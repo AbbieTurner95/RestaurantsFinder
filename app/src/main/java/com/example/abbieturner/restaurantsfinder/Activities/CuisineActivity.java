@@ -48,6 +48,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         setContentView(R.layout.activity_cuisines);
         ButterKnife.bind(this);
 
+        this.setTitle(R.string.title_cuisines);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         cuisineAdapter = new CuisineAdapter(this, this);
