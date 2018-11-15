@@ -78,7 +78,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     public void fetchCuisines() {
 
-        service.getCuisineId("332", "53.382882", "-1.470300") //set to yorkshire - later on will use gps of users phone
+        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
                 .enqueue(new Callback<Cuisines>() {
                     @Override
                     public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
@@ -104,6 +104,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     @Override
     public void onCuisineItemClick(Cuisine cuisines) {
 
+        //(TODO) David send id and title to restaurants list activity
 
     }
 }
