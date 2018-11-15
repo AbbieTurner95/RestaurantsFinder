@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:fontFamily="@font/restaurant"
+                android:fontFamily="@font/pink"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/thirty_TS" />
 
@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_top_ten"
                 android:text="@string/find_your_place_today"
-                android:fontFamily="@font/restaurant"
+                android:fontFamily="@font/pink"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sixteen_TS"
                 android:textStyle="italic" />
@@ -79,7 +79,7 @@
                 android:background="@android:color/white"
                 android:elevation="@dimen/elev_four"
                 android:text="@string/enter"
-                android:fontFamily="@font/restaurant"
+                android:fontFamily="@font/pink"
                 android:textColor="@color/colorPrimaryDark" />
             <Button
                 android:id="@+id/skip_login__btn"
@@ -89,7 +89,7 @@
                 android:background="@android:color/white"
                 android:elevation="4sp"
                 android:text="Skip Login"
-                android:fontFamily="@font/restaurant"
+                android:fontFamily="@font/pink"
                 android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
