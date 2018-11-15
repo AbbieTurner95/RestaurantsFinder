@@ -13,6 +13,11 @@ public class Restaurant {
     public int online_delivery;
     public String cuisines;
 
+    public Restaurant(String id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }
