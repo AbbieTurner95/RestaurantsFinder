@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
-import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
@@ -58,7 +57,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         this.setTitle(name);
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cuisine.class, new RestaurantJsonAdapter())
+                .registerTypeAdapter(Restaurants.class, new RestaurantJsonAdapter())
                 .create();
 
         final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
