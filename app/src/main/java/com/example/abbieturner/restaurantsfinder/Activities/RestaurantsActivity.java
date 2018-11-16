@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
@@ -17,10 +18,6 @@ import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,7 +49,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         Intent intent = getIntent();
 
         if(intent != null){
-            cuisineID = Integer.parseInt(intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_ID)));
+            cuisineID = intent.getIntExtra("cuisine_id", cuisineID);
             name = intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_NAME));
         } else {
             Log.e("ERROR INTENT", "Intent is null!");
@@ -61,7 +58,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         this.setTitle(name);
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
+                .registerTypeAdapter(Cuisine.class, new RestaurantJsonAdapter())
                 .create();
 
         final String BASE_URL = getResources().getString(R.string.BASE_URL_API);

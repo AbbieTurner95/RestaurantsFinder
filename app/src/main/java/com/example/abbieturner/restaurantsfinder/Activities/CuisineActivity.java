@@ -110,7 +110,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
 
         Intent intent = new Intent(CuisineActivity.this, RestaurantsActivity.class);
-        intent.putExtra(getResources().getString(R.string.TAG_CUISINE_ID), id);
+        intent.putExtra("cuisine_id", id);
         intent.putExtra(getResources().getString(R.string.TAG_CUISINE_NAME), name);
         startActivity(intent);
 
