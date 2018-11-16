@@ -79,7 +79,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
-                        assert response.body() != null;
+                       //null?
                         restaurantsAdapter.setRestaurantsList(response.body().restaurantList);
                     }
 
