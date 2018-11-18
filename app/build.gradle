@@ -47,6 +47,7 @@ dependencies {
 
     //Google PlayServices
     implementation 'com.google.android.gms:play-services-ads:17.1.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
