@@ -71,8 +71,8 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         service = retrofit.create(API.ZomatoApiCalls.class);
 
-        //fetchRestaurants();
-        restaurantsAdapter.setRestaurantsList(setMockData());
+        fetchRestaurants();
+        //restaurantsAdapter.setRestaurantsList(setMockData());
     }
 
     private List<Restaurant> setMockData() {
@@ -94,7 +94,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
-                       //null?
+
                         restaurantsAdapter.setRestaurantsList(response.body().restaurantList);
                     }
 
