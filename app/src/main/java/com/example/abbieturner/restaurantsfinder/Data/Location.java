@@ -6,8 +6,13 @@ public class Location {
     public String locality;
     public String city;
     public String city_id;
-    public String lat;
-    public String longt;
+    public double lat;
+    public double longt;
+
+    public Location(double lat, double lng){
+        this.lat = lat;
+        this.longt = lng;
+    }
 
     //hello david
     public String zipcode;
@@ -45,19 +50,19 @@ public class Location {
     }
 
 
-    public String getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public String getLongt() {
+    public double getLongt() {
         return longt;
     }
 
-    public void setLongt(String longt) {
+    public void setLongt(double longt) {
         this.longt = longt;
     }
 

@@ -10,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     private List<Restaurant> restaurantsList;
     private final Context context;
     private final RestaurantItemClick listener;
+    DecimalFormat df = new DecimalFormat("#.00");
+
 
     public RestaurantsAdapter(Context context, RestaurantItemClick listener){
         restaurantsList = new ArrayList<>();
@@ -94,6 +98,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     private double calcDistance(Restaurant restaurant){
-        return 2.0; // TODO calculate real distane
+        double distance = UsersLocation.getDistance(restaurant.getLocation().getLat(), restaurant.getLocation().getLongt());
+
+        return Math.round(distance*100.0)/100.0;
     }
 }
