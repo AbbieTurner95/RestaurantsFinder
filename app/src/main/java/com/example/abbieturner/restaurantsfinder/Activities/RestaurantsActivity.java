@@ -60,7 +60,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         this.setTitle(name);
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Restaurants.class, new RestaurantJsonAdapter())
+                .registerTypeAdapter(Restaurant.class, new RestaurantJsonAdapter())
                 .create();
 
         final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
@@ -90,12 +90,12 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private void fetchRestaurants(){
 
         service.getRestaurants("332", "city", "1", "20",
-                "53.382882", "-1.470300", "rating", cuisineID, "asc")
+                "53.382882", "-1.470300", cuisineID, "rating", "asc")
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
+                      restaurantsAdapter.setRestaurantsList(response.body().restaurantList);
 
-                        restaurantsAdapter.setRestaurantsList(response.body().restaurantList);
                     }
 
                     @Override

@@ -1,6 +1,5 @@
 package com.example.abbieturner.restaurantsfinder.Adapters;
 
-
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
