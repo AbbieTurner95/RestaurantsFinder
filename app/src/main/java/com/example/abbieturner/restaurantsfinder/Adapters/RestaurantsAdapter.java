@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -39,10 +41,21 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(RestaurantsViewHolder holder, int position){
-        Restaurant restaurant = restaurantsList.get(position);
+        final Restaurant restaurant = restaurantsList.get(position);
 
         String title = restaurant.getName();
+
         holder.restaurantName.setText(title);
+        holder.distance.setText(getRestaurantDistance(restaurant));
+
+        holder.favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFavoriteRestaurant(restaurant);
+            }
+        });
+
+
     }
 
     @Override
@@ -51,11 +64,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView restaurantName;
+        TextView restaurantName, distance;
+        ImageView favorites;
 
         public RestaurantsViewHolder(View view){
             super(view);
             restaurantName = view.findViewById(R.id.restaurant_name);
+            favorites = view.findViewById(R.id.restaurant_favorite_btn);
+            distance = view.findViewById(R.id.restaurant_distance);
             view.setOnClickListener(this);
         }
 
@@ -67,5 +83,17 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     public interface RestaurantItemClick{
         void onRestaurantItemClick(Restaurant restaurant);
+    }
+
+    private void toggleFavoriteRestaurant(Restaurant restaurant){
+        Toast.makeText(context, "Add " + restaurant.getName() + " to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
+    }
+
+    private String getRestaurantDistance(Restaurant restaurant){
+        return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
+    }
+
+    private double calcDistance(Restaurant restaurant){
+        return 2.0; // TODO calculate real distane
     }
 }

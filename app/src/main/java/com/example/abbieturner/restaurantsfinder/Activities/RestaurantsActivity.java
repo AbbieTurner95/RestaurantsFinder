@@ -18,6 +18,9 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +36,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
 
-
+///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,20 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         service = retrofit.create(API.ZomatoApiCalls.class);
 
-        fetchRestaurants();
+        //fetchRestaurants();
+        restaurantsAdapter.setRestaurantsList(setMockData());
+    }
+
+    private List<Restaurant> setMockData() {
+        List<Restaurant> myList = new ArrayList<>();
+
+        myList.add(new Restaurant("1", "Restaurant 1"));
+        myList.add(new Restaurant("2", "Restaurant 2"));
+        myList.add(new Restaurant("3", "Restaurant 3"));
+        myList.add(new Restaurant("4", "Restaurant 4"));
+        myList.add(new Restaurant("5", "Restaurant 5"));
+
+        return myList;
     }
 
     private void fetchRestaurants(){
