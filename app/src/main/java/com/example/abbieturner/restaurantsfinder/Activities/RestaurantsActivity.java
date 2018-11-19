@@ -36,7 +36,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
 
-
+///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
