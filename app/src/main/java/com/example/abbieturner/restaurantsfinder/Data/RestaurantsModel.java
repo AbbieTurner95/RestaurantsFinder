@@ -4,13 +4,6 @@ import java.util.List;
 
 public class RestaurantsModel {
 
-    /**
-     * results_found : 3
-     * results_start : 1
-     * results_shown : 2
-     * restaurants : [{"restaurant":{"R":{"res_id":16677766},"apikey":"b48385ca8e173d7176550e050eae5fe9","id":"16677766","name":"Cabana Brasilian Barbecue","url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","location":{"address":"Albion St, Leeds","locality":"Leeds City Centre","city":"West Yorkshire","city_id":331,"latitude":"53.7999158000","longitude":"-1.5448894000","zipcode":"","country_id":215,"locality_verbose":"Leeds City Centre, West Yorkshire"},"switch_to_order_menu":0,"cuisines":"BBQ, Brazilian, Bar Food","average_cost_for_two":20,"price_range":3,"currency":"£","offers":[],"opentable_support":0,"is_zomato_book_res":0,"mezzo_provider":"OTHER","is_book_form_web_view":0,"book_form_web_view_url":"","book_again_url":"","thumb":"","user_rating":{"aggregate_rating":"2.7","rating_text":"Average","rating_color":"FFBA00","votes":"5"},"photos_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop","menu_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop","featured_image":"","has_online_delivery":0,"is_delivering_now":0,"include_bogo_offers":true,"deeplink":"zomato://restaurant/16677766","is_table_reservation_supported":0,"has_table_booking":0,"events_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/events#tabtop?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","establishment_types":[]}},{"restaurant":{"R":{"res_id":16677475},"apikey":"b48385ca8e173d7176550e050eae5fe9","id":"16677475","name":"Fazenda Rodizio Bar & Grill","url":"https://www.zomato.com/west-yorkshire-england/fazenda-rodizio-bar-grill-leeds?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","location":{"address":"Waterman's Place, 3 Wharf Approach, Granary Wharf, Leeds LS1 4GL","locality":"Leeds City Centre","city":"West Yorkshire","city_id":331,"latitude":"53.7932090000","longitude":"-1.5472600000","zipcode":"LS1 4GL","country_id":215,"locality_verbose":"Leeds City Centre, West Yorkshire"},"switch_to_order_menu":0,"cuisines":"Brazilian, Steak","average_cost_for_two":0,"price_range":1,"currency":"£","offers":[],"opentable_support":0,"is_zomato_book_res":0,"mezzo_provider":"OTHER","is_book_form_web_view":0,"book_form_web_view_url":"","book_again_url":"","thumb":"","user_rating":{"aggregate_rating":"4.1","rating_text":"Very Good","rating_color":"5BA829","votes":"38"},"photos_url":"https://www.zomato.com/west-yorkshire-england/fazenda-rodizio-bar-grill-leeds/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop","menu_url":"https://www.zomato.com/west-yorkshire-england/fazenda-rodizio-bar-grill-leeds/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop","featured_image":"","has_online_delivery":0,"is_delivering_now":0,"include_bogo_offers":true,"deeplink":"zomato://restaurant/16677475","is_table_reservation_supported":0,"has_table_booking":0,"events_url":"https://www.zomato.com/west-yorkshire-england/fazenda-rodizio-bar-grill-leeds/events#tabtop?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","establishment_types":[]}}]
-     */
-
     private int results_found;
     private int results_start;
     private int results_shown;
@@ -49,9 +42,6 @@ public class RestaurantsModel {
     }
 
     public static class RestaurantsData {
-        /**
-         * restaurant : {"R":{"res_id":16677766},"apikey":"b48385ca8e173d7176550e050eae5fe9","id":"16677766","name":"Cabana Brasilian Barbecue","url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","location":{"address":"Albion St, Leeds","locality":"Leeds City Centre","city":"West Yorkshire","city_id":331,"latitude":"53.7999158000","longitude":"-1.5448894000","zipcode":"","country_id":215,"locality_verbose":"Leeds City Centre, West Yorkshire"},"switch_to_order_menu":0,"cuisines":"BBQ, Brazilian, Bar Food","average_cost_for_two":20,"price_range":3,"currency":"£","offers":[],"opentable_support":0,"is_zomato_book_res":0,"mezzo_provider":"OTHER","is_book_form_web_view":0,"book_form_web_view_url":"","book_again_url":"","thumb":"","user_rating":{"aggregate_rating":"2.7","rating_text":"Average","rating_color":"FFBA00","votes":"5"},"photos_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop","menu_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop","featured_image":"","has_online_delivery":0,"is_delivering_now":0,"include_bogo_offers":true,"deeplink":"zomato://restaurant/16677766","is_table_reservation_supported":0,"has_table_booking":0,"events_url":"https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/events#tabtop?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1","establishment_types":[]}
-         */
 
         private RestaurantData restaurant;
 
@@ -64,40 +54,6 @@ public class RestaurantsModel {
         }
 
         public static class RestaurantData {
-            /**
-             * R : {"res_id":16677766}
-             * apikey : b48385ca8e173d7176550e050eae5fe9
-             * id : 16677766
-             * name : Cabana Brasilian Barbecue
-             * url : https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1
-             * location : {"address":"Albion St, Leeds","locality":"Leeds City Centre","city":"West Yorkshire","city_id":331,"latitude":"53.7999158000","longitude":"-1.5448894000","zipcode":"","country_id":215,"locality_verbose":"Leeds City Centre, West Yorkshire"}
-             * switch_to_order_menu : 0
-             * cuisines : BBQ, Brazilian, Bar Food
-             * average_cost_for_two : 20
-             * price_range : 3
-             * currency : £
-             * offers : []
-             * opentable_support : 0
-             * is_zomato_book_res : 0
-             * mezzo_provider : OTHER
-             * is_book_form_web_view : 0
-             * book_form_web_view_url :
-             * book_again_url :
-             * thumb :
-             * user_rating : {"aggregate_rating":"2.7","rating_text":"Average","rating_color":"FFBA00","votes":"5"}
-             * photos_url : https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop
-             * menu_url : https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop
-             * featured_image :
-             * has_online_delivery : 0
-             * is_delivering_now : 0
-             * include_bogo_offers : true
-             * deeplink : zomato://restaurant/16677766
-             * is_table_reservation_supported : 0
-             * has_table_booking : 0
-             * events_url : https://www.zomato.com/west-yorkshire-england/cabana-brasilian-barbecue-leeds/events#tabtop?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1
-             * establishment_types : []
-             */
-
             private RData R;
             private String apikey;
             private String id;
@@ -395,17 +351,6 @@ public class RestaurantsModel {
             }
 
             public static class LocationData {
-                /**
-                 * address : Albion St, Leeds
-                 * locality : Leeds City Centre
-                 * city : West Yorkshire
-                 * city_id : 331
-                 * latitude : 53.7999158000
-                 * longitude : -1.5448894000
-                 * zipcode :
-                 * country_id : 215
-                 * locality_verbose : Leeds City Centre, West Yorkshire
-                 */
 
                 private String address;
                 private String locality;
