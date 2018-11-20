@@ -9,19 +9,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
-import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
-import com.example.abbieturner.restaurantsfinder.Data.Location;
-import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
-import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantsModel;
 import com.example.abbieturner.restaurantsfinder.R;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,11 +25,11 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     private String name;
     private int cuisineID;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
+    private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,53 +52,37 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         this.setTitle(name);
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Restaurant.class, new RestaurantJsonAdapter())
-                .create();
-
         final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
                 .build();
 
         service = retrofit.create(API.ZomatoApiCalls.class);
 
         fetchRestaurants();
-        //restaurantsAdapter.setRestaurantsList(setMockData());
-    }
-
-    private List<Restaurant> setMockData() {
-        List<Restaurant> myList = new ArrayList<>();
-
-        myList.add(new Restaurant("1", "Restaurant 1", new Location(53.537026, -1.129258)));
-        myList.add(new Restaurant("2", "Restaurant 2", new Location(53.487760, -0.956852)));
-        myList.add(new Restaurant("3", "Restaurant 3", new Location(53.402855, -0.506995)));
-        myList.add(new Restaurant("4", "Restaurant 4", new Location(53.537026, -1.129258)));
-        myList.add(new Restaurant("5", "Restaurant 5", new Location(53.537026, -1.129258)));
-
-        return myList;
     }
 
     private void fetchRestaurants(){
+
         service.getRestaurants("332", "city", "1", "20",
                 "53.382882", "-1.470300", cuisineID, "rating", "asc")
-                .enqueue(new Callback<Restaurants>() {
+                .enqueue(new Callback<RestaurantsModel>() {
                     @Override
-                    public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
-                      restaurantsAdapter.setRestaurantsList(response.body().restaurantList);
-
+                    public void onResponse(Call<RestaurantsModel> call, Response<RestaurantsModel> response) {
+                        restaurantsAdapter.setRestaurantsList(response.body().getRestaurants());
                     }
 
                     @Override
-                    public void onFailure(Call<Restaurants> call, Throwable t) {
+                    public void onFailure(Call<RestaurantsModel> call, Throwable t) {
                         t.printStackTrace();
                     }
                 });
-        }
+    }
 
     @Override
-    public void onRestaurantItemClick(Restaurant restaurant){
-        Toast.makeText(this, restaurant.getName(), Toast.LENGTH_LONG).show();
+    public void onRestaurantItemClick(RestaurantsModel.RestaurantsData restaurant){
+        Toast.makeText(this, restaurant.getRestaurant().getName(), Toast.LENGTH_LONG).show();
     }
 }
