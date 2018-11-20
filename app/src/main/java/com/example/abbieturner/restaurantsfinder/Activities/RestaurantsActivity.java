@@ -88,7 +88,6 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     }
 
     private void fetchRestaurants(){
-
         service.getRestaurants("332", "city", "1", "20",
                 "53.382882", "-1.470300", cuisineID, "rating", "asc")
                 .enqueue(new Callback<Restaurants>() {
