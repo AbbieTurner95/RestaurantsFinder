@@ -13,9 +13,10 @@ public class Restaurant {
     public int online_delivery;
     public String cuisines;
 
-    public Restaurant(String id, String name){
+    public Restaurant(String id, String name, Location location){
         this.id = id;
         this.name = name;
+        locationList = location;
     }
 
     public String getId() {

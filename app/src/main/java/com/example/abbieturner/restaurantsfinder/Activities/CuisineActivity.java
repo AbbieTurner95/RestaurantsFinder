@@ -17,6 +17,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.R;
 
+import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;

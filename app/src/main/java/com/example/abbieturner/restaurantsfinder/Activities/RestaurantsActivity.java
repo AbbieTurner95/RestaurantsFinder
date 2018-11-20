@@ -12,6 +12,7 @@ import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
+import com.example.abbieturner.restaurantsfinder.Data.Location;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -78,11 +79,11 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private List<Restaurant> setMockData() {
         List<Restaurant> myList = new ArrayList<>();
 
-        myList.add(new Restaurant("1", "Restaurant 1"));
-        myList.add(new Restaurant("2", "Restaurant 2"));
-        myList.add(new Restaurant("3", "Restaurant 3"));
-        myList.add(new Restaurant("4", "Restaurant 4"));
-        myList.add(new Restaurant("5", "Restaurant 5"));
+        myList.add(new Restaurant("1", "Restaurant 1", new Location(53.537026, -1.129258)));
+        myList.add(new Restaurant("2", "Restaurant 2", new Location(53.487760, -0.956852)));
+        myList.add(new Restaurant("3", "Restaurant 3", new Location(53.402855, -0.506995)));
+        myList.add(new Restaurant("4", "Restaurant 4", new Location(53.537026, -1.129258)));
+        myList.add(new Restaurant("5", "Restaurant 5", new Location(53.537026, -1.129258)));
 
         return myList;
     }
