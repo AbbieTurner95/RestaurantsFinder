@@ -13,7 +13,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineViewHolder>{
+public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineViewHolder> {
 
     private List<Cuisine> cuisineList;
     private final Context context;
@@ -36,6 +36,7 @@ public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineV
         View view = LayoutInflater.from(context).inflate(R.layout.cuisine_item, parent, false);
         return new CuisineViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(CuisineViewHolder holder, int position) {
         Cuisine cuisine = cuisineList.get(position);

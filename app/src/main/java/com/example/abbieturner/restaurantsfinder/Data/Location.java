@@ -9,7 +9,7 @@ public class Location {
     public double lat;
     public double longt;
 
-    public Location(double lat, double lng){
+    public Location(double lat, double lng) {
         this.lat = lat;
         this.longt = lng;
     }

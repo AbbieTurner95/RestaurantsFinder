@@ -43,7 +43,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         Intent intent = getIntent();
 
-        if(intent != null){
+        if (intent != null) {
             cuisineID = intent.getIntExtra("cuisine_id", cuisineID);
             name = intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_NAME));
         } else {
@@ -64,7 +64,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         fetchRestaurants();
     }
 
-    private void fetchRestaurants(){
+    private void fetchRestaurants() {
 
         service.getRestaurants("332", "city", "1", "20",
                 "53.382882", "-1.470300", cuisineID, "rating", "asc")
@@ -82,7 +82,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     }
 
     @Override
-    public void onRestaurantItemClick(RestaurantsModel.RestaurantsData restaurant){
+    public void onRestaurantItemClick(RestaurantsModel.RestaurantsData restaurant) {
         Toast.makeText(this, restaurant.getRestaurant().getName(), Toast.LENGTH_LONG).show();
     }
 }

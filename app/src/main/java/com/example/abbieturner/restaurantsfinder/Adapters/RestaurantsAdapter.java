@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder>{
+public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> {
 
     private List<RestaurantsModel.RestaurantsData> restaurantsList;
     private final Context context;
@@ -25,26 +25,26 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     DecimalFormat df = new DecimalFormat("#.00");
 
 
-    public RestaurantsAdapter(Context context, RestaurantItemClick listener){
+    public RestaurantsAdapter(Context context, RestaurantItemClick listener) {
         restaurantsList = new ArrayList<>();
         this.context = context;
         this.listener = listener;
     }
 
-    public void setRestaurantsList(List<RestaurantsModel.RestaurantsData> restaurantsList){
+    public void setRestaurantsList(List<RestaurantsModel.RestaurantsData> restaurantsList) {
         this.restaurantsList.clear();
         this.restaurantsList.addAll(restaurantsList);
         notifyDataSetChanged();
     }
 
     @Override
-    public RestaurantsViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public RestaurantsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.restaurant_item, parent, false);
         return new RestaurantsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RestaurantsViewHolder holder, int position){
+    public void onBindViewHolder(RestaurantsViewHolder holder, int position) {
         final RestaurantsModel.RestaurantsData restaurant = restaurantsList.get(position);
 
         String title = restaurant.getRestaurant().getName();
@@ -63,7 +63,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return restaurantsList.size();
     }
 
@@ -71,7 +71,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         TextView restaurantName, distance;
         ImageView favorites;
 
-        public RestaurantsViewHolder(View view){
+        public RestaurantsViewHolder(View view) {
             super(view);
             restaurantName = view.findViewById(R.id.restaurant_name);
             favorites = view.findViewById(R.id.restaurant_favorite_btn);
@@ -80,27 +80,27 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         }
 
         @Override
-        public void onClick(View view){
+        public void onClick(View view) {
             listener.onRestaurantItemClick(restaurantsList.get(getAdapterPosition()));
         }
     }
 
-    public interface RestaurantItemClick{
+    public interface RestaurantItemClick {
         void onRestaurantItemClick(RestaurantsModel.RestaurantsData restaurant);
     }
 
-    private void toggleFavoriteRestaurant(RestaurantsModel.RestaurantsData restaurant){
+    private void toggleFavoriteRestaurant(RestaurantsModel.RestaurantsData restaurant) {
         Toast.makeText(context, "Add " + restaurant.getRestaurant().getName() + " to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
     }
 
-    private String getRestaurantDistance(RestaurantsModel.RestaurantsData restaurant){
+    private String getRestaurantDistance(RestaurantsModel.RestaurantsData restaurant) {
         return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
     }
 
-    private double calcDistance(RestaurantsModel.RestaurantsData restaurant){
+    private double calcDistance(RestaurantsModel.RestaurantsData restaurant) {
         double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getRestaurant().getLocation().getLatitude())
                 , Double.parseDouble(restaurant.getRestaurant().getLocation().getLongitude()));
 
-        return Math.round(distance*100.0)/100.0;
+        return Math.round(distance * 100.0) / 100.0;
     }
 }

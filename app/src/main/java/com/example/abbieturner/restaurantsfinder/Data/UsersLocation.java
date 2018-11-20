@@ -4,16 +4,19 @@ public class UsersLocation {
     private static double lat = 53.479207; //TODO change for real lat
     private static double lng = -1.186169; //TODO change for real lng
 
-    public static double getLat(){
+    public static double getLat() {
         return lat;
     }
-    public static double getLng(){
+
+    public static double getLng() {
         return lng;
     }
-    public static void setLat(double newLat){
+
+    public static void setLat(double newLat) {
         lat = newLat;
     }
-    public static void setLng(double newLng){
+
+    public static void setLng(double newLng) {
         lng = newLng;
     }
 
@@ -23,8 +26,7 @@ public class UsersLocation {
         final String unit = "M";
         if ((lat == lat2) && (lng == lon2)) {
             return 0;
-        }
-        else {
+        } else {
             double theta = lng - lon2;
             double dist = Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(lat2)) +
                     Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));

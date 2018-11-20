@@ -22,15 +22,19 @@ import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 import com.shashank.sony.fancydialoglib.Animation;
 import com.shashank.sony.fancydialoglib.Icon;
+
 import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class LogInActivity extends AppCompatActivity {
 
-    @BindView(R.id.sign_in_btn) Button signin_button;
-    @BindView(R.id.skip_login__btn) Button skipLoginBtn;
+    @BindView(R.id.sign_in_btn)
+    Button signin_button;
+    @BindView(R.id.skip_login__btn)
+    Button skipLoginBtn;
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
@@ -56,9 +60,9 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
-        skipLoginBtn.setOnClickListener(new View.OnClickListener(){
+        skipLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent myIntent = new Intent(LogInActivity.this, CuisineActivity.class);
                 LogInActivity.this.startActivity(myIntent);
             }
@@ -124,7 +128,8 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)                    //Transaction from activity to activity
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    //Transaction from activity to activity
     private void setEnterExitTransition(Intent intent) {
         getWindow().setExitTransition(new Fade().setDuration(1000));
         getWindow().setReenterTransition(new Fade().setDuration(1000));
