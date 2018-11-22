@@ -104,7 +104,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     @Override
     public void onCuisineItemClick(Cuisine cuisines) {
-
         int id = cuisines.getCuisine_id();
         String name = cuisines.getCuisine_name();
 
@@ -113,7 +112,5 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         intent.putExtra("cuisine_id", id);
         intent.putExtra(getResources().getString(R.string.TAG_CUISINE_NAME), name);
         startActivity(intent);
-
-
     }
 }

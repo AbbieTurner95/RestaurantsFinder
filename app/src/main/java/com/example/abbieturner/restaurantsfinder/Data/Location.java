@@ -14,7 +14,6 @@ public class Location {
         this.longt = lng;
     }
 
-    //hello david
     public String zipcode;
 
     public String getAddress() {
