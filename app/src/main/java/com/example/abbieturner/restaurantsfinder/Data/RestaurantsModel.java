@@ -41,6 +41,15 @@ public class RestaurantsModel {
         this.restaurants = restaurants;
     }
 
+
+
+
+
+
+
+
+
+
     public static class RestaurantsData {
 
         private RestaurantData restaurant;
@@ -54,53 +63,20 @@ public class RestaurantsModel {
         }
 
         public static class RestaurantData {
-            private RData R;
-            private String apikey;
             private String id;
             private String name;
             private String url;
             private LocationData location;
-            private int switch_to_order_menu;
             private String cuisines;
             private int average_cost_for_two;
             private int price_range;
             private String currency;
-            private int opentable_support;
-            private int is_zomato_book_res;
-            private String mezzo_provider;
-            private int is_book_form_web_view;
-            private String book_form_web_view_url;
-            private String book_again_url;
-            private String thumb;
             private UserRatingData user_rating;
             private String photos_url;
             private String menu_url;
             private String featured_image;
             private int has_online_delivery;
-            private int is_delivering_now;
-            private boolean include_bogo_offers;
-            private String deeplink;
-            private int is_table_reservation_supported;
-            private int has_table_booking;
-            private String events_url;
-            private List<?> offers;
-            private List<?> establishment_types;
 
-            public RData getR() {
-                return R;
-            }
-
-            public void setR(RData R) {
-                this.R = R;
-            }
-
-            public String getApikey() {
-                return apikey;
-            }
-
-            public void setApikey(String apikey) {
-                this.apikey = apikey;
-            }
 
             public String getId() {
                 return id;
@@ -134,14 +110,6 @@ public class RestaurantsModel {
                 this.location = location;
             }
 
-            public int getSwitch_to_order_menu() {
-                return switch_to_order_menu;
-            }
-
-            public void setSwitch_to_order_menu(int switch_to_order_menu) {
-                this.switch_to_order_menu = switch_to_order_menu;
-            }
-
             public String getCuisines() {
                 return cuisines;
             }
@@ -172,62 +140,6 @@ public class RestaurantsModel {
 
             public void setCurrency(String currency) {
                 this.currency = currency;
-            }
-
-            public int getOpentable_support() {
-                return opentable_support;
-            }
-
-            public void setOpentable_support(int opentable_support) {
-                this.opentable_support = opentable_support;
-            }
-
-            public int getIs_zomato_book_res() {
-                return is_zomato_book_res;
-            }
-
-            public void setIs_zomato_book_res(int is_zomato_book_res) {
-                this.is_zomato_book_res = is_zomato_book_res;
-            }
-
-            public String getMezzo_provider() {
-                return mezzo_provider;
-            }
-
-            public void setMezzo_provider(String mezzo_provider) {
-                this.mezzo_provider = mezzo_provider;
-            }
-
-            public int getIs_book_form_web_view() {
-                return is_book_form_web_view;
-            }
-
-            public void setIs_book_form_web_view(int is_book_form_web_view) {
-                this.is_book_form_web_view = is_book_form_web_view;
-            }
-
-            public String getBook_form_web_view_url() {
-                return book_form_web_view_url;
-            }
-
-            public void setBook_form_web_view_url(String book_form_web_view_url) {
-                this.book_form_web_view_url = book_form_web_view_url;
-            }
-
-            public String getBook_again_url() {
-                return book_again_url;
-            }
-
-            public void setBook_again_url(String book_again_url) {
-                this.book_again_url = book_again_url;
-            }
-
-            public String getThumb() {
-                return thumb;
-            }
-
-            public void setThumb(String thumb) {
-                this.thumb = thumb;
             }
 
             public UserRatingData getUser_rating() {
@@ -270,85 +182,15 @@ public class RestaurantsModel {
                 this.has_online_delivery = has_online_delivery;
             }
 
-            public int getIs_delivering_now() {
-                return is_delivering_now;
-            }
 
-            public void setIs_delivering_now(int is_delivering_now) {
-                this.is_delivering_now = is_delivering_now;
-            }
 
-            public boolean isInclude_bogo_offers() {
-                return include_bogo_offers;
-            }
 
-            public void setInclude_bogo_offers(boolean include_bogo_offers) {
-                this.include_bogo_offers = include_bogo_offers;
-            }
 
-            public String getDeeplink() {
-                return deeplink;
-            }
 
-            public void setDeeplink(String deeplink) {
-                this.deeplink = deeplink;
-            }
 
-            public int getIs_table_reservation_supported() {
-                return is_table_reservation_supported;
-            }
 
-            public void setIs_table_reservation_supported(int is_table_reservation_supported) {
-                this.is_table_reservation_supported = is_table_reservation_supported;
-            }
 
-            public int getHas_table_booking() {
-                return has_table_booking;
-            }
 
-            public void setHas_table_booking(int has_table_booking) {
-                this.has_table_booking = has_table_booking;
-            }
-
-            public String getEvents_url() {
-                return events_url;
-            }
-
-            public void setEvents_url(String events_url) {
-                this.events_url = events_url;
-            }
-
-            public List<?> getOffers() {
-                return offers;
-            }
-
-            public void setOffers(List<?> offers) {
-                this.offers = offers;
-            }
-
-            public List<?> getEstablishment_types() {
-                return establishment_types;
-            }
-
-            public void setEstablishment_types(List<?> establishment_types) {
-                this.establishment_types = establishment_types;
-            }
-
-            public static class RData {
-                /**
-                 * res_id : 16677766
-                 */
-
-                private int res_id;
-
-                public int getRes_id() {
-                    return res_id;
-                }
-
-                public void setRes_id(int res_id) {
-                    this.res_id = res_id;
-                }
-            }
 
             public static class LocationData {
 
@@ -434,6 +276,18 @@ public class RestaurantsModel {
                     this.locality_verbose = locality_verbose;
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
+
 
             public static class UserRatingData {
 
