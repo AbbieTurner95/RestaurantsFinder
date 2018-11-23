@@ -82,7 +82,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     }
 
     @Override
-    public void onRestaurantItemClick(RestaurantsModel.RestaurantsData restaurant) {
+    public void onRestaurantItemClick(RestaurantsModel.Restaurant restaurant) {
         Toast.makeText(this, restaurant.getRestaurant().getName(), Toast.LENGTH_LONG).show();
     }
 }

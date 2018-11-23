@@ -1,5 +1,9 @@
 package com.example.abbieturner.restaurantsfinder.Data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 public class RestaurantsModel {
@@ -7,7 +11,7 @@ public class RestaurantsModel {
     private int results_found;
     private int results_start;
     private int results_shown;
-    private List<RestaurantsData> restaurants;
+    private List<Restaurant> restaurants;
 
     public int getResults_found() {
         return results_found;
@@ -33,11 +37,11 @@ public class RestaurantsModel {
         this.results_shown = results_shown;
     }
 
-    public List<RestaurantsData> getRestaurants() {
+    public List<Restaurant> getRestaurants() {
         return restaurants;
     }
 
-    public void setRestaurants(List<RestaurantsData> restaurants) {
+    public void setRestaurants(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
 
@@ -48,10 +52,11 @@ public class RestaurantsModel {
 
 
 
+    @Entity
+    public static class Restaurant {
 
-
-    public static class RestaurantsData {
-
+        @NonNull
+        @PrimaryKey
         private RestaurantData restaurant;
 
         public RestaurantData getRestaurant() {
@@ -62,7 +67,9 @@ public class RestaurantsModel {
             this.restaurant = restaurant;
         }
 
+
         public static class RestaurantData {
+
             private String id;
             private String name;
             private String url;
@@ -76,6 +83,11 @@ public class RestaurantsModel {
             private String menu_url;
             private String featured_image;
             private int has_online_delivery;
+
+
+            public RestaurantData(){
+
+            }
 
 
             public String getId() {

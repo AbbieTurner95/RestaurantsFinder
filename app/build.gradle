@@ -44,6 +44,8 @@ dependencies {
     //Data libs
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'android.arch.persistence.room:runtime:1.0.0'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
 
     //Google PlayServices
     implementation 'com.google.android.gms:play-services-ads:17.1.1'
