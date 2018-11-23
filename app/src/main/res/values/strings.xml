@@ -14,4 +14,11 @@
     <string name="TAG_CUISINE_ID">cuisine_id</string>
     <string name="TAG_CUISINE_NAME">cuisine_name</string>
     <string name="BASE_URL_API">https://developers.zomato.com/</string>
+    <string name="has_online_delivery">Has Online Delivery? :</string>
+    <string name="click_to_view_menu">Click to view menu</string>
+    <string name="load_menu_by_clicking">Load menu by clicking</string>
+    <string name="home_button">Home button</string>
+    <string name="website_link_icon">Website link icon</string>
+    <string name="favorite_icon">Favorite icon</string>
+    <string name="image_of_food">Image of food</string>
 </resources>
