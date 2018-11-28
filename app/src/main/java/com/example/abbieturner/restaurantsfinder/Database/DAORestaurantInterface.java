@@ -4,14 +4,14 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 
-import com.example.abbieturner.restaurantsfinder.Data.RestaurantsModel;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 
 @Dao
 public interface DAORestaurantInterface {
 
     @Insert
-    void insertRestaurant(RestaurantsModel.Restaurant restaurant);
+    void insertRestaurant(Restaurant restaurant);
 
     @Delete
-    void deleteResuarant (RestaurantsModel.Restaurant restaurant);
+    void deleteResuarant (Restaurant restaurant);
 }

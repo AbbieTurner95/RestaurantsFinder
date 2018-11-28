@@ -9,9 +9,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
+import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
-import com.example.abbieturner.restaurantsfinder.Data.RestaurantsModel;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -52,11 +56,15 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         this.setTitle(name);
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Restaurant.class, new RestaurantJsonAdapter())
+                .create();
+
         final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(builder.build())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                //.client(builder.build())
                 .build();
 
         service = retrofit.create(API.ZomatoApiCalls.class);
@@ -68,21 +76,21 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         service.getRestaurants("332", "city", "1", "20",
                 "53.382882", "-1.470300", cuisineID, "rating", "asc")
-                .enqueue(new Callback<RestaurantsModel>() {
+                .enqueue(new Callback<Restaurants>() {
                     @Override
-                    public void onResponse(Call<RestaurantsModel> call, Response<RestaurantsModel> response) {
-                        restaurantsAdapter.setRestaurantsList(response.body().getRestaurants());
+                    public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
+                        restaurantsAdapter.setRestaurantsList(response.body().restaurantsList);
                     }
 
                     @Override
-                    public void onFailure(Call<RestaurantsModel> call, Throwable t) {
+                    public void onFailure(Call<Restaurants> call, Throwable t) {
                         t.printStackTrace();
                     }
                 });
     }
 
     @Override
-    public void onRestaurantItemClick(RestaurantsModel.Restaurant restaurant) {
-        Toast.makeText(this, restaurant.getRestaurant().getName(), Toast.LENGTH_LONG).show();
+    public void onRestaurantItemClick(Restaurant restaurant) {
+        Toast.makeText(this, restaurant.getName(), Toast.LENGTH_LONG).show();
     }
 }

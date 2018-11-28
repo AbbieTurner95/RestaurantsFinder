@@ -7,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.Data.RestaurantsModel;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> {
 
-    private List<RestaurantsModel.Restaurant> restaurantsList;
+    private List<Restaurant> restaurantsList;
     private final Context context;
     private final RestaurantItemClick listener;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -35,7 +34,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
 
-    public void setRestaurantsList(List<RestaurantsModel.Restaurant> restaurantsList) {
+    public void setRestaurantsList(List<Restaurant> restaurantsList) {
         this.restaurantsList.clear();
         this.restaurantsList.addAll(restaurantsList);
         notifyDataSetChanged();
@@ -49,9 +48,9 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(RestaurantsViewHolder holder, int position) {
-        final RestaurantsModel.Restaurant restaurant = restaurantsList.get(position);
+        final Restaurant restaurant = restaurantsList.get(position);
 
-        String title = restaurant.getRestaurant().getName();
+        String title = restaurant.getName();
 
         holder.restaurantName.setText(title);
         holder.distance.setText(getRestaurantDistance(restaurant));
@@ -89,23 +88,23 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     public interface RestaurantItemClick {
-        void onRestaurantItemClick(RestaurantsModel.Restaurant restaurant);
+        void onRestaurantItemClick(Restaurant restaurant);
     }
 
-    private void toggleFavoriteRestaurant(RestaurantsModel.Restaurant restaurant) {
+    private void toggleFavoriteRestaurant(Restaurant restaurant) {
 
         database.restaurantsDAO().insertRestaurant(restaurant);
 
         //Toast.makeText(context, "Add " + restaurant.getRestaurant().getName() + " to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
     }
 
-    private String getRestaurantDistance(RestaurantsModel.Restaurant restaurant) {
+    private String getRestaurantDistance(Restaurant restaurant) {
         return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
     }
 
-    private double calcDistance(RestaurantsModel.Restaurant restaurant) {
-        double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getRestaurant().getLocation().getLatitude())
-                , Double.parseDouble(restaurant.getRestaurant().getLocation().getLongitude()));
+    private double calcDistance(Restaurant restaurant) {
+        double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getLocation().getLatitude())
+                , Double.parseDouble(restaurant.getLocation().getLongitude()));
 
         return Math.round(distance * 100.0) / 100.0;
     }
