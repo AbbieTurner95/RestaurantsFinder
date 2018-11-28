@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.text.DecimalFormat;
@@ -24,12 +26,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     private final RestaurantItemClick listener;
     DecimalFormat df = new DecimalFormat("#.00");
 
+
     private AppDatabase database;
 
 
     public RestaurantsAdapter(Context context, RestaurantItemClick listener) {
         restaurantsList = new ArrayList<>();
         this.context = context;
+        this.database = AppDatabase.getInstance(this.context);
         this.listener = listener;
     }
 
@@ -93,9 +97,17 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     private void toggleFavoriteRestaurant(Restaurant restaurant) {
 
-        database.restaurantsDAO().insertRestaurant(restaurant);
+        ModelConverter converter = ModelConverter.getInstance();
+        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
 
-        //Toast.makeText(context, "Add " + restaurant.getRestaurant().getName() + " to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
+
+        database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+
+        Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
+
+        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+
+
     }
 
     private String getRestaurantDistance(Restaurant restaurant) {

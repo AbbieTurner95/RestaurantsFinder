@@ -1,14 +1,17 @@
 package com.example.abbieturner.restaurantsfinder.Data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.google.gson.annotations.SerializedName;
+
 
 public class Restaurant {
 
-    @SerializedName("id")
     private String id;
-    @SerializedName("name")
     private String name;
-    @SerializedName("url")
     private String url;
     private RestaurantLocationData location;
     private String cuisines;
@@ -20,6 +23,36 @@ public class Restaurant {
     private String menu_url;
     private String featured_image;
     private int has_online_delivery;
+
+    public Restaurant(){
+
+    }
+
+    public Restaurant(DatabaseRestaurant databaseRestaurant){
+        this.id = databaseRestaurant.getId();
+        this.name = databaseRestaurant.getId();
+        this.url = databaseRestaurant.getId();
+
+        this.location = new RestaurantLocationData(
+                databaseRestaurant.getAddress(),
+                databaseRestaurant.getLocality(),
+                databaseRestaurant.getCity(),
+                databaseRestaurant.getCity_id(),
+                databaseRestaurant.getLatitude(),
+                databaseRestaurant.getLongitude(),
+                databaseRestaurant.getZipcode(),
+                databaseRestaurant.getCountry_id(),
+                databaseRestaurant.getLocality_verbose());
+
+        this.cuisines = databaseRestaurant.getCuisines();
+        this.average_cost_for_two = databaseRestaurant.getAverage_cost_for_two();
+        this.price_range = databaseRestaurant.getPrice_range();
+        this.currency = databaseRestaurant.getCurrency();
+        this.photos_url = databaseRestaurant.getPhotos_url();
+        this.menu_url = databaseRestaurant.getMenu_url();
+        this.featured_image = databaseRestaurant.getFeatured_image();
+        this.has_online_delivery = databaseRestaurant.getHas_online_delivery();
+    }
 
 
     public String getId() {
@@ -125,4 +158,5 @@ public class Restaurant {
     public void setHas_online_delivery(int has_online_delivery) {
         this.has_online_delivery = has_online_delivery;
     }
+
 }

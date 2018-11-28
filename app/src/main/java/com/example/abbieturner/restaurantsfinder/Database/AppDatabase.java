@@ -1,10 +1,14 @@
 package com.example.abbieturner.restaurantsfinder.Database;
 
+import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-//@Database(entities = {RestaurantsModel.Restaurant.class}, version = 1, exportSchema = false)
+import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
+
+@Database(entities = {DatabaseRestaurant.class}, version = 1, exportSchema = false)
 
     public abstract class AppDatabase extends RoomDatabase {
 

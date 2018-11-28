@@ -12,6 +12,23 @@ public class RestaurantLocationData {
     private int country_id;
     private String locality_verbose;
 
+    public RestaurantLocationData(){
+
+    }
+
+    public RestaurantLocationData(String address, String locality, String city, int city_id,
+                                  String latitude, String longitude, String zipcode,
+                                  int country_id, String locality_verbose){
+        this.address = address;
+        this.locality = locality;
+        this.city = city;
+        this.city_id = city_id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.zipcode = zipcode;
+        this.country_id = country_id;
+        this.locality_verbose = locality_verbose;
+    }
     public String getAddress() {
         return address;
     }
