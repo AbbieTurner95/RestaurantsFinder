@@ -21,4 +21,5 @@
     <string name="website_link_icon">Website link icon</string>
     <string name="favorite_icon">Favorite icon</string>
     <string name="image_of_food">Image of food</string>
+    <string name="TAG_RESTAURANT">restaurant_object</string>
 </resources>
