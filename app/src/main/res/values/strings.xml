@@ -21,4 +21,6 @@
     <string name="website_link_icon">Website link icon</string>
     <string name="favorite_icon">Favorite icon</string>
     <string name="image_of_food">Image of food</string>
+    <string name="open_menu">OPEN MENU</string>
+    <string name="close_menu">CLOSE MENU</string>
 </resources>
