@@ -35,7 +35,11 @@
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".Activities.RestaurantActivity"></activity>
+        <activity android:name=".Activities.RestaurantActivity" />
+        <activity
+            android:name=".Activities.NavActivity"
+            android:label="@string/title_activity_nav"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
