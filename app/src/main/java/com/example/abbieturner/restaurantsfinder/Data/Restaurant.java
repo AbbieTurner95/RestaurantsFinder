@@ -30,8 +30,16 @@ public class Restaurant {
 
     public Restaurant(DatabaseRestaurant databaseRestaurant){
         this.id = databaseRestaurant.getId();
-        this.name = databaseRestaurant.getId();
-        this.url = databaseRestaurant.getId();
+        this.name = databaseRestaurant.getName();
+        this.url = databaseRestaurant.getUrl();
+        this.cuisines = databaseRestaurant.getCuisines();
+        this.average_cost_for_two = databaseRestaurant.getAverage_cost_for_two();
+        this.price_range = databaseRestaurant.getPrice_range();
+        this.currency = databaseRestaurant.getCurrency();
+        this.photos_url = databaseRestaurant.getPhotos_url();
+        this.menu_url = databaseRestaurant.getMenu_url();
+        this.featured_image = databaseRestaurant.getFeatured_image();
+        this.has_online_delivery = databaseRestaurant.getHas_online_delivery();
 
         this.location = new RestaurantLocationData(
                 databaseRestaurant.getAddress(),
@@ -43,15 +51,11 @@ public class Restaurant {
                 databaseRestaurant.getZipcode(),
                 databaseRestaurant.getCountry_id(),
                 databaseRestaurant.getLocality_verbose());
-
-        this.cuisines = databaseRestaurant.getCuisines();
-        this.average_cost_for_two = databaseRestaurant.getAverage_cost_for_two();
-        this.price_range = databaseRestaurant.getPrice_range();
-        this.currency = databaseRestaurant.getCurrency();
-        this.photos_url = databaseRestaurant.getPhotos_url();
-        this.menu_url = databaseRestaurant.getMenu_url();
-        this.featured_image = databaseRestaurant.getFeatured_image();
-        this.has_online_delivery = databaseRestaurant.getHas_online_delivery();
+        this.user_rating = new RestaurantUserRating(
+                databaseRestaurant.getAggregate_rating(),
+                databaseRestaurant.getRating_text(),
+                databaseRestaurant.getRating_color(),
+                databaseRestaurant.getVotes());
     }
 
 

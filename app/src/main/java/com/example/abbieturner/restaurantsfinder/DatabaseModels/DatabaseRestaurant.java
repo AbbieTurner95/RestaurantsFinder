@@ -41,6 +41,16 @@ public class DatabaseRestaurant {
     private int country_id;
     private String locality_verbose;
 
+
+    /////////////////////////////////////////////////////
+    ////////// --- RATING PARAMETERS --- ////////////////
+    /////////////////////////////////////////////////////
+
+    private String aggregate_rating;
+    private String rating_text;
+    private String rating_color;
+    private String votes;
+
     public DatabaseRestaurant(){
 
     }
@@ -67,6 +77,11 @@ public class DatabaseRestaurant {
         this.zipcode = restaurant.getLocation().getZipcode();
         this.country_id = restaurant.getLocation().getCountry_id();
         this.locality_verbose = restaurant.getLocation().getLocality_verbose();
+
+        this.aggregate_rating = restaurant.getUser_rating().getAggregate_rating();
+        this.rating_text = restaurant.getUser_rating().getRating_text();
+        this.rating_color = restaurant.getUser_rating().getRating_color();
+        this.votes = restaurant.getUser_rating().getVotes();
     }
 
 
@@ -237,5 +252,41 @@ public class DatabaseRestaurant {
 
     public void setLocality_verbose(String locality_verbose) {
         this.locality_verbose = locality_verbose;
+    }
+
+    /////////////////////////////////////////////////////
+    ////////// --- RATING FUNCTIONS --- /////////////////
+    /////////////////////////////////////////////////////
+
+    public String getAggregate_rating() {
+        return aggregate_rating;
+    }
+
+    public void setAggregate_rating(String aggregate_rating) {
+        this.aggregate_rating = aggregate_rating;
+    }
+
+    public String getRating_text() {
+        return rating_text;
+    }
+
+    public void setRating_text(String rating_text) {
+        this.rating_text = rating_text;
+    }
+
+    public String getRating_color() {
+        return rating_color;
+    }
+
+    public void setRating_color(String rating_color) {
+        this.rating_color = rating_color;
+    }
+
+    public String getVotes() {
+        return votes;
+    }
+
+    public void setVotes(String votes) {
+        this.votes = votes;
     }
 }

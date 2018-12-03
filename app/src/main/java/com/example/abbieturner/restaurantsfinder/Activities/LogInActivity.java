@@ -63,7 +63,7 @@ public class LogInActivity extends AppCompatActivity {
         skipLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(LogInActivity.this, CuisineActivity.class);
+                Intent myIntent = new Intent(LogInActivity.this, HomeActivity.class);
                 LogInActivity.this.startActivity(myIntent);
             }
         });

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:focusable="true"
+android:focusableInTouchMode="true"
+android:orientation="vertical"
+android:background="@color/list_background"
+tools:context=".Activities.HomeActivity">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:orientation="horizontal">
+
+        <!--<AutoCompleteTextView-->
+            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:id="@+id/autocomplete_cuisines"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:completionThreshold="1"/>-->
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <AutoCompleteTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/autocomplete_cuisines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:completionThreshold="1"/>
+
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/ic_clear_black_24dp" />
+
+        </FrameLayout>
+        <ImageView
+            android:id="@+id/btn_all_cuisines"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_list_black_24dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:paddingLeft="5dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="Popular Restaurants"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/home_popular_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TODO: Popular restaurants"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:paddingLeft="5dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="Favourite Restaurants"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_favourites_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+
+
+</LinearLayout>
