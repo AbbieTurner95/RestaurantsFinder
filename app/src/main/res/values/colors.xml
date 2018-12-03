@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#540000</color>
     <color name="colorAccent">#e68721</color>
     <color name="list_background">#e4e4e4</color>
+    <color name="transparent">#00000000</color>
 </resources>

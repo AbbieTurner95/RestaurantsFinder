@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     @BindView(R.id.btn_share)
     ImageView shareButton;
 
+    private ScrollView mainScrollView;
+    private ImageView transparentImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_restaurant);
         ButterKnife.bind(this);
 
+        mainScrollView = (ScrollView) findViewById(R.id.scrollview_restaurant);
+        transparentImageView = (ImageView) findViewById(R.id.transparent_image);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         slider.setLayoutManager(layoutManager);
@@ -101,6 +108,33 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
                         break;
                 }
                 return true;
+            }
+        });
+
+        transparentImageView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
             }
         });
 
