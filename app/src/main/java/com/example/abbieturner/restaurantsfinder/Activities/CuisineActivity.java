@@ -21,6 +21,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
+import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
@@ -45,7 +46,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     @BindView(R.id.cuisines_recycler_view)
     RecyclerView recyclerView;
 
-    private API.ZomatoApiCalls service;
     private CuisineAdapter cuisineAdapter;
     private LinearLayoutManager layoutManager;
 
@@ -62,42 +62,12 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         cuisineAdapter = new CuisineAdapter(this, this);
         recyclerView.setAdapter(cuisineAdapter);
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
-                .create();
-
-        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        service = retrofit.create(API.ZomatoApiCalls.class);
-
-        fetchCuisines();
+        cuisineAdapter.setCuisineList(CuisinesSingleton.getInstance().getCuisines());
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
-    }
-
-
-    public void fetchCuisines() {
-
-        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
-                .enqueue(new Callback<Cuisines>() {
-                    @Override
-                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
-                        assert response.body() != null;
-                        cuisineAdapter.setCuisineList(response.body().cuisinesList);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Cuisines> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
     }
 
 

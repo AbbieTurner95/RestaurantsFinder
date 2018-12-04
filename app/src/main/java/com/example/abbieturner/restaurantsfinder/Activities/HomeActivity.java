@@ -25,6 +25,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
+import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -55,7 +56,6 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     private AppDatabase database;
     private ModelConverter converter;
     private AutoCompleteTextView autoCompleteTextView;
-    private API.ZomatoApiCalls service;
     private Button btnClear;
 
     @Override
@@ -73,20 +73,7 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         favouritesRecyclerView = (RecyclerView)findViewById(R.id.home_favourites_recycler_view);
         autoCompleteTextView = findViewById(R.id.autocomplete_cuisines);
 
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
-                .create();
-
-        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        service = retrofit.create(API.ZomatoApiCalls.class);
-
-        fetchCuisines();
+        setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
 
         favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         favouriteAdapter = new FavouriteAdapter(this, this);
@@ -139,23 +126,6 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
         intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(intent);
-    }
-
-    public void fetchCuisines() {
-
-        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
-                .enqueue(new Callback<Cuisines>() {
-                    @Override
-                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
-                        assert response.body() != null;
-                        setUpAutocomplete(response.body().cuisinesList);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Cuisines> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
     }
 
     private void setUpAutocomplete(List<Cuisine> cuisineList){

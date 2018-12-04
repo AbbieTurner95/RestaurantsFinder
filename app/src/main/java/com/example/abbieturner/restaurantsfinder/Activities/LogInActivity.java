@@ -12,12 +12,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.abbieturner.restaurantsfinder.API.API;
+import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
+import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
+import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 import com.shashank.sony.fancydialoglib.Animation;
@@ -27,6 +34,11 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class LogInActivity extends AppCompatActivity {
@@ -38,6 +50,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
+    private API.ZomatoApiCalls service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +81,37 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
+                .create();
+
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        service = retrofit.create(API.ZomatoApiCalls.class);
+
+        fetchCuisines();
+
+    }
+
+    public void fetchCuisines() {
+
+        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
+                .enqueue(new Callback<Cuisines>() {
+                    @Override
+                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
+                        assert response.body() != null;
+                        CuisinesSingleton.getInstance().setCuisines(response.body().cuisinesList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Cuisines> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
