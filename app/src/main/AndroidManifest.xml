@@ -23,11 +23,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".Activities.LogInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Activities.CuisineActivity" />
         <activity android:name=".Activities.RestaurantsActivity" />
@@ -40,11 +36,8 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".Activities.RestaurantActivity" />
-        <activity
-            android:name=".Activities.NavActivity"
-            android:label="@string/title_activity_nav"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.HomeActivity"></activity>
+        <activity android:name=".Activities.HomeActivity" />
+
     </application>
 
 </manifest>
