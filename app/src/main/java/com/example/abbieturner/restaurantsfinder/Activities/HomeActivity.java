@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
@@ -35,6 +37,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +52,8 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     RecyclerView favouritesRecyclerView;
     @BindView(R.id.btn_all_cuisines)
     ImageView allCuisines;
+    @BindView(R.id.btn_manage_favourites)
+    Button btnManageFavourites;
 
     private LinearLayoutManager popularLayoutManager;
     private LinearLayoutManager favouriteLayoutManager;
@@ -58,11 +63,13 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     private AutoCompleteTextView autoCompleteTextView;
     private Button btnClear;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        ButterKnife.bind(this);
         database = AppDatabase.getInstance(this);
         converter = ModelConverter.getInstance();
 
@@ -76,7 +83,8 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
 
         favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        favouriteAdapter = new FavouriteAdapter(this, this);
+        int layout = R.layout.favourite_restaurant_item;
+        favouriteAdapter = new FavouriteAdapter(this, this, layout);
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         favouritesRecyclerView.setLayoutManager(favouriteLayoutManager);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
@@ -97,6 +105,8 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
                 autoCompleteTextView.setText("");
             }
         });
+
+        btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
     }
 
     @Override
@@ -148,6 +158,14 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
             }
         });
     }
+
+    private View.OnClickListener btnManageFavouritesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(HomeActivity.this, FavouritesActivity.class);
+            startActivity(intent);
+        }
+    };
 }
 
 

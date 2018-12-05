@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.abbieturner.restaurantsfinder.CalculateDistance;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
@@ -26,6 +27,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     private final RestaurantItemClick listener;
     DecimalFormat df = new DecimalFormat("#.00");
 
+    private ModelConverter converter;
+
 
     private AppDatabase database;
 
@@ -35,6 +38,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         this.context = context;
         this.database = AppDatabase.getInstance(this.context);
         this.listener = listener;
+        this.converter = ModelConverter.getInstance();
     }
 
 
@@ -57,7 +61,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         String title = restaurant.getName();
 
         holder.restaurantName.setText(title);
-        holder.distance.setText(getRestaurantDistance(restaurant));
+        String distance = CalculateDistance.getInstance().getRestaurantDistance(restaurant);
+        holder.distance.setText(distance);
 
         holder.favorites.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,9 +102,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     private void toggleFavoriteRestaurant(Restaurant restaurant) {
 
-        ModelConverter converter = ModelConverter.getInstance();
         DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
-
 
         database.restaurantsDAO().insertRestaurant(convertedRestaurant);
 
@@ -110,14 +113,5 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     }
 
-    private String getRestaurantDistance(Restaurant restaurant) {
-        return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
-    }
 
-    private double calcDistance(Restaurant restaurant) {
-        double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getLocation().getLatitude())
-                , Double.parseDouble(restaurant.getLocation().getLongitude()));
-
-        return Math.round(distance * 100.0) / 100.0;
-    }
 }
