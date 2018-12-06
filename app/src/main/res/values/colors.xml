@@ -6,4 +6,7 @@
     <color name="list_background">#e4e4e4</color>
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
+    <color name="c">#fafafa</color>
+    <color name="c2">#e4e4e4</color>
+    <color name="c3">#e9e9e9</color>
 </resources>

@@ -18,18 +18,22 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Review;
 import com.example.abbieturner.restaurantsfinder.Data.Reviews;
+import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,6 +54,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
+
 public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick {
 
 
@@ -68,13 +74,27 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     ImageView directionButton;
     @BindView(R.id.btn_share)
     ImageView shareButton;
+    @BindView(R.id.restaurant_name)
+    TextView restaurantName;
+    @BindView(R.id.btn_menu)
+    LinearLayout btnMenu;
+    @BindView(R.id.btn_favourites)
+    LinearLayout btnFavourites;
+    @BindView(R.id.btn_web)
+    LinearLayout btnWeb;
+    @BindView(R.id.btn_favourite_icon)
+    ImageView favouriteIcon;
+    @BindView(R.id.scrollview_restaurant)
+    ScrollView mainScrollView;
+    @BindView(R.id.transparent_image)
+    ImageView transparentImageView;
+    @BindView(R.id.review_slider)
+    RecyclerView recyclerView;
 
-    private ScrollView mainScrollView;
-    private ImageView transparentImageView;
     private API.ZomatoApiCalls service;
     private ReviewsAdapter reviewsAdapter;
-    private RecyclerView recyclerView;
-
+    private ModelConverter converter;
+    private AppDatabase database;
 
 
     @Override
@@ -83,13 +103,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_restaurant);
         ButterKnife.bind(this);
 
-        mainScrollView = (ScrollView) findViewById(R.id.scrollview_restaurant);
-        transparentImageView = (ImageView) findViewById(R.id.transparent_image);
+        converter = ModelConverter.getInstance();
+        database = AppDatabase.getInstance(this);
 
-
-
-
-        recyclerView = findViewById(R.id.review_slider);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         reviewsAdapter = new ReviewsAdapter(this, this);
@@ -101,42 +117,25 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
         }
 
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
+
         this.setTitle(restaurant.getName());
 
+        restaurantName.setText(restaurant.getName());
         overalRating.setText(restaurant.getUser_rating().getAggregate_rating());
         address.setText(restaurant.getLocation().getAddress());
 
         String onlineDelivery = restaurant.getHas_online_delivery() == 0 ? "NO" : "YES";
         hasOnlineDelivery.setText(onlineDelivery);
 
-
         callButton.setOnClickListener(callButtonOnClickListener);
         directionButton.setOnClickListener(directionButtonOnClickListener);
         shareButton.setOnClickListener(shareButtonOnClickListener);
-
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch(menuItem.getItemId()){
-                    case R.id.action_menu:
-                        //Toast.makeText(RestaurantActivity.this, restaurant.getMenu_url(), Toast.LENGTH_SHORT).show();
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
-                        startActivity(browserIntent);
-                        break;
-                    case R.id.action_favourite:
-                        Toast.makeText(RestaurantActivity.this, "Favourite Clicked!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.action_web_page:
-                        //Toast.makeText(RestaurantActivity.this, restaurant.getUrl(), Toast.LENGTH_SHORT).show();
-                        Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
-                        startActivity(browserIntent2);
-                        break;
-                }
-                return true;
-            }
-        });
-
+        btnWeb.setOnClickListener(btnWebOnClickListener);
+        btnMenu.setOnClickListener(btnMenuOnClickListener);
+        btnFavourites.setOnClickListener(btnFavouritesOnClickListener);
         transparentImageView.setOnTouchListener(onTouchListener);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
@@ -157,6 +156,20 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         fetchReviews();
     }
 
+    private void toggleFavouriteRestaurant(){
+        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
+
+
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+            Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+        }else{
+            database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+            Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap){
@@ -191,27 +204,18 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         }
     };
 
-    private void directionButtonClicked() {
-        //Toast.makeText(RestaurantActivity.this, "Direction!", Toast.LENGTH_LONG).show();
-
+    private void directionButtonClicked()
+    {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr=53.478908,-1.1863414&daddr="+ restaurant.getLocation().getLatitude() +","+ restaurant.getLocation().getLongitude()+""));
         startActivity(intent);
     }
 
-    private void callButtonClicked() {
-        //Toast.makeText(RestaurantActivity.this, "Call!", Toast.LENGTH_LONG).show();
-
-
+    private void callButtonClicked()
+    {
         if(isPermissionGranted()){
             call_action();
         }
-
-
-
-//        Intent intent = new Intent(Intent.ACTION_CALL);
-//        intent.setData(Uri.parse("tel:+447725887680"));
-//        this.startActivity(intent);
     }
 
     private void call_action(){
@@ -262,8 +266,15 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void shareButtonClicked() {
-        Toast.makeText(RestaurantActivity.this, "Share!", Toast.LENGTH_LONG).show();
-
+       // Toast.makeText(RestaurantActivity.this, "Share!", Toast.LENGTH_LONG).show();
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = restaurant.getName() +
+                "\n\n" + restaurant.getLocation().getAddress() +
+                "\n\n" + restaurant.getUrl();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Check this restaurant !!!");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
 
@@ -300,7 +311,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onResponse(Call<Reviews> call, Response<Reviews> response) {
                         assert response.body() != null;
-                        reviewsAdapter.setReviewsList(response.body().reviewsList);
+
+                        List<Review> test = response.body().reviewsList;
+                        reviewsAdapter.setReviewsList(test);
                     }
 
                     @Override
@@ -324,4 +337,25 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 //        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
 //        startActivity(i);
     }
+
+    private View.OnClickListener btnWebOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
+            startActivity(browserIntent2);
+        }
+    };
+    private View.OnClickListener btnMenuOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
+                        startActivity(browserIntent);
+        }
+    };
+    private View.OnClickListener btnFavouritesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            toggleFavouriteRestaurant();
+        }
+    };
 }

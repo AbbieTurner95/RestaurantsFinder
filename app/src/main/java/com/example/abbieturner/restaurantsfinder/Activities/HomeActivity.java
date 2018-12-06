@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
@@ -34,6 +35,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,21 +49,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick{
 
     @BindView(R.id.home_popular_recycler_view)
-    RecyclerView popularRecyclerView;
+    EmptyRecyclerView popularRecyclerView;
     @BindView(R.id.home_favourites_recycler_view)
-    RecyclerView favouritesRecyclerView;
+    EmptyRecyclerView favouritesRecyclerView;
     @BindView(R.id.btn_all_cuisines)
     ImageView allCuisines;
     @BindView(R.id.btn_manage_favourites)
     Button btnManageFavourites;
+    @BindView(R.id.autocomplete_cuisines)
+    AutoCompleteTextView autoCompleteTextView;
+    @BindView(R.id.btn_clear)
+    Button btnClear;
 
     private LinearLayoutManager popularLayoutManager;
     private LinearLayoutManager favouriteLayoutManager;
     private FavouriteAdapter favouriteAdapter;
+    private FavouriteAdapter popularAdapter;
     private AppDatabase database;
     private ModelConverter converter;
-    private AutoCompleteTextView autoCompleteTextView;
-    private Button btnClear;
+    private List<Restaurant> favoritesRestaurants;
+    private int layout;
 
 
     @Override
@@ -70,43 +77,55 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
+
         database = AppDatabase.getInstance(this);
         converter = ModelConverter.getInstance();
+        layout = R.layout.favourite_restaurant_item;
 
-
-
-        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
-
-        favouritesRecyclerView = (RecyclerView)findViewById(R.id.home_favourites_recycler_view);
-        autoCompleteTextView = findViewById(R.id.autocomplete_cuisines);
+        favoritesRestaurants = getFavouriteRestaurants();
 
         setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
+        setUpPopularRecyclerView();
+        setUpFavouritesRecyclerView();
 
+        allCuisines.setOnClickListener(allCuisinesOnClickListener);
+        btnClear.setOnClickListener(btnClearOnClickListener);
+        btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
+    }
+
+    private List<Restaurant> getFavouriteRestaurants(){
+        return converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+    }
+
+    private void setUpFavouritesRecyclerView(){
         favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        int layout = R.layout.favourite_restaurant_item;
         favouriteAdapter = new FavouriteAdapter(this, this, layout);
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         favouritesRecyclerView.setLayoutManager(favouriteLayoutManager);
+
+        View favouritesEmptyView = findViewById(R.id.favourites_empty_view);
+        favouritesRecyclerView.setEmptyView(favouritesEmptyView);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
+    }
 
-        allCuisines = (ImageView) findViewById(R.id.btn_all_cuisines);
-        allCuisines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, CuisineActivity.class);
-                startActivity(intent);
-            }
-        });
+    private void setUpPopularRecyclerView(){
+        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        popularAdapter = new FavouriteAdapter(this, this, layout);
+        popularAdapter.setCuisineList(new ArrayList<Restaurant>());
+        popularRecyclerView.setLayoutManager(popularLayoutManager);
 
-        btnClear = findViewById(R.id.btn_clear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                autoCompleteTextView.setText("");
-            }
-        });
 
-        btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
+        View popularEmptyView = findViewById(R.id.popular_empty_view);
+        popularRecyclerView.setEmptyView(popularEmptyView);
+        popularRecyclerView.setAdapter(popularAdapter);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+        favouriteAdapter.setCuisineList(favoritesRestaurants);
     }
 
     @Override
@@ -139,8 +158,6 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     }
 
     private void setUpAutocomplete(List<Cuisine> cuisineList){
-        //Cuisine[] cousineArray = new Cuisine[]{new Cuisine(1, "Cuisine1"), new Cuisine(2, "Cuisine2")};
-
         ArrayAdapter<Cuisine> adapter =
                 new ArrayAdapter<Cuisine>(this, android.R.layout.simple_list_item_1, cuisineList);
         autoCompleteTextView.setAdapter(adapter);
@@ -164,6 +181,21 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         public void onClick(View v) {
             Intent intent = new Intent(HomeActivity.this, FavouritesActivity.class);
             startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener allCuisinesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(HomeActivity.this, CuisineActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener btnClearOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            autoCompleteTextView.setText("");
         }
     };
 }

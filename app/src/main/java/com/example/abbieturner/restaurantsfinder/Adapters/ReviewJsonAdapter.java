@@ -11,8 +11,10 @@ import java.lang.reflect.Type;
 
 public class ReviewJsonAdapter implements JsonDeserializer<Review> {
     @Override
-    public Review deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public Review deserialize(JsonElement json, Type typeOf, JsonDeserializationContext context) throws JsonParseException {
         JsonElement jsonReview = json.getAsJsonObject().get("review");
         return new Gson().fromJson(jsonReview, Review.class);
     }
+
+
 }

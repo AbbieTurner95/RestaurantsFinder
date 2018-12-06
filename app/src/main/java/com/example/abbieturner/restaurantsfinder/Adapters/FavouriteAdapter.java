@@ -112,7 +112,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
 
 
 
-        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+        //List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
     }
 
 }

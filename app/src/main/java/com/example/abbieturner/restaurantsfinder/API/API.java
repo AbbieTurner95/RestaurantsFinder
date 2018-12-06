@@ -33,6 +33,6 @@ public class API {
 
         @Headers("user-key: b48385ca8e173d7176550e050eae5fe9")
         @GET("api/v2.1/reviews")
-        Call<Reviews> getReviews(@Query("res_id") String restaurant_id);
+        Call<Reviews> getReviews(@Query("res_id") String res_id);
     }
 }

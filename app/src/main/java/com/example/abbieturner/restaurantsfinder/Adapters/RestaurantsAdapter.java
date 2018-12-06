@@ -55,8 +55,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(RestaurantsViewHolder holder, int position) {
+    public void onBindViewHolder(final RestaurantsViewHolder holder, int position) {
         final Restaurant restaurant = restaurantsList.get(position);
+
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
 
         String title = restaurant.getName();
 
@@ -67,7 +71,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         holder.favorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleFavoriteRestaurant(restaurant);
+                toggleFavoriteRestaurant(restaurant, holder);
             }
         });
 
@@ -100,15 +104,19 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         void onRestaurantItemClick(Restaurant restaurant);
     }
 
-    private void toggleFavoriteRestaurant(Restaurant restaurant) {
+    private void toggleFavoriteRestaurant(Restaurant restaurant, RestaurantsViewHolder holder) {
 
         DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
 
-        database.restaurantsDAO().insertRestaurant(convertedRestaurant);
-
-        Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show(); //TODO save restaurant in phone
-
-        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+            Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+            holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }else{
+            database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+            Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+            holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
 
 
     }

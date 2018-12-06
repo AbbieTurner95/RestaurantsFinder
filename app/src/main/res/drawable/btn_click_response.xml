@@ -4,11 +4,10 @@
         android:state_pressed="true">
         <shape
             android:shape="rectangle">
-            <corners
-                android:radius="10dp" />
+
 
             <solid
-                android:color="@color/colorPrimary"/>
+                android:color="@color/colorPrimaryDark"/>
         </shape>
     </item>
 
@@ -16,9 +15,9 @@
     <item>
         <shape
             android:shape="rectangle">
-            <corners android:radius="10dp" />
 
-            <solid android:color="@color/colorPrimaryDark"/>
+
+            <solid android:color="@color/list_background"/>
         </shape>
     </item>
 
