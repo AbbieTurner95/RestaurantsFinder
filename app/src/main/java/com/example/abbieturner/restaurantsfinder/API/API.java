@@ -7,6 +7,7 @@ import retrofit2.http.Query;
 
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
+import com.example.abbieturner.restaurantsfinder.Data.Reviews;
 
 public class API {
     public interface ZomatoApiCalls {
@@ -29,5 +30,9 @@ public class API {
         Call<Cuisines> getCuisineId(@Query("city_id") String city_id,
                                     @Query("lat") String lat,
                                     @Query("lon") String lon);
+
+        @Headers("user-key: b48385ca8e173d7176550e050eae5fe9")
+        @GET("api/v2.1/reviews")
+        Call<Reviews> getReviews(@Query("res_id") String restaurant_id);
     }
 }

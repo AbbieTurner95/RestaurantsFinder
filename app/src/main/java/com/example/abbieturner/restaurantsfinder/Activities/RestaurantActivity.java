@@ -22,7 +22,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.abbieturner.restaurantsfinder.API.API;
+import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.ReviewJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
+import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.Review;
+import com.example.abbieturner.restaurantsfinder.Data.Reviews;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,13 +41,17 @@ import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.gson.GsonBuilder;
 
-public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick {
 
-    @BindView(R.id.review_slider)
-    RecyclerView slider;
 
     private Gson gson;
     private String jsonRestaurant;
@@ -60,6 +71,10 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
     private ScrollView mainScrollView;
     private ImageView transparentImageView;
+    private API.ZomatoApiCalls service;
+    private ReviewsAdapter reviewsAdapter;
+    private RecyclerView recyclerView;
+
 
 
     @Override
@@ -71,9 +86,14 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         mainScrollView = (ScrollView) findViewById(R.id.scrollview_restaurant);
         transparentImageView = (ImageView) findViewById(R.id.transparent_image);
 
+
+
+
+        recyclerView = findViewById(R.id.review_slider);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        slider.setLayoutManager(layoutManager);
-        //needs adapter
+        recyclerView.setLayoutManager(layoutManager);
+        reviewsAdapter = new ReviewsAdapter(this, this);
+        recyclerView.setAdapter(reviewsAdapter);
 
         gson = new Gson();
         jsonRestaurant = getIntent().getStringExtra(getResources().getString(R.string.TAG_RESTAURANT));
@@ -121,6 +141,20 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
         mapFragment.getMapAsync(this);
+
+
+//        Gson gson = new GsonBuilder()
+//                .registerTypeAdapter(Review.class, new ReviewJsonAdapter())
+//                .create();
+//
+//        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build();
+//
+//        service = retrofit.create(API.ZomatoApiCalls.class);
+        //fetchReviews();
     }
 
 
@@ -258,4 +292,36 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
     };
+
+    private void fetchReviews() {
+
+        service.getReviews(restaurant.getId())
+                .enqueue(new Callback<Reviews>() {
+                    @Override
+                    public void onResponse(Call<Reviews> call, Response<Reviews> response) {
+                        assert response.body() != null;
+                        reviewsAdapter.setReviewsList(response.body().reviewsList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Reviews> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
+    @Override
+    public void onReviewItemClick(Review review) {
+        Toast.makeText(this, "Review clicked", Toast.LENGTH_LONG).show();
+
+
+
+
+//        Gson gS = new Gson();
+//        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
+//
+//        Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
+//        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
+//        startActivity(i);
+    }
 }

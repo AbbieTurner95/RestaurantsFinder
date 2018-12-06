@@ -11,14 +11,15 @@
                 android:color="@color/colorPrimaryDark"/>
         </shape>
     </item>
+
+
     <item>
         <shape
             android:shape="rectangle">
-            <corners
-                android:radius="10dp" />
+            <corners android:radius="10dp" />
 
-            <solid
-                android:color="@color/colorPrimary"/>
+            <solid android:color="@color/colorPrimary"/>
         </shape>
     </item>
+
 </selector>
