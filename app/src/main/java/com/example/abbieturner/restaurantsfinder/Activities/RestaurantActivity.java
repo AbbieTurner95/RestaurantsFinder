@@ -143,18 +143,18 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
 
 
-//        Gson gson = new GsonBuilder()
-//                .registerTypeAdapter(Review.class, new ReviewJsonAdapter())
-//                .create();
-//
-//        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        service = retrofit.create(API.ZomatoApiCalls.class);
-        //fetchReviews();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Review.class, new ReviewJsonAdapter())
+                .create();
+
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        service = retrofit.create(API.ZomatoApiCalls.class);
+        fetchReviews();
     }
 
 
