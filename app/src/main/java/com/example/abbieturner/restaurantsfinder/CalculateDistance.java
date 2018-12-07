@@ -7,14 +7,14 @@ public class CalculateDistance {
 
     private static CalculateDistance theSingleton = null;
 
-    private CalculateDistance(){
+    private CalculateDistance() {
     }
 
-    public static CalculateDistance getInstance(){
-        if (theSingleton == null){
+    public static CalculateDistance getInstance() {
+        if (theSingleton == null) {
             theSingleton = new CalculateDistance();
         }
-        return theSingleton;	// here’s one I made earlier !!
+        return theSingleton;
     }
 
     public String getRestaurantDistance(Restaurant restaurant) {

@@ -13,7 +13,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder>{
+public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
     private List<Review> reviewsList;
     private final Context context;
     private final ReviewItemClick listener;

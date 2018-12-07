@@ -22,7 +22,7 @@ public interface DAORestaurantInterface {
     List<DatabaseRestaurant> getRestaurants();
 
     @Delete
-    void deleteRestaurant (DatabaseRestaurant restaurant);
+    void deleteRestaurant(DatabaseRestaurant restaurant);
 
     @Query("SELECT * FROM restaurantsDatabase WHERE Id = :restaurantId")
     DatabaseRestaurant getRestaurant(String restaurantId);

@@ -25,7 +25,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-
 public class RestaurantsActivity extends AppCompatActivity implements RestaurantsAdapter.RestaurantItemClick {
 
     private String name;
@@ -93,8 +92,6 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
         //Toast.makeText(this, restaurant.getName(), Toast.LENGTH_LONG).show();
-
-
 
 
         Gson gS = new Gson();

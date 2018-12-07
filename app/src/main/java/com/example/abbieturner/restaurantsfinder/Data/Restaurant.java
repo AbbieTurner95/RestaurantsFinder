@@ -24,11 +24,11 @@ public class Restaurant {
     private String featured_image;
     private int has_online_delivery;
 
-    public Restaurant(){
+    public Restaurant() {
 
     }
 
-    public Restaurant(DatabaseRestaurant databaseRestaurant){
+    public Restaurant(DatabaseRestaurant databaseRestaurant) {
         this.id = databaseRestaurant.getId();
         this.name = databaseRestaurant.getName();
         this.url = databaseRestaurant.getUrl();

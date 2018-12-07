@@ -7,25 +7,24 @@ public class CuisinesSingleton {
     private static CuisinesSingleton theSingleton = null;
     private List<Cuisine> cuisines;
 
-    private CuisinesSingleton(){
+    private CuisinesSingleton() {
         cuisines = new ArrayList<>();
     }
 
-    public static CuisinesSingleton getInstance(){
-        if (theSingleton == null){
+    public static CuisinesSingleton getInstance() {
+        if (theSingleton == null) {
             theSingleton = new CuisinesSingleton();
         }
-        return theSingleton;	// here’s one I made earlier !!
+        return theSingleton;    // here’s one I made earlier !!
     }
 
-    public List<Cuisine> getCuisines(){
+    public List<Cuisine> getCuisines() {
         return this.cuisines;
     }
 
-    public void setCuisines(List<Cuisine> cuisines){
+    public void setCuisines(List<Cuisine> cuisines) {
         this.cuisines = cuisines;
     }
-
 
 
 }

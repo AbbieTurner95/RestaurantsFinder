@@ -68,7 +68,7 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nav_drawer_layout);
+        setContentView(R.layout.nav_drawer_layout_login);
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);

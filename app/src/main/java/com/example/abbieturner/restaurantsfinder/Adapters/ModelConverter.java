@@ -10,21 +10,22 @@ public class ModelConverter {
     private static ModelConverter theSingleton = null;
 
 
-
-    public static ModelConverter getInstance(){
-        if (theSingleton == null)
-        { theSingleton = new ModelConverter (); }
-        return theSingleton;	// here’s one I made earlier !!
+    public static ModelConverter getInstance() {
+        if (theSingleton == null) {
+            theSingleton = new ModelConverter();
+        }
+        return theSingleton;    // here’s one I made earlier !!
     }
 
-    public DatabaseRestaurant convertToDatabaseRestaurant(Restaurant restaurant){
+    public DatabaseRestaurant convertToDatabaseRestaurant(Restaurant restaurant) {
         return new DatabaseRestaurant(restaurant);
     }
 
-    private Restaurant convertToRestaurant(DatabaseRestaurant databaseRestaurant){
+    private Restaurant convertToRestaurant(DatabaseRestaurant databaseRestaurant) {
         return new Restaurant(databaseRestaurant);
     }
-    public List<Restaurant> convertToRestaurants(List<DatabaseRestaurant> databaseRestaurants){
+
+    public List<Restaurant> convertToRestaurants(List<DatabaseRestaurant> databaseRestaurants) {
 
         List<Restaurant> convertedRestaurants = new ArrayList<>();
 

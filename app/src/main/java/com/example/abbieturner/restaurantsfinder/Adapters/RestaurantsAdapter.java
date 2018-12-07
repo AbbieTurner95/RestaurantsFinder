@@ -102,7 +102,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     private void toggleFavoriteRestaurant(Restaurant restaurant) {
 
-        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
+        DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
 
         database.restaurantsDAO().insertRestaurant(convertedRestaurant);
 

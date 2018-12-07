@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 
-@Entity (tableName = "restaurantsDatabase")
+@Entity(tableName = "restaurantsDatabase")
 public class DatabaseRestaurant {
 
     /////////////////////////////////////////////////////
@@ -51,11 +51,11 @@ public class DatabaseRestaurant {
     private String rating_color;
     private String votes;
 
-    public DatabaseRestaurant(){
+    public DatabaseRestaurant() {
 
     }
 
-    public DatabaseRestaurant(Restaurant restaurant){
+    public DatabaseRestaurant(Restaurant restaurant) {
         this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.url = restaurant.getUrl();
