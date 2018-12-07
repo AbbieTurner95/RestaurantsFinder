@@ -44,7 +44,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick {
+public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick{
 
     @BindView(R.id.home_popular_recycler_view)
     RecyclerView popularRecyclerView;
@@ -74,9 +74,10 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         converter = ModelConverter.getInstance();
 
 
+
         List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
 
-        favouritesRecyclerView = (RecyclerView) findViewById(R.id.home_favourites_recycler_view);
+        favouritesRecyclerView = (RecyclerView)findViewById(R.id.home_favourites_recycler_view);
         autoCompleteTextView = findViewById(R.id.autocomplete_cuisines);
 
         setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
@@ -112,10 +113,10 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if (v instanceof EditText) {
+            if ( v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
                     Log.d("focus", "touchevent");
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -137,7 +138,7 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         startActivity(intent);
     }
 
-    private void setUpAutocomplete(List<Cuisine> cuisineList) {
+    private void setUpAutocomplete(List<Cuisine> cuisineList){
         //Cuisine[] cousineArray = new Cuisine[]{new Cuisine(1, "Cuisine1"), new Cuisine(2, "Cuisine2")};
 
         ArrayAdapter<Cuisine> adapter =

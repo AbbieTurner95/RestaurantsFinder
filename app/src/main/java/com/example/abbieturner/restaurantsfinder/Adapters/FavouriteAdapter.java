@@ -20,7 +20,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.RestaurantViewHolder> {
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.RestaurantViewHolder>{
     private List<Restaurant> restaurantList;
     private final Context context;
     private final RestaurantItemClick listener;
@@ -94,20 +94,22 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
         void onRestaurantItemClick(Restaurant cuisines);
     }
 
-    private void toggleFavoriteRestaurant(Restaurant restaurant) {
+    private void toggleFavoriteRestaurant(Restaurant restaurant){
 
-        DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
+        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
 
 
-        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
             database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             restaurantList.remove(restaurant);
             notifyDataSetChanged();
-        } else {
+        }else{
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
         }
+
+
 
 
         List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());

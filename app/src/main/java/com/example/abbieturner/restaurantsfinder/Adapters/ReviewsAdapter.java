@@ -26,7 +26,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
 
     public void setReviewsList(List<Review> reviewsList) {
         this.reviewsList.clear();
-        this.reviewsList.addAll(reviewsList);
+
+        if(reviewsList == null){
+            this.reviewsList.addAll(new ArrayList<Review>());
+        }else{
+            this.reviewsList.addAll(reviewsList);
+        }
+
         notifyDataSetChanged();
     }
 

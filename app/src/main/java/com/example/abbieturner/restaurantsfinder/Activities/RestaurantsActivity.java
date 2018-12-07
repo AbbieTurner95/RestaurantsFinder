@@ -64,7 +64,6 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                //.client(builder.build())
                 .build();
 
         service = retrofit.create(API.ZomatoApiCalls.class);
