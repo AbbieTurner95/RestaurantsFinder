@@ -135,8 +135,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
-
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_fave) {
 
         } else if (id == R.id.nav_share) {

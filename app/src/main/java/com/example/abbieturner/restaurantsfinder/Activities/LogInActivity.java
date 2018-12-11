@@ -228,7 +228,8 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_fave) {
 

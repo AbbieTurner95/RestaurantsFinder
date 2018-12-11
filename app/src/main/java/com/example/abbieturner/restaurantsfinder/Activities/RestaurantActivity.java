@@ -7,13 +7,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,7 +56,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.GsonBuilder;
 
-public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick {
+public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick, NavigationView.OnNavigationItemSelectedListener {
 
 
     private Gson gson;
@@ -68,6 +74,12 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     ImageView directionButton;
     @BindView(R.id.btn_share)
     ImageView shareButton;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private ScrollView mainScrollView;
     private ImageView transparentImageView;
@@ -76,18 +88,22 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     private RecyclerView recyclerView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant);
+        setContentView(R.layout.nav_bar_rest);
+        setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         mainScrollView = (ScrollView) findViewById(R.id.scrollview_restaurant);
         transparentImageView = (ImageView) findViewById(R.id.transparent_image);
-
-
-
 
         recyclerView = findViewById(R.id.review_slider);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -109,33 +125,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         String onlineDelivery = restaurant.getHas_online_delivery() == 0 ? "NO" : "YES";
         hasOnlineDelivery.setText(onlineDelivery);
 
-
         callButton.setOnClickListener(callButtonOnClickListener);
         directionButton.setOnClickListener(directionButtonOnClickListener);
         shareButton.setOnClickListener(shareButtonOnClickListener);
-
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch(menuItem.getItemId()){
-                    case R.id.action_menu:
-                        //Toast.makeText(RestaurantActivity.this, restaurant.getMenu_url(), Toast.LENGTH_SHORT).show();
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
-                        startActivity(browserIntent);
-                        break;
-                    case R.id.action_favourite:
-                        Toast.makeText(RestaurantActivity.this, "Favourite Clicked!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.action_web_page:
-                        //Toast.makeText(RestaurantActivity.this, restaurant.getUrl(), Toast.LENGTH_SHORT).show();
-                        Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
-                        startActivity(browserIntent2);
-                        break;
-                }
-                return true;
-            }
-        });
 
         transparentImageView.setOnTouchListener(onTouchListener);
 
@@ -324,4 +316,51 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 //        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
 //        startActivity(i);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_fave) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_contact) {
+
+        } else if (id == R.id.nav_loginout) {
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
+
 }
