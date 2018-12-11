@@ -80,13 +80,15 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.scrollview_restaurant)
+    ScrollView mainScrollView;
+    @BindView(R.id.transparent_image)
+    ImageView transparentImageView;
+    @BindView(R.id.review_slider)
+    RecyclerView recyclerView;
 
-    private ScrollView mainScrollView;
-    private ImageView transparentImageView;
     private API.ZomatoApiCalls service;
     private ReviewsAdapter reviewsAdapter;
-    private RecyclerView recyclerView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +104,6 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainScrollView = (ScrollView) findViewById(R.id.scrollview_restaurant);
-        transparentImageView = (ImageView) findViewById(R.id.transparent_image);
-
-        recyclerView = findViewById(R.id.review_slider);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         reviewsAdapter = new ReviewsAdapter(this, this);
@@ -113,7 +111,7 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         gson = new Gson();
         jsonRestaurant = getIntent().getStringExtra(getResources().getString(R.string.TAG_RESTAURANT));
-        if(jsonRestaurant != null){
+        if (jsonRestaurant != null) {
             restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
         }
 
@@ -133,33 +131,17 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
         mapFragment.getMapAsync(this);
-
-
-//        Gson gson = new GsonBuilder()
-//                .registerTypeAdapter(Review.class, new ReviewJsonAdapter())
-//                .create();
-//
-//        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-//
-//        service = retrofit.create(API.ZomatoApiCalls.class);
-        //fetchReviews();
     }
 
-
     @Override
-    public void onMapReady(GoogleMap googleMap){
+    public void onMapReady(GoogleMap googleMap) {
         LatLng location = new LatLng(Double.parseDouble(restaurant.getLocation().getLatitude()), Double.parseDouble(restaurant.getLocation().getLongitude()));
-
 
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
                 .title(restaurant.getLocation().getAddress()));
         float zoomLevel = (float) 15.0;
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,zoomLevel));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
     }
 
     private View.OnClickListener directionButtonOnClickListener = new View.OnClickListener() {
@@ -184,50 +166,48 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     };
 
     private void directionButtonClicked() {
-        //Toast.makeText(RestaurantActivity.this, "Direction!", Toast.LENGTH_LONG).show();
-
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?saddr=53.478908,-1.1863414&daddr="+ restaurant.getLocation().getLatitude() +","+ restaurant.getLocation().getLongitude()+""));
+                Uri.parse("http://maps.google.com/maps?saddr=53.478908,-1.1863414&daddr=" + restaurant.getLocation().getLatitude() + "," + restaurant.getLocation().getLongitude() + ""));
         startActivity(intent);
     }
 
     private void callButtonClicked() {
-        //Toast.makeText(RestaurantActivity.this, "Call!", Toast.LENGTH_LONG).show();
-
-
-        if(isPermissionGranted()){
+        if (isPermissionGranted()) {
             call_action();
         }
-
-
-
-//        Intent intent = new Intent(Intent.ACTION_CALL);
-//        intent.setData(Uri.parse("tel:+447725887680"));
-//        this.startActivity(intent);
     }
 
-    private void call_action(){
+    private void call_action() {
         String phnum = "+447725887680";
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + phnum));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         startActivity(callIntent);
     }
 
-    private  boolean isPermissionGranted() {
+    private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v("TAG","Permission is granted");
+                Log.v("TAG", "Permission is granted");
                 return true;
             } else {
 
-                Log.v("TAG","Permission is revoked");
+                Log.v("TAG", "Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
                 return false;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.v("TAG","Permission is granted");
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("TAG", "Permission is granted");
             return true;
         }
     }
@@ -247,17 +227,12 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
     private void shareButtonClicked() {
         Toast.makeText(RestaurantActivity.this, "Share!", Toast.LENGTH_LONG).show();
-
     }
-
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
@@ -286,7 +261,6 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     };
 
     private void fetchReviews() {
-
         service.getReviews(restaurant.getId())
                 .enqueue(new Callback<Reviews>() {
                     @Override
@@ -305,10 +279,6 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onReviewItemClick(Review review) {
         Toast.makeText(this, "Review clicked", Toast.LENGTH_LONG).show();
-
-
-
-
 //        Gson gS = new Gson();
 //        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
 //
@@ -359,8 +329,4 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
 }

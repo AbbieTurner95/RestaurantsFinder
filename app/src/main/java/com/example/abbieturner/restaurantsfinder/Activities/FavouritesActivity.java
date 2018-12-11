@@ -12,36 +12,26 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavouritesActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener{
+public class FavouritesActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.favourites_restaurants_recycler_view)
     RecyclerView favouritesRestaurantsRecyclerView;
-
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
-    private AppDatabase database;
-    private ModelConverter converter;
-    private LinearLayoutManager favouritesLayoutManager;
-    private FavouriteAdapter favouritesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +40,8 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        database = AppDatabase.getInstance(this);
-        converter = ModelConverter.getInstance();
+        AppDatabase database = AppDatabase.getInstance(this);
+        ModelConverter converter = ModelConverter.getInstance();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -62,9 +52,9 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
 
         List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
 
-        favouritesLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager favouritesLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         int layout = R.layout.favourite_restaurant_vertical_item;
-        favouritesAdapter = new FavouriteAdapter(this, this, layout);
+        FavouriteAdapter favouritesAdapter = new FavouriteAdapter(this, this, layout);
         favouritesAdapter.setCuisineList(favoritesRestaurants);
         favouritesRestaurantsRecyclerView.setLayoutManager(favouritesLayoutManager);
         favouritesRestaurantsRecyclerView.setAdapter(favouritesAdapter);
@@ -74,10 +64,8 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
 
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
-
         Gson gS = new Gson();
-        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
-
+        String jsonRestaurant = gS.toJson(restaurant);
         Intent intent = new Intent(FavouritesActivity.this, RestaurantActivity.class);
         intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(intent);

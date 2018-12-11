@@ -34,7 +34,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RestaurantsActivity extends AppCompatActivity implements RestaurantsAdapter.RestaurantItemClick,NavigationView.OnNavigationItemSelectedListener {
+public class RestaurantsActivity extends AppCompatActivity implements RestaurantsAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -42,13 +42,14 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.restaurants_recycler_view)
+    RecyclerView recyclerView;
 
     private String name;
     private int cuisineID;
-    private RecyclerView recyclerView;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
-    private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    //private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,6 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        recyclerView = findViewById(R.id.restaurants_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         restaurantsAdapter = new RestaurantsAdapter(this, this);
@@ -115,12 +115,8 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
-        //Toast.makeText(this, restaurant.getName(), Toast.LENGTH_LONG).show();
-
-
         Gson gS = new Gson();
-        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
-
+        String jsonRestaurant = gS.toJson(restaurant);
         Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
         i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(i);

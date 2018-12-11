@@ -195,7 +195,6 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    //Transaction from activity to activity
     private void setEnterExitTransition(Intent intent) {
         getWindow().setExitTransition(new Fade().setDuration(1000));
         getWindow().setReenterTransition(new Fade().setDuration(1000));

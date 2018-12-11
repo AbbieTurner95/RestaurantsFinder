@@ -2,9 +2,7 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,29 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
-import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
-
-import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 
 public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick, NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,7 +32,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     AdView mAdView;
     @BindView(R.id.cuisines_recycler_view)
     RecyclerView recyclerView;
-
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -72,7 +55,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
 
         this.setTitle(R.string.title_cuisines);
 
@@ -150,11 +132,4 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
-
-
 }

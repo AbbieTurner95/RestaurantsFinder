@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,33 +24,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.API.API;
-import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener{
+
+public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.home_popular_recycler_view)
     RecyclerView popularRecyclerView;
@@ -67,15 +56,10 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
-    private LinearLayoutManager popularLayoutManager;
-    private LinearLayoutManager favouriteLayoutManager;
-    private FavouriteAdapter favouriteAdapter;
-    private AppDatabase database;
-    private ModelConverter converter;
-    private AutoCompleteTextView autoCompleteTextView;
-    private Button btnClear;
-
+    @BindView(R.id.autocomplete_cuisines)
+    AutoCompleteTextView autoCompleteTextView;
+    @BindView(R.id.btn_clear)
+    Button btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +67,8 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        database = AppDatabase.getInstance(this);
-        converter = ModelConverter.getInstance();
+        AppDatabase database = AppDatabase.getInstance(this);
+        ModelConverter converter = ModelConverter.getInstance();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,19 +79,15 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
 
         List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
 
-        favouritesRecyclerView = (RecyclerView)findViewById(R.id.home_favourites_recycler_view);
-        autoCompleteTextView = findViewById(R.id.autocomplete_cuisines);
-
         setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
 
-        favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         int layout = R.layout.favourite_restaurant_item;
-        favouriteAdapter = new FavouriteAdapter(this, this, layout);
+        FavouriteAdapter favouriteAdapter = new FavouriteAdapter(this, this, layout);
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         favouritesRecyclerView.setLayoutManager(favouriteLayoutManager);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
 
-        allCuisines = (ImageView) findViewById(R.id.btn_all_cuisines);
         allCuisines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,14 +96,13 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
             }
         });
 
-        btnClear = findViewById(R.id.btn_clear);
+
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 autoCompleteTextView.setText("");
             }
         });
-
         btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
     }
 
@@ -131,10 +110,10 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     Log.d("focus", "touchevent");
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -149,16 +128,14 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     public void onRestaurantItemClick(Restaurant restaurant) {
 
         Gson gS = new Gson();
-        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
+        String jsonRestaurant = gS.toJson(restaurant);
 
         Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
         intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(intent);
     }
 
-    private void setUpAutocomplete(List<Cuisine> cuisineList){
-        //Cuisine[] cousineArray = new Cuisine[]{new Cuisine(1, "Cuisine1"), new Cuisine(2, "Cuisine2")};
-
+    private void setUpAutocomplete(List<Cuisine> cuisineList) {
         ArrayAdapter<Cuisine> adapter =
                 new ArrayAdapter<Cuisine>(this, android.R.layout.simple_list_item_1, cuisineList);
         autoCompleteTextView.setAdapter(adapter);
@@ -228,15 +205,4 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
-
-
-
-
 }
-
-
