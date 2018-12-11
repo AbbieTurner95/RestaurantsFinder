@@ -233,7 +233,12 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_fave) {
 
         } else if (id == R.id.nav_share) {
-
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hey check out this cool restaurant finder app!";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Restaurant Finder!");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
         } else if (id == R.id.nav_contact) {
 
         } else if (id == R.id.nav_loginout) {

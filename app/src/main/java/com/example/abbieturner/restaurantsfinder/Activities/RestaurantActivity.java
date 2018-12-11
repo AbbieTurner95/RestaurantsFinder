@@ -231,7 +231,13 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void shareButtonClicked() {
-        Toast.makeText(RestaurantActivity.this, "Share!", Toast.LENGTH_LONG).show();
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Hey check out this restaurant I found using the restaurant finder app! Its called - "
+                + restaurant.getName() + "Its amazing check out the user rating its : " + restaurant.getUser_rating();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Restaurant from Restaurant Finder!");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -319,6 +325,13 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         } else if (id == R.id.nav_fave) {
 
         } else if (id == R.id.nav_share) {
+
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hey check out this cool restaurant finder app!";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Restaurant Finder!");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         } else if (id == R.id.nav_contact) {
 
