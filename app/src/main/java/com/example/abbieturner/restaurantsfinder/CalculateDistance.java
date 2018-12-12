@@ -21,7 +21,7 @@ public class CalculateDistance {
         return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
     }
 
-    private double calcDistance(Restaurant restaurant) {
+    public double calcDistance(Restaurant restaurant) {
         double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getLocation().getLatitude())
                 , Double.parseDouble(restaurant.getLocation().getLongitude()));
 

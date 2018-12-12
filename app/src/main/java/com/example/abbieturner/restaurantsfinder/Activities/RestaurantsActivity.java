@@ -2,6 +2,7 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
+import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,8 +57,9 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_bar_rests);
-        setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -75,10 +78,13 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         if (intent != null) {
             cuisineID = intent.getIntExtra("cuisine_id", cuisineID);
             name = intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_NAME));
+
+            toolbar.setTitle(name);
         } else {
             Log.e("ERROR INTENT", "Intent is null!");
         }
 
+//        toolbar.inflateMenu(R.menu.menu_restaurants);
         this.setTitle(name);
 
         Gson gson = new GsonBuilder()
@@ -134,12 +140,20 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_restaurants, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if(id == R.id.action_filter){
+            openFilterDialog();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -171,4 +185,18 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void openFilterDialog(){
+        RestaurantsFilterDialog dialog = new RestaurantsFilterDialog();
+        Bundle args = new Bundle();
+        args.putSerializable("key", restaurantsAdapter);
+        dialog.setArguments(args);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        dialog.show(ft, RestaurantsFilterDialog.TAG);
+
+
+    }
+
+
 }

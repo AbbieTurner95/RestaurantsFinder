@@ -31,4 +31,5 @@
     <string name="TAG_RESTAURANT">restaurant_tag</string>
     <string name="google_maps_key">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
     <string name="title_activity_navig">NavigActivity</string>
+    <string name="RestaurantsFilterDialog">RestaurantsFilterDialog</string>
 </resources>

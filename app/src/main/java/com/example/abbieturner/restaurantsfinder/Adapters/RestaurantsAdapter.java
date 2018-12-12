@@ -5,24 +5,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.CalculateDistance;
+import com.example.abbieturner.restaurantsfinder.CustomFilter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> {
+public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable {
 
-    private List<Restaurant> restaurantsList;
+    private List<Restaurant> restaurantsList, filterList;
+    private CustomFilter filter;
     private final Context context;
     private final RestaurantItemClick listener;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -35,6 +40,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     public RestaurantsAdapter(Context context, RestaurantItemClick listener) {
         restaurantsList = new ArrayList<>();
+        filterList = new ArrayList<>();
+
         this.context = context;
         this.database = AppDatabase.getInstance(this.context);
         this.listener = listener;
@@ -45,8 +52,20 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public void setRestaurantsList(List<Restaurant> restaurantsList) {
         this.restaurantsList.clear();
         this.restaurantsList.addAll(restaurantsList);
+
+        this.filterList.clear();
+        this.filterList.addAll(restaurantsList);
         notifyDataSetChanged();
     }
+
+    public void setRestaurants(List<Restaurant> restaurantsList) {
+        this.restaurantsList.clear();
+        this.restaurantsList.addAll(restaurantsList);
+
+        notifyDataSetChanged();
+
+    }
+
 
     @Override
     public RestaurantsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -80,6 +99,15 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     @Override
     public int getItemCount() {
         return restaurantsList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(filter == null){
+            filter = new CustomFilter(filterList, this);
+        }
+
+        return filter;
     }
 
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

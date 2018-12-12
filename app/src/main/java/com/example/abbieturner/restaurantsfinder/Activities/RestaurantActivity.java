@@ -24,18 +24,22 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Review;
 import com.example.abbieturner.restaurantsfinder.Data.Reviews;
+import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,6 +66,8 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     private Gson gson;
     private String jsonRestaurant;
     private Restaurant restaurant;
+    private ModelConverter converter;
+    private AppDatabase database;
     @BindView(R.id.overall_rating)
     TextView overalRating;
     @BindView(R.id.address_tv_1)
@@ -86,6 +92,16 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     ImageView transparentImageView;
     @BindView(R.id.review_slider)
     RecyclerView recyclerView;
+    @BindView(R.id.btn_menu)
+    LinearLayout btnMenu;
+    @BindView(R.id.btn_favourites)
+    LinearLayout btnFavourites;
+    @BindView(R.id.btn_web)
+    LinearLayout btnWeb;
+    @BindView(R.id.btn_favourite_icon)
+    ImageView favouriteIcon;
+    @BindView(R.id.restaurant_name)
+    TextView restaurantName;
 
     private API.ZomatoApiCalls service;
     private ReviewsAdapter reviewsAdapter;
@@ -96,6 +112,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.nav_bar_rest);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        converter = ModelConverter.getInstance();
+        database = AppDatabase.getInstance(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,7 +134,14 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
         }
 
-        this.setTitle(restaurant.getName());
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
+
+        toolbar.setTitle(restaurant.getName());
+        //this.setTitle(restaurant.getName());
+
+        restaurantName.setText(restaurant.getName());
 
         overalRating.setText(restaurant.getUser_rating().getAggregate_rating());
         address.setText(restaurant.getLocation().getAddress());
@@ -126,6 +152,10 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         callButton.setOnClickListener(callButtonOnClickListener);
         directionButton.setOnClickListener(directionButtonOnClickListener);
         shareButton.setOnClickListener(shareButtonOnClickListener);
+
+        btnWeb.setOnClickListener(btnWebOnClickListener);
+        btnMenu.setOnClickListener(btnMenuOnClickListener);
+        btnFavourites.setOnClickListener(btnFavouritesOnClickListener);
 
         transparentImageView.setOnTouchListener(onTouchListener);
 
@@ -341,5 +371,41 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private View.OnClickListener btnWebOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
+            startActivity(browserIntent2);
+        }
+    };
+    private View.OnClickListener btnMenuOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
+            startActivity(browserIntent);
+        }
+    };
+    private View.OnClickListener btnFavouritesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            toggleFavouriteRestaurant();
+        }
+    };
+
+    private void toggleFavouriteRestaurant(){
+        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
+
+
+        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+            Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+        }else{
+            database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+            Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
     }
 }

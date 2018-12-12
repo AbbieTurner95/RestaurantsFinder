@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
@@ -34,6 +35,7 @@ import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,9 +45,9 @@ import butterknife.ButterKnife;
 public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.home_popular_recycler_view)
-    RecyclerView popularRecyclerView;
+    EmptyRecyclerView popularRecyclerView;
     @BindView(R.id.home_favourites_recycler_view)
-    RecyclerView favouritesRecyclerView;
+    EmptyRecyclerView favouritesRecyclerView;
     @BindView(R.id.btn_all_cuisines)
     ImageView allCuisines;
     @BindView(R.id.btn_manage_favourites)
@@ -61,49 +63,66 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     @BindView(R.id.btn_clear)
     Button btnClear;
 
+    private List<Restaurant> favoritesRestaurants;
+    private FavouriteAdapter favouriteAdapter, popularAdapter;
+    private LinearLayoutManager favouriteLayoutManager, popularLayoutManager;
+    private ModelConverter converter;
+    private AppDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        AppDatabase database = AppDatabase.getInstance(this);
-        ModelConverter converter = ModelConverter.getInstance();
+        database = AppDatabase.getInstance(this);
+        converter = ModelConverter.getInstance();
 
+        setUpNavigationDrawer();
+
+        favoritesRestaurants = getFavouriteRestaurants();
+
+        setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
+        setUpPopularRecyclerView();
+        setUpFavouritesRecyclerView();
+        setUpOnClickListeners();
+    }
+
+    private void setUpNavigationDrawer(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
-        List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
-
-        setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
-
-        LinearLayoutManager favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        int layout = R.layout.favourite_restaurant_item;
-        FavouriteAdapter favouriteAdapter = new FavouriteAdapter(this, this, layout);
+    }
+    private void setUpOnClickListeners(){
+        allCuisines.setOnClickListener(allCuisinesOnClickListener);
+        btnClear.setOnClickListener(btnClearOnClickListener);
+        btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
+    }
+    private List<Restaurant> getFavouriteRestaurants(){
+        return converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+    }
+    private void setUpFavouritesRecyclerView(){
+        favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        favouriteAdapter = new FavouriteAdapter(this, this, R.layout.favourite_restaurant_item);
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         favouritesRecyclerView.setLayoutManager(favouriteLayoutManager);
+
+        View favouritesEmptyView = findViewById(R.id.favourites_empty_view);
+        favouritesRecyclerView.setEmptyView(favouritesEmptyView);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
+    }
+    private void setUpPopularRecyclerView(){
+        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        popularAdapter = new FavouriteAdapter(this, this, R.layout.favourite_restaurant_item);
+        popularAdapter.setCuisineList(new ArrayList<Restaurant>());
+        popularRecyclerView.setLayoutManager(popularLayoutManager);
 
-        allCuisines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, CuisineActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                autoCompleteTextView.setText("");
-            }
-        });
-        btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
+        View popularEmptyView = findViewById(R.id.popular_empty_view);
+        popularRecyclerView.setEmptyView(popularEmptyView);
+        popularRecyclerView.setAdapter(popularAdapter);
     }
 
     @Override
@@ -162,7 +181,6 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         }
     };
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -170,6 +188,14 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        favoritesRestaurants = getFavouriteRestaurants();
+        favouriteAdapter.setCuisineList(favoritesRestaurants);
     }
 
     @Override
@@ -210,4 +236,19 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private View.OnClickListener allCuisinesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(HomeActivity.this, CuisineActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener btnClearOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            autoCompleteTextView.setText("");
+        }
+    };
 }
