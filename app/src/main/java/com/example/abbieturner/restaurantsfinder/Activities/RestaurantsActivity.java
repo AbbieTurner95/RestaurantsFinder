@@ -1,6 +1,7 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
@@ -25,6 +27,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -168,6 +171,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         } else if (id == R.id.nav_fave) {
 
+
         } else if (id == R.id.nav_share) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
@@ -177,7 +181,32 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         } else if (id == R.id.nav_contact) {
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                    .setTopColorRes(R.color.design_default_color_primary)
+                    .setButtonsColorRes(R.color.white)
+                    .setIcon(R.drawable.phone_black_24dp)
+                    .setTitle("Select a contact method.")
+                    .setMessage("How do you wish to contact us?")
+                    .setPositiveButton("Email", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                    "mailto","info@restaurantfinder.com", null));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                            startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
 
+                        }
+                    })
+                    .setNegativeButton("Phone Us", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:01145627382"));
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
         } else if (id == R.id.nav_loginout) {
 
         }

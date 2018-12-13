@@ -3,6 +3,7 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -36,6 +37,7 @@ import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 import com.shashank.sony.fancydialoglib.Animation;
 import com.shashank.sony.fancydialoglib.Icon;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.Arrays;
 
@@ -240,7 +242,32 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
         } else if (id == R.id.nav_contact) {
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                    .setTopColorRes(R.color.design_default_color_primary)
+                    .setButtonsColorRes(R.color.white)
+                    .setIcon(R.drawable.phone_black_24dp)
+                    .setTitle("Select a contact method.")
+                    .setMessage("How do you wish to contact us?")
+                    .setPositiveButton("Email", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                    "mailto","info@restaurantfinder.com", null));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                            startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
 
+                        }
+                    })
+                    .setNegativeButton("Phone Us", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:01145627382"));
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
         } else if (id == R.id.nav_loginout) {
 
         }

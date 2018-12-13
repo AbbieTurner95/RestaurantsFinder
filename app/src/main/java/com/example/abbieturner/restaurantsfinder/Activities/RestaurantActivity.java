@@ -59,6 +59,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.GsonBuilder;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick, NavigationView.OnNavigationItemSelectedListener {
 
@@ -364,7 +365,32 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         } else if (id == R.id.nav_contact) {
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                    .setTopColorRes(R.color.design_default_color_primary)
+                    .setButtonsColorRes(R.color.white)
+                    .setIcon(R.drawable.phone_black_24dp)
+                    .setTitle("Select a contact method.")
+                    .setMessage("How do you wish to contact us?")
+                    .setPositiveButton("Email", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                    "mailto","info@restaurantfinder.com", null));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                            startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
 
+                        }
+                    })
+                    .setNegativeButton("Phone Us", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:01145627382"));
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
         } else if (id == R.id.nav_loginout) {
 
         }
