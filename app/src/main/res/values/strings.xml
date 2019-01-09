@@ -11,9 +11,9 @@
     <string name="title_cuisines">Select Cuisine</string>
 
 
-    <string name="TAG_CUISINE_ID">cuisine_id</string>
-    <string name="TAG_CUISINE_NAME">cuisine_name</string>
-    <string name="BASE_URL_API">https://developers.zomato.com/</string>
+    <string name="TAG_CUISINE_ID" translatable="false">cuisine_id</string>
+    <string name="TAG_CUISINE_NAME" translatable="false">cuisine_name</string>
+    <string name="BASE_URL_API" translatable="false">https://developers.zomato.com/</string>
     <string name="has_online_delivery">Has Online Delivery: </string>
     <string name="click_to_view_menu">Click to view menu</string>
     <string name="load_menu_by_clicking">Load menu by clicking</string>
@@ -21,15 +21,15 @@
     <string name="website_link_icon">Website link icon</string>
     <string name="favorite_icon">Favorite icon</string>
     <string name="image_of_food">Image of food</string>
-    <string name="title_activity_nav">NavActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="TAG_RESTAURANT">restaurant_tag</string>
-    <string name="google_maps_key">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
-    <string name="title_activity_navig">NavigActivity</string>
-    <string name="RestaurantsFilterDialog">RestaurantsFilterDialog</string>
+    <string name="title_activity_nav" translatable="false">NavActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="TAG_RESTAURANT" translatable="false">restaurant_tag</string>
+    <string name="google_maps_key" translatable="false">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
+    <string name="title_activity_navig" translatable="false">NavigActivity</string>
+    <string name="RestaurantsFilterDialog" translatable="false">RestaurantsFilterDialog</string>
 </resources>

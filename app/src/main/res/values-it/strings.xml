@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Restaurants Finder</string>
+    <string name="sign_in_cancelled">Accedi cancellato</string>
+    <string name="connection_error">Errore di connessione!</string>
+    <string name="signin_error_trya">Accedi errore, riprova!</string>
+    <string name="check_connection">Controlla la tua connessione e riprova!</string>
+    <string name="ok">OK</string>
+    <string name="find_your_place_today">Trova il tuo posto oggi!</string>
+    <string name="enter">accedere</string>
+    <string name="title_cuisines">Seleziona la cucina</string>
+    <string name="has_online_delivery">Ha la consegna online:</string>
+    <string name="click_to_view_menu">Clicca per vedere il menu</string>
+    <string name="load_menu_by_clicking">Carica il menu cliccando</string>
+    <string name="home_button">Pulsante Home</string>
+    <string name="website_link_icon">Icona di collegamento del sito Web</string>
+    <string name="favorite_icon">Icona preferita</string>
+    <string name="image_of_food">Immagine del cibo</string>
+</resources>

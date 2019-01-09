@@ -152,7 +152,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_filter){
+        if (id == R.id.action_filter) {
             openFilterDialog();
             return true;
         }
@@ -191,7 +191,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
                         @Override
                         public void onClick(View v) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto","info@restaurantfinder.com", null));
+                                    "mailto", "info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -215,7 +215,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         return true;
     }
 
-    private void openFilterDialog(){
+    private void openFilterDialog() {
         RestaurantsFilterDialog dialog = new RestaurantsFilterDialog();
         Bundle args = new Bundle();
         args.putSerializable("key", restaurantsAdapter);

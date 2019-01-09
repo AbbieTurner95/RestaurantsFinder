@@ -229,22 +229,23 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
 
         } else if (id == R.id.nav_fave) {
 
         } else if (id == R.id.nav_share) {
+
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             String shareBody = "Hey check out this cool restaurant finder app!";
             sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Restaurant Finder!");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
         } else if (id == R.id.nav_contact) {
+
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTopColorRes(R.color.design_default_color_primary)
-                    .setButtonsColorRes(R.color.white)
+                    .setButtonsColorRes(R.color.colorPrimary)
                     .setIcon(R.drawable.phone_black_24dp)
                     .setTitle("Select a contact method.")
                     .setMessage("How do you wish to contact us?")
@@ -252,7 +253,7 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
                         @Override
                         public void onClick(View v) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto","info@restaurantfinder.com", null));
+                                    "mailto", "info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -268,6 +269,7 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
                         }
                     })
                     .show();
+
         } else if (id == R.id.nav_loginout) {
 
         }
