@@ -91,7 +91,10 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setAvailableProviders(Arrays.asList(
-                                        new AuthUI.IdpConfig.GoogleBuilder().build()))
+                                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                        new AuthUI.IdpConfig.PhoneBuilder().build(),
+                                        new AuthUI.IdpConfig.FacebookBuilder().build()))
                                 .build(),
                         RC_SIGN_IN);
             }

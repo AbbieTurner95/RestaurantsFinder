@@ -36,6 +36,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.ReviewJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Data.Review;
 import com.example.abbieturner.restaurantsfinder.Data.Reviews;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
@@ -138,6 +139,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
+
+        String id = restaurant.getId();
+        fetchReviews(id);
 
         toolbar.setTitle(restaurant.getName());
         //this.setTitle(restaurant.getName());
@@ -297,12 +301,11 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         }
     };
 
-    private void fetchReviews() {
-        service.getReviews(restaurant.getId())
+    private void fetchReviews(String id) {
+        service.getReviews(id)
                 .enqueue(new Callback<Reviews>() {
                     @Override
                     public void onResponse(Call<Reviews> call, Response<Reviews> response) {
-                        assert response.body() != null;
                         reviewsAdapter.setReviewsList(response.body().reviewsList);
                     }
 
