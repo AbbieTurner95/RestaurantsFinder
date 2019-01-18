@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -22,7 +23,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.LogInActivity">
+        <activity android:name=".Activities.RestaurantsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.CuisineActivity" />
-        <activity android:name=".Activities.RestaurantsActivity" />
+        <activity android:name=".Activities.LogInActivity" />
         <activity android:name=".Activities.RestaurantActivity" />
         <activity android:name=".Activities.HomeActivity" />
         <activity android:name=".Activities.FavouritesActivity"/>
@@ -43,7 +44,5 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:theme="@android:style/Theme.Translucent" />
 
-
     </application>
-
 </manifest>

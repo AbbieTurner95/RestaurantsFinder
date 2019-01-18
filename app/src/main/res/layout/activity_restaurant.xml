@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activities.RestaurantActivity">
-
-
     <ScrollView
         android:id="@+id/scrollview_restaurant"
         android:layout_width="match_parent"
@@ -16,36 +14,28 @@
         android:fillViewport="true"
         android:layout_weight="1"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <ImageView
                     android:layout_width="match_parent"
                     android:scaleType="center"
                     android:layout_height="150dp"
                     android:src="@drawable/food"/>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:background="@drawable/gradient" />
-
             </FrameLayout>
             <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:scaleType="center"-->
-                <!--android:layout_height="150dp"-->
-                <!--android:src="@drawable/food"/>-->
-
-
+            <!--android:layout_width="match_parent"-->
+            <!--android:scaleType="center"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:src="@drawable/food"/>-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +55,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/padding_eight">
-
                     <ImageView
                         android:contentDescription="@string/home_button"
                         android:layout_width="30dp"
@@ -73,7 +62,6 @@
                         android:layout_margin="5dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_home_white_24dp" />
-
                     <TextView
                         android:id="@+id/address_tv_1"
                         android:layout_width="0dp"
@@ -84,12 +72,7 @@
                         android:layout_gravity="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:layout_weight="1"/>
-
-
-
-
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,8 +92,6 @@
                         android:textStyle="bold"
                         android:text="Rating"/>
                 </LinearLayout>
-
-
                 <LinearLayout
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -118,7 +99,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/padding_eight">
-
                     <TextView
                         android:id="@+id/online_delivery_tv"
                         android:layout_width="wrap_content"
@@ -134,14 +114,8 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/padd_five"
                         android:layout_weight="1"/>
-
-
-
                 </LinearLayout>
-
             </LinearLayout>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,30 +143,25 @@
                     android:padding="5dp"
                     android:src="@drawable/ic_directions_black_24dp"/>
             </LinearLayout>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shadow">
-
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/review_slider"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
-
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:gravity="center"
                     android:text="Add Reviews here"
-                    android:gravity="center"/>
+                    android:visibility="gone" />
             </RelativeLayout>
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/restaurant_map"
@@ -200,25 +169,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
-
                 <ImageView
                     android:id="@+id/transparent_image"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:src="@color/transparent" />
-
             </RelativeLayout>
-
-                <!--<com.google.android.gms.maps.MapView-->
-                    <!--android:id="@+id/google_maps"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent" />-->
-
-            </LinearLayout>
-
+            <!--<com.google.android.gms.maps.MapView-->
+            <!--android:id="@+id/google_maps"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+        </LinearLayout>
     </ScrollView>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -283,6 +245,4 @@
                 android:text="Web Page"/>
         </LinearLayout>
     </LinearLayout>
-
-
 </LinearLayout>

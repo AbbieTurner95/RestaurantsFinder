@@ -39,6 +39,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Data.Review;
 import com.example.abbieturner.restaurantsfinder.Data.Reviews;
+import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -136,15 +137,11 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
         }
 
-        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
 
-        String id = restaurant.getId();
-        fetchReviews(id);
-
         toolbar.setTitle(restaurant.getName());
-        //this.setTitle(restaurant.getName());
 
         restaurantName.setText(restaurant.getName());
 
@@ -163,6 +160,15 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         btnFavourites.setOnClickListener(btnFavouritesOnClickListener);
 
         transparentImageView.setOnTouchListener(onTouchListener);
+
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(API.ZomatoApiCalls.class);
+        fetchReviews();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
         mapFragment.getMapAsync(this);
@@ -301,30 +307,19 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         }
     };
 
-    private void fetchReviews(String id) {
-        service.getReviews(id)
-                .enqueue(new Callback<Reviews>() {
+    private void fetchReviews() {
+        service.getReviews(restaurant.getId())
+                .enqueue(new Callback<UserReviews>() {
                     @Override
-                    public void onResponse(Call<Reviews> call, Response<Reviews> response) {
-                        reviewsAdapter.setReviewsList(response.body().reviewsList);
+                    public void onResponse(Call<UserReviews> call, Response<UserReviews> response) {
+                        assert response.body() != null;
+                        reviewsAdapter.setReviewsList(response.body().getUser_reviews());
                     }
 
                     @Override
-                    public void onFailure(Call<Reviews> call, Throwable t) {
-                        t.printStackTrace();
+                    public void onFailure(Call<UserReviews> call, Throwable t) {
                     }
                 });
-    }
-
-    @Override
-    public void onReviewItemClick(Review review) {
-        Toast.makeText(this, "Review clicked", Toast.LENGTH_LONG).show();
-//        Gson gS = new Gson();
-//        String jsonRestaurant = gS.toJson(restaurant); // Converts the object to a JSON String
-//
-//        Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
-//        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
-//        startActivity(i);
     }
 
     @Override
@@ -436,5 +431,10 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
+    }
+
+    @Override
+    public void onReviewItemClick(UserReviews.UserReviewsData review) {
+
     }
 }

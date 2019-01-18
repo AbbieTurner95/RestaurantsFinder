@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.abbieturner.restaurantsfinder.Data.Review;
+import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
-    private List<Review> reviewsList;
+    private List<UserReviews.UserReviewsData> reviewsList;
     private final Context context;
     private final ReviewItemClick listener;
 
@@ -24,11 +24,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         this.listener = listener;
     }
 
-    public void setReviewsList(List<Review> reviewsList) {
+    public void setReviewsList(List<UserReviews.UserReviewsData> reviewsList) {
         this.reviewsList.clear();
 
         if(reviewsList == null){
-            this.reviewsList.addAll(new ArrayList<Review>());
+            this.reviewsList.addAll(new ArrayList<UserReviews.UserReviewsData>());
         }else{
             this.reviewsList.addAll(reviewsList);
         }
@@ -44,10 +44,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
 
     @Override
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
-        Review review = reviewsList.get(position);
+        UserReviews.UserReviewsData.ReviewData review = reviewsList.get(position).getReview();
 
         String title = review.getReview_text();
-        //holder.cuisineTitle.setText(title);
+        holder.cuisineTitle.setText(title);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     }
 
     public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //TextView cuisineTitle;
+        TextView cuisineTitle;
 
         public ReviewViewHolder(View view) {
             super(view);
-            //cuisineTitle = view.findViewById(R.id.cuisine_title);
+            cuisineTitle = view.findViewById(R.id.cuisine_title);
             view.setOnClickListener(this);
         }
 
@@ -71,7 +71,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     }
 
     public interface ReviewItemClick {
-        void onReviewItemClick(Review review);
+        void onReviewItemClick(UserReviews.UserReviewsData review);
     }
 }
-
