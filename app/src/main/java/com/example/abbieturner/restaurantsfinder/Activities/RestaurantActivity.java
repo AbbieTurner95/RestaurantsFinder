@@ -42,6 +42,8 @@ import com.example.abbieturner.restaurantsfinder.Data.Reviews;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +65,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
-public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, ReviewsAdapter.ReviewItemClick, NavigationView.OnNavigationItemSelectedListener {
+import java.util.List;
+
+public class RestaurantActivity extends AppCompatActivity implements OnMapReadyCallback,
+        ReviewsAdapter.ReviewItemClick, NavigationView.OnNavigationItemSelectedListener,
+        PopularRestaurants.PopularRestaurantsListener{
 
 
     private Gson gson;
@@ -108,6 +114,8 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
     private API.ZomatoApiCalls service;
     private ReviewsAdapter reviewsAdapter;
+    private PopularRestaurants popularRestaurantDataAccess;
+    private String TAG_RESTAURANT_ID, restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +124,19 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
+        TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
+
         converter = ModelConverter.getInstance();
         database = AppDatabase.getInstance(this);
 
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        service = retrofit.create(API.ZomatoApiCalls.class);
+
+        popularRestaurantDataAccess = new PopularRestaurants(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -135,12 +153,88 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         jsonRestaurant = getIntent().getStringExtra(getResources().getString(R.string.TAG_RESTAURANT));
         if (jsonRestaurant != null) {
             restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
+            displayRestaurantData();
+            fetchReviews();
         }
 
-        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
+        if (restaurant != null && database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
 
+        restaurantId = getIntent().getStringExtra(TAG_RESTAURANT_ID);
+
+        if(restaurantId != null){
+            service.getRestaurant(restaurantId)
+                    .enqueue(new Callback<Restaurant>() {
+                        @Override
+                        public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
+                            restaurant = response.body();
+
+                            if(restaurant != null){
+                                displayRestaurantData();
+                                fetchReviews();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Restaurant> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+        }
+
+
+        setUpListeners();
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void setUpListeners(){
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callButtonClicked();
+            }
+        });
+        directionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                directionButtonClicked();
+            }
+        });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareButtonClicked();
+            }
+        });
+        btnWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
+                startActivity(browserIntent2);
+            }
+        });
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
+                startActivity(browserIntent);
+            }
+        });
+        btnFavourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFavouriteRestaurant();
+            }
+        });
+
+        transparentImageView.setOnTouchListener(onTouchListener);
+    }
+
+    private void displayRestaurantData(){
         toolbar.setTitle(restaurant.getName());
 
         restaurantName.setText(restaurant.getName());
@@ -150,61 +244,20 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         String onlineDelivery = restaurant.getHas_online_delivery() == 0 ? "NO" : "YES";
         hasOnlineDelivery.setText(onlineDelivery);
-
-        callButton.setOnClickListener(callButtonOnClickListener);
-        directionButton.setOnClickListener(directionButtonOnClickListener);
-        shareButton.setOnClickListener(shareButtonOnClickListener);
-
-        btnWeb.setOnClickListener(btnWebOnClickListener);
-        btnMenu.setOnClickListener(btnMenuOnClickListener);
-        btnFavourites.setOnClickListener(btnFavouritesOnClickListener);
-
-        transparentImageView.setOnTouchListener(onTouchListener);
-
-        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        service = retrofit.create(API.ZomatoApiCalls.class);
-        fetchReviews();
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.restaurant_map);
-        mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng location = new LatLng(Double.parseDouble(restaurant.getLocation().getLatitude()), Double.parseDouble(restaurant.getLocation().getLongitude()));
+        if(restaurant != null){
+            LatLng location = new LatLng(Double.parseDouble(restaurant.getLocation().getLatitude()), Double.parseDouble(restaurant.getLocation().getLongitude()));
 
-        googleMap.addMarker(new MarkerOptions()
-                .position(location)
-                .title(restaurant.getLocation().getAddress()));
-        float zoomLevel = (float) 15.0;
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
+            googleMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title(restaurant.getLocation().getAddress()));
+            float zoomLevel = (float) 15.0;
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
+        }
     }
-
-    private View.OnClickListener directionButtonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            directionButtonClicked();
-        }
-    };
-
-    private View.OnClickListener callButtonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            callButtonClicked();
-        }
-    };
-
-    private View.OnClickListener shareButtonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            shareButtonClicked();
-        }
-    };
 
     private void directionButtonClicked() {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
@@ -397,36 +450,16 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
         return true;
     }
 
-    private View.OnClickListener btnWebOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getUrl()));
-            startActivity(browserIntent2);
-        }
-    };
-    private View.OnClickListener btnMenuOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenu_url()));
-            startActivity(browserIntent);
-        }
-    };
-    private View.OnClickListener btnFavouritesOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            toggleFavouriteRestaurant();
-        }
-    };
-
     private void toggleFavouriteRestaurant(){
         DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
 
-
         if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            popularRestaurantDataAccess.removePopularRestaurant(convertedRestaurant.getId());
             database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
             Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             favouriteIcon.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }else{
+            popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);
@@ -436,5 +469,10 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onReviewItemClick(UserReviews.UserReviewsData review) {
 
+    }
+
+    @Override
+    public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
+        //No needed for this class
     }
 }

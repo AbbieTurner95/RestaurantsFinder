@@ -83,10 +83,13 @@ tools:context=".Activities.HomeActivity">
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="No Popular Restaurants"/>
-
-
-
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_popular_restaurants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
