@@ -5,9 +5,8 @@ public class PopularRestaurant {
     private int count;
     private String name;
 
-    public PopularRestaurant(String id, String name){
-        this.restaurantId = id;
-        this.name = name;
+    public PopularRestaurant(){
+
     }
 
     public String getRestaurantId() {

@@ -156,7 +156,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }else{
-            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId());
+            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);

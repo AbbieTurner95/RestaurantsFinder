@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PopularRestaurants {
@@ -74,7 +75,7 @@ public class PopularRestaurants {
         });
     }
 
-    public void upsertPopularRestaurant(final String restaurantId){
+    public void upsertPopularRestaurant(final String restaurantId, final String restaurantName){
         popularRestaurantsRef.child(restaurantId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -85,7 +86,7 @@ public class PopularRestaurants {
                     updateRestaurant(restaurant);
                 }
 
-                createRestaurant(restaurantId);
+                createRestaurant(restaurantId, restaurantName);
             }
 
             @Override
@@ -104,8 +105,17 @@ public class PopularRestaurants {
         popularRestaurantsRef.child(restaurant.getRestaurantId()).child("count").setValue(restaurant.getCount());
     }
 
-    private void createRestaurant(String restaurantId){
-        popularRestaurantsRef.child(restaurantId).setValue()
-                .child("count").setValue(1);
+    private void createRestaurant(String restaurantId, String restaurantName){
+        popularRestaurantsRef.child(restaurantId).setValue(createHashMap(restaurantId, restaurantName));
+    }
+
+    private HashMap createHashMap(String id, String name){
+        HashMap hm = new HashMap();
+
+        hm.put("restaurantId", id);
+        hm.put("count", 1);
+        hm.put("name", name);
+
+        return hm;
     }
 }

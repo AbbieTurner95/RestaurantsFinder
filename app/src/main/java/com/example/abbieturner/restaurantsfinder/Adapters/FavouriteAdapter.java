@@ -119,7 +119,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
             restaurantList.remove(restaurant);
             notifyDataSetChanged();
         }else{
-            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId());
+            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
         }

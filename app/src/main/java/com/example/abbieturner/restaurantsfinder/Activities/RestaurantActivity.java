@@ -459,7 +459,7 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
             Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             favouriteIcon.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }else{
-            popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId());
+            popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(RestaurantActivity.this, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             favouriteIcon.setImageResource(R.drawable.ic_favorite_white_24dp);

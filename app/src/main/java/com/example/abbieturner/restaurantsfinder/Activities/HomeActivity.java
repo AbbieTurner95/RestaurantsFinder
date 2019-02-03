@@ -310,20 +310,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
         pbPopularRestaurants.setVisibility(View.GONE);
-//        if(hasFailed){
-//            String s = null;
-//        }else{
-//            String m = null;
-//        }
-
-        List<PopularRestaurant> myList = new ArrayList<>();
-
-        myList.add(new PopularRestaurant("16774318", "restaurant 1"));
-        myList.add(new PopularRestaurant("2", "restaurant 2"));
-        myList.add(new PopularRestaurant("3", "restaurant 3"));
-        myList.add(new PopularRestaurant("4", "restaurant 4"));
-
-        popularAdapter.setList(myList);
+        if(hasFailed){
+            String s = null;
+        }else{
+            popularAdapter.setList(list);
+        }
     }
 
     @Override
