@@ -92,9 +92,7 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
                                 .createSignInIntentBuilder()
                                 .setAvailableProviders(Arrays.asList(
                                         new AuthUI.IdpConfig.EmailBuilder().build(),
-                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                        new AuthUI.IdpConfig.PhoneBuilder().build(),
-                                        new AuthUI.IdpConfig.FacebookBuilder().build()))
+                                        new AuthUI.IdpConfig.GoogleBuilder().build()))
                                 .build(),
                         RC_SIGN_IN);
             }
@@ -190,11 +188,16 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+
+                startActivity(intent);
+                //setEnterExitTransition(new Intent(LogInActivity.this, HomeActivity.class));
                 finish();
-                setEnterExitTransition(new Intent(LogInActivity.this, CuisineActivity.class));
             } else {
+
+                startActivity(new Intent(LogInActivity.this, HomeActivity.class));
                 finish();
-                startActivity(new Intent(LogInActivity.this, CuisineActivity.class));
             }
         }
     }

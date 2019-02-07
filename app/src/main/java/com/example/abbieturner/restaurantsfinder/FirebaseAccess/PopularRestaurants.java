@@ -87,6 +87,8 @@ public class PopularRestaurants {
                 }
 
                 createRestaurant(restaurantId, restaurantName);
+
+                popularRestaurantsRef.removeEventListener(this);
             }
 
             @Override
@@ -102,7 +104,9 @@ public class PopularRestaurants {
     }
 
     private void updateRestaurant(PopularRestaurant restaurant){
-        popularRestaurantsRef.child(restaurant.getRestaurantId()).child("count").setValue(restaurant.getCount());
+        if(restaurant != null){
+            popularRestaurantsRef.child(restaurant.getRestaurantId()).child("count").setValue(restaurant.getCount());
+        }
     }
 
     private void createRestaurant(String restaurantId, String restaurantName){

@@ -10,15 +10,23 @@
       "client_info": {
         "mobilesdk_app_id": "1:1064379951143:android:6ff84ffd746ad81f",
         "android_client_info": {
-          "package_name": "com.example.abbieturner.restaurantsfinder"
+          "package_name": "com.example.abbieturner.restaurantfinder"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1064379951143-phjpmskj8e3tm89m2o68giofuoqjmpl9.apps.googleusercontent.com",
+          "client_id": "1064379951143-qhdlaofeud8gs5d5p23v26ho0qg62r74.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.abbieturner.restaurantsfinder",
+            "package_name": "com.example.abbieturner.restaurantfinder",
+            "certificate_hash": "ed85fffd31c4eb58ece109c5cfd8174811dbead2"
+          }
+        },
+        {
+          "client_id": "1064379951143-1lgga22nabua8aa71rc47j68rqtf044h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.abbieturner.restaurantfinder",
             "certificate_hash": "8b078c9e3a2d2492e70ce5d3ba3c1c6de8c794d0"
           }
         },
