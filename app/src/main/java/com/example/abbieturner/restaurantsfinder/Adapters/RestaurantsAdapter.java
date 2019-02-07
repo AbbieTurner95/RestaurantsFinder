@@ -17,6 +17,8 @@ import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.io.Serializable;
@@ -24,13 +26,14 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable {
+public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable, PopularRestaurants.PopularRestaurantsListener {
 
     private List<Restaurant> restaurantsList, filterList;
     private CustomFilter filter;
     private final Context context;
     private final RestaurantItemClick listener;
     DecimalFormat df = new DecimalFormat("#.00");
+    private PopularRestaurants popularRestaurantsDataAccess;
 
     private ModelConverter converter;
 
@@ -46,6 +49,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         this.database = AppDatabase.getInstance(this.context);
         this.listener = listener;
         this.converter = ModelConverter.getInstance();
+
+        this.popularRestaurantsDataAccess = new PopularRestaurants(this);
     }
 
 
@@ -110,6 +115,15 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         return filter;
     }
 
+    @Override
+    public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
+        if(hasFailed){
+
+        }else{
+
+        }
+    }
+
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView restaurantName, distance;
         ImageView favorites;
@@ -137,14 +151,18 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
 
         if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+            popularRestaurantsDataAccess.removePopularRestaurant(restaurant.getId());
             database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }else{
+            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
+
+
 
 
     }

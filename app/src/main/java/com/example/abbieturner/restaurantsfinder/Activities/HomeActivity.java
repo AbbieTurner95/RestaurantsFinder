@@ -25,14 +25,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
+import com.example.abbieturner.restaurantsfinder.Adapters.PopularRestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -44,7 +49,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity
+                        implements
+                                FavouriteAdapter.RestaurantItemClick,
+                                NavigationView.OnNavigationItemSelectedListener,
+                                PopularRestaurants.PopularRestaurantsListener,
+                                PopularRestaurantsAdapter.RestaurantItemClick{
 
     @BindView(R.id.home_popular_recycler_view)
     EmptyRecyclerView popularRecyclerView;
@@ -64,12 +74,19 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     AutoCompleteTextView autoCompleteTextView;
     @BindView(R.id.btn_clear)
     Button btnClear;
+    @BindView(R.id.pb_popular_restaurants)
+    ProgressBar pbPopularRestaurants;
+
+
 
     private List<Restaurant> favoritesRestaurants;
-    private FavouriteAdapter favouriteAdapter, popularAdapter;
+    private FavouriteAdapter favouriteAdapter;
+    private PopularRestaurantsAdapter popularAdapter;
     private LinearLayoutManager favouriteLayoutManager, popularLayoutManager;
     private ModelConverter converter;
     private AppDatabase database;
+    private PopularRestaurants popularRestaurantsDataAccess;
+    private String TAG_RESTAURANT_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +96,9 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
         setSupportActionBar(toolbar);
         database = AppDatabase.getInstance(this);
         converter = ModelConverter.getInstance();
+        TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
+
+        popularRestaurantsDataAccess = new PopularRestaurants(this);
 
         setUpNavigationDrawer();
 
@@ -118,8 +138,8 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
     }
     private void setUpPopularRecyclerView(){
         popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        popularAdapter = new FavouriteAdapter(this, this, R.layout.favourite_restaurant_item);
-        popularAdapter.setCuisineList(new ArrayList<Restaurant>());
+        popularAdapter = new PopularRestaurantsAdapter(this);
+        popularAdapter.setList(new ArrayList<PopularRestaurant>());
         popularRecyclerView.setLayoutManager(popularLayoutManager);
 
         View popularEmptyView = findViewById(R.id.popular_empty_view);
@@ -198,6 +218,13 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
 
         favoritesRestaurants = getFavouriteRestaurants();
         favouriteAdapter.setCuisineList(favoritesRestaurants);
+
+        getPopularRestaurants();
+    }
+
+    private void getPopularRestaurants(){
+        pbPopularRestaurants.setVisibility(View.VISIBLE);
+        popularRestaurantsDataAccess.getPopularRestaurants();
     }
 
     @Override
@@ -279,4 +306,22 @@ public class HomeActivity extends AppCompatActivity implements FavouriteAdapter.
             autoCompleteTextView.setText("");
         }
     };
+
+    @Override
+    public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
+        pbPopularRestaurants.setVisibility(View.GONE);
+        if(hasFailed){
+            String s = null;
+        }else{
+            popularAdapter.setList(list);
+        }
+    }
+
+    @Override
+    public void onRestaurantItemClick(PopularRestaurant restaurant) {
+        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
+
+        intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
+        startActivity(intent);
+    }
 }
