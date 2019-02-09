@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +29,7 @@ public class PopularRestaurants {
 
     public interface PopularRestaurantsListener{
         void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed);
+        void onRestaurantUpdated();
     }
 
     public void getPopularRestaurants(){
@@ -52,7 +55,8 @@ public class PopularRestaurants {
     }
 
     public void removePopularRestaurant(final String restaurantId){
-        popularRestaurantsRef.child(restaurantId).addValueEventListener(new ValueEventListener() {
+        final DatabaseReference dr = popularRestaurantsRef.child(restaurantId);
+                dr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PopularRestaurant restaurant = dataSnapshot.getValue(PopularRestaurant.class);
@@ -65,6 +69,8 @@ public class PopularRestaurants {
                         removeRestaurantFromPopular(restaurantId);
                     }
                 }
+
+                dr.removeEventListener(this);
             }
 
             @Override
@@ -76,7 +82,8 @@ public class PopularRestaurants {
     }
 
     public void upsertPopularRestaurant(final String restaurantId, final String restaurantName){
-        popularRestaurantsRef.child(restaurantId).addValueEventListener(new ValueEventListener() {
+        final DatabaseReference df =  popularRestaurantsRef.child(restaurantId);
+                df.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PopularRestaurant restaurant = dataSnapshot.getValue(PopularRestaurant.class);
@@ -84,33 +91,66 @@ public class PopularRestaurants {
                 if(restaurant != null){
                     restaurant.increateCountByOne();
                     updateRestaurant(restaurant);
+                }else{
+                    createRestaurant(restaurantId, restaurantName);
                 }
 
-                createRestaurant(restaurantId, restaurantName);
-
-                popularRestaurantsRef.removeEventListener(this);
+                df.removeEventListener(this);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("TAG", "onCancelled", databaseError.toException());
-                //callback.onBusinessLoadedCompleted(true, null);
+                callback.onRestaurantUpdated();
+                popularRestaurantsRef.removeEventListener(this);
             }
         });
     }
 
+    private void createRestaurant(String restaurantId, String restaurantName){
+        popularRestaurantsRef
+                .child(restaurantId)
+                .setValue(createHashMap(restaurantId, restaurantName))
+                .addOnCompleteListener(new OnCompleteListener<Void>(){
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            callback.onRestaurantUpdated();
+                        }else{
+                            callback.onRestaurantUpdated();
+                        }
+                    }
+                });
+    }
+
     private void removeRestaurantFromPopular(String restaurantId){
-        popularRestaurantsRef.child(restaurantId).removeValue();
+        popularRestaurantsRef
+                .child(restaurantId)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        callback.onRestaurantUpdated();
+                    }
+                });
     }
 
     private void updateRestaurant(PopularRestaurant restaurant){
         if(restaurant != null){
-            popularRestaurantsRef.child(restaurant.getRestaurantId()).child("count").setValue(restaurant.getCount());
+            popularRestaurantsRef
+                    .child(restaurant.getRestaurantId())
+                    .child("count")
+                    .setValue(restaurant.getCount())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            callback.onRestaurantUpdated();
+                        }else{
+                            callback.onRestaurantUpdated();
+                        }
+                    }
+            });
         }
-    }
-
-    private void createRestaurant(String restaurantId, String restaurantName){
-        popularRestaurantsRef.child(restaurantId).setValue(createHashMap(restaurantId, restaurantName));
     }
 
     private HashMap createHashMap(String id, String name){

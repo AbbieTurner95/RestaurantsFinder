@@ -85,6 +85,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
         }
     }
 
+    @Override
+    public void onRestaurantUpdated() {
+
+    }
+
     public class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView restaurantName, distanceTextView;
         ImageView favourite;

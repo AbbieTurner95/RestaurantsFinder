@@ -475,4 +475,9 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
         //No needed for this class
     }
+
+    @Override
+    public void onRestaurantUpdated() {
+
+    }
 }

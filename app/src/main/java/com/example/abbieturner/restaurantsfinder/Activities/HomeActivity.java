@@ -137,7 +137,7 @@ public class HomeActivity extends AppCompatActivity
         favouritesRecyclerView.setAdapter(favouriteAdapter);
     }
     private void setUpPopularRecyclerView(){
-        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         popularAdapter = new PopularRestaurantsAdapter(this);
         popularAdapter.setList(new ArrayList<PopularRestaurant>());
         popularRecyclerView.setLayoutManager(popularLayoutManager);
@@ -315,6 +315,11 @@ public class HomeActivity extends AppCompatActivity
         }else{
             popularAdapter.setList(list);
         }
+    }
+
+    @Override
+    public void onRestaurantUpdated() {
+
     }
 
     @Override
