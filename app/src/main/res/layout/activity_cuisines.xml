@@ -8,7 +8,7 @@
         android:id="@+id/cuisines_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/list_background"
+        android:background="@color/activity_background"
         ads:layout_constraintBottom_toTopOf="@+id/adView"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"

@@ -10,4 +10,6 @@
     <color name="c">#fafafa</color>
     <color name="c2">#e4e4e4</color>
     <color name="c3">#e9e9e9</color>
+
+    <color name="activity_background">#ededed</color>
 </resources>

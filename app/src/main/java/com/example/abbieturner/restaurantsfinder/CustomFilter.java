@@ -6,6 +6,9 @@ import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.FilterModel;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class CustomFilter extends Filter {
 
         constraint = model.getSearch();
 
-        if(isSearchSet(constraint) || isDistanceSet()){
+        if(isSearchSet(constraint) || isDistanceSet() || isRatingSet()){
             constraint=constraint.toString().toUpperCase();
 
             List<Restaurant> filteredRestaurans = new ArrayList<>();
@@ -36,7 +39,7 @@ public class CustomFilter extends Filter {
             {
                 Restaurant currentRestaurant = filterList.get(i);
 
-                if(containsName(currentRestaurant, constraint) && fitsDistance(currentRestaurant))
+                if(containsName(currentRestaurant, constraint) && fitsDistance(currentRestaurant) && fitsRating(currentRestaurant))
                 {
                     //ADD RESTAURANT TO FILTERED
                     filteredRestaurans.add(filterList.get(i));
@@ -53,22 +56,40 @@ public class CustomFilter extends Filter {
         return results;
     }
 
+    private boolean isRatingSet(){
+        return model.getRating() > 0;
+    }
     private boolean isDistanceSet(){
         return (model.getDistance() > 0);
     }
     private boolean isSearchSet(CharSequence constraint){
         return (constraint != null && constraint.length() > 0);
     }
-
     private boolean containsName(Restaurant restaurant, CharSequence constraint){
         return restaurant.getName().toUpperCase().contains(constraint);
     }
-
     private boolean fitsDistance(Restaurant restaurant)
     {
         Double distance = CalculateDistance.getInstance().calcDistance(restaurant);
 
         return model.getDistance() == 0 || distance.intValue() <= model.getDistance();
+    }
+    private boolean fitsRating(Restaurant restaurant){
+        String ratingInString = restaurant.getUser_rating().getAggregate_rating();
+        return stringToDouble(ratingInString) > model.getRating();
+    }
+
+    private double stringToDouble(String number){
+        DecimalFormat df = new DecimalFormat();
+        DecimalFormatSymbols sfs = new DecimalFormatSymbols();
+        sfs.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(sfs);
+        try{
+            double d = df.parse(number).doubleValue();
+            return d;
+        }catch(ParseException e){
+            return 0.0;
+        }
     }
 
     @Override

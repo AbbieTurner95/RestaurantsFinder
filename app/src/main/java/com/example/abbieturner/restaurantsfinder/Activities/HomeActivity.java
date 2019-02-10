@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
@@ -39,6 +41,7 @@ import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -63,7 +66,7 @@ public class HomeActivity extends AppCompatActivity
     @BindView(R.id.btn_all_cuisines)
     ImageView allCuisines;
     @BindView(R.id.btn_manage_favourites)
-    Button btnManageFavourites;
+    TextView btnManageFavourites;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -135,9 +138,12 @@ public class HomeActivity extends AppCompatActivity
         View favouritesEmptyView = findViewById(R.id.favourites_empty_view);
         favouritesRecyclerView.setEmptyView(favouritesEmptyView);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
+
+        SnapHelper favouriteSnapHelper = new StartSnapHelper();
+        favouriteSnapHelper.attachToRecyclerView(favouritesRecyclerView);
     }
     private void setUpPopularRecyclerView(){
-        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         popularAdapter = new PopularRestaurantsAdapter(this);
         popularAdapter.setList(new ArrayList<PopularRestaurant>());
         popularRecyclerView.setLayoutManager(popularLayoutManager);
@@ -145,6 +151,8 @@ public class HomeActivity extends AppCompatActivity
         View popularEmptyView = findViewById(R.id.popular_empty_view);
         popularRecyclerView.setEmptyView(popularEmptyView);
         popularRecyclerView.setAdapter(popularAdapter);
+        SnapHelper popularSnapHelper = new StartSnapHelper();
+        popularSnapHelper.attachToRecyclerView(popularRecyclerView);
     }
 
     @Override

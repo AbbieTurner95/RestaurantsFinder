@@ -68,7 +68,6 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         this.restaurantsList.addAll(restaurantsList);
 
         notifyDataSetChanged();
-
     }
 
 
@@ -87,10 +86,13 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         }
 
         String title = restaurant.getName();
-
         holder.restaurantName.setText(title);
+
         String distance = CalculateDistance.getInstance().getRestaurantDistance(restaurant);
         holder.distance.setText(distance);
+
+        String rating = restaurant.getUser_rating().getAggregate_rating();
+        holder.rating.setText("Rating: " + rating);
 
         holder.favorites.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +132,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView restaurantName, distance;
+        TextView restaurantName, distance, rating;
         ImageView favorites;
 
         public RestaurantsViewHolder(View view) {
@@ -138,6 +140,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             restaurantName = view.findViewById(R.id.restaurant_name);
             favorites = view.findViewById(R.id.restaurant_favorite_btn);
             distance = view.findViewById(R.id.restaurant_distance);
+            rating = view.findViewById(R.id.restaurant_rating);
             view.setOnClickListener(this);
         }
 

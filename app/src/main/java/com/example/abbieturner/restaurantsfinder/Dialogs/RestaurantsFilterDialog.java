@@ -21,8 +21,8 @@ public class RestaurantsFilterDialog extends DialogFragment  {
     public static String TAG;
 
     private RestaurantsAdapter adapter;
-    SeekBar distanceBar;
-    TextView distance;
+    SeekBar distanceBar, ratingBar;
+    TextView distance, rating;
     Button search, btnClearFilter;
     EditText searchInput;
     ImageView btnClearSearchText;
@@ -57,7 +57,9 @@ public class RestaurantsFilterDialog extends DialogFragment  {
 
         searchInput = view.findViewById(R.id.et_search);
         distance = view.findViewById(R.id.tv_distance);
+        rating = view.findViewById(R.id.tv_rating);
         distanceBar = view.findViewById(R.id.seekBarDistance);
+        ratingBar = view.findViewById(R.id.seekBarRating);
         search = view.findViewById(R.id.btn_search);
         btnClearSearchText = view.findViewById(R.id.btn_clear_search_text);
         btnClearFilter = view.findViewById(R.id.btn_clear_filter);
@@ -73,7 +75,12 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         distanceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                distance.setText(progress + " miles");
+                if(progress == 0){
+                    distance.setText("Off");
+                }else{
+                    distance.setText(progress + " miles");
+                }
+
             }
 
             @Override
@@ -84,6 +91,28 @@ public class RestaurantsFilterDialog extends DialogFragment  {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 FilterModel.getInstance().setDistance(seekBar.getProgress());
+            }
+        });
+
+        ratingBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress == 0){
+                    rating.setText("Off");
+                }else{
+                    rating.setText(String.valueOf(progress));
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                FilterModel.getInstance().setRating(seekBar.getProgress());
             }
         });
 
@@ -121,14 +150,19 @@ public class RestaurantsFilterDialog extends DialogFragment  {
     private void clearModel(){
         FilterModel model = FilterModel.getInstance();
         model.setDistance(0);
+        model.setRating(0);
         model.setSearch("");
     }
 
     private void setValues(){
         FilterModel model = FilterModel.getInstance();
-        distance.setText(model.getDistance() + " miles");
+        //distance.setText(model.getDistance() + " miles");
+        distance.setText("Off");
+        //rating.setText(String.valueOf(model.getRating()));
+        rating.setText("Off");
         searchInput.setText(model.getSearch());
         distanceBar.setProgress(model.getDistance());
+        ratingBar.setProgress(model.getRating());
     }
 
     @Override

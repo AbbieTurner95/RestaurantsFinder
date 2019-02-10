@@ -16,6 +16,7 @@ public class FilterModel {
 
     private String search;
     private int distance;
+    private int rating;
 
     public FilterModel(String search, int distance){
         this.search = search;
@@ -38,5 +39,11 @@ public class FilterModel {
         this.distance = distance;
     }
 
+    public int getRating() {
+        return rating;
+    }
 
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }
