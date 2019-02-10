@@ -124,11 +124,12 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
-        Gson gS = new Gson();
-        String jsonRestaurant = gS.toJson(restaurant);
-        Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
-        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
-        startActivity(i);
+//        Gson gS = new Gson();
+//        String jsonRestaurant = gS.toJson(restaurant);
+//        Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
+//        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
+//        startActivity(i);
+        startActivity(new Intent(RestaurantsActivity.this, RestaurantActivityNew.class));
     }
 
 

@@ -176,12 +176,13 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
 
-        Gson gS = new Gson();
-        String jsonRestaurant = gS.toJson(restaurant);
-
-        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
-        intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
-        startActivity(intent);
+//        Gson gS = new Gson();
+//        String jsonRestaurant = gS.toJson(restaurant);
+//
+//        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
+//        intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
+//        startActivity(intent);
+        startActivity(new Intent(HomeActivity.this, RestaurantActivityNew.class));
     }
 
     private void setUpAutocomplete(List<Cuisine> cuisineList) {

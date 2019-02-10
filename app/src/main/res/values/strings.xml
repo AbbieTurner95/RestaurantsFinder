@@ -33,4 +33,6 @@
     <string name="title_activity_navig" translatable="false">NavigActivity</string>
     <string name="RestaurantsFilterDialog" translatable="false">RestaurantsFilterDialog</string>
     <string name="TAG_RESTAURANT_ID">restaurantIdTag</string>
+    <string name="title_activity_restaurant_new">Restaurant Activity</string>
+
 </resources>
