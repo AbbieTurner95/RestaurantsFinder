@@ -71,7 +71,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
     public void onRestaurantItemClick(Restaurant restaurant) {
         Gson gS = new Gson();
         String jsonRestaurant = gS.toJson(restaurant);
-        Intent intent = new Intent(FavouritesActivity.this, RestaurantActivity.class);
+        Intent intent = new Intent(FavouritesActivity.this, RestaurantActivityNew.class);
         intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(intent);
     }

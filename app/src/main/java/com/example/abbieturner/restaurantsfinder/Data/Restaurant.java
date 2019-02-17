@@ -163,4 +163,10 @@ public class Restaurant {
         this.has_online_delivery = has_online_delivery;
     }
 
+    public boolean isLocationSet(){
+        return location != null
+                && !location.getLongitude().isEmpty()
+                && !location.getLongitude().isEmpty();
+    }
+
 }
