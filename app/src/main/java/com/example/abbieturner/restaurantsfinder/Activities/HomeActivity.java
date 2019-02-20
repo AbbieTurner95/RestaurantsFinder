@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,7 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
@@ -179,11 +177,11 @@ public class HomeActivity extends AppCompatActivity
         Gson gS = new Gson();
         String jsonRestaurant = gS.toJson(restaurant);
 
-        Intent intent = new Intent(HomeActivity.this, RestaurantActivityNew.class);
+        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
         intent.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
         startActivity(intent);
 
-        //startActivity(new Intent(HomeActivity.this, RestaurantActivityNew.class));
+        //startActivity(new Intent(HomeActivity.this, RestaurantActivity.class));
     }
 
     private void setUpAutocomplete(List<Cuisine> cuisineList) {
@@ -334,7 +332,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onRestaurantItemClick(PopularRestaurant restaurant) {
-        Intent intent = new Intent(HomeActivity.this, RestaurantActivityNew.class);
+        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
 
         intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
         startActivity(intent);

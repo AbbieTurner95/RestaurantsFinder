@@ -35,7 +35,6 @@
         </activity>
         <activity android:name=".Activities.CuisineActivity" />
         <activity android:name=".Activities.RestaurantsActivity" />
-        <activity android:name=".Activities.RestaurantActivity" />
         <activity android:name=".Activities.HomeActivity" />
         <activity android:name=".Activities.FavouritesActivity" />
 
@@ -47,7 +46,7 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".Activities.RestaurantActivityNew"
+            android:name=".Activities.RestaurantActivity"
             android:label="@string/title_activity_restaurant_new"></activity>
     </application>
 

@@ -1,20 +1,10 @@
 package com.example.abbieturner.restaurantsfinder.Dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,10 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivityNew;
+import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewSingleton;
-import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Review;
 import com.example.abbieturner.restaurantsfinder.R;
 
 public class ReviewDialog{
@@ -103,7 +92,7 @@ public class ReviewDialog{
         cameraPlaceHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RestaurantActivityNew)context).openCamera();
+                ((RestaurantActivity)context).openCamera();
             }
         });
 
@@ -131,7 +120,7 @@ public class ReviewDialog{
             public void onClick(View v) {
                 if(reviewIsValid()){
                     getDataFromUI();
-                    ((RestaurantActivityNew)context).createReview();
+                    ((RestaurantActivity)context).createReview();
                     showProgressBar();
                 }else{
                     Toast.makeText(context, "Please fill required fields.", Toast.LENGTH_LONG).show();

@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivityNew;
+import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
@@ -74,7 +74,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((RestaurantActivityNew)getActivity()).restaurantInfoLoaded();
+        ((RestaurantActivity)getActivity()).restaurantInfoLoaded();
     }
 
     @Override

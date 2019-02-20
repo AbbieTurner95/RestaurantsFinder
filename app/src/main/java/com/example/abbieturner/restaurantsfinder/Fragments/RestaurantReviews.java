@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivityNew;
+import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
@@ -62,7 +62,7 @@ public class RestaurantReviews extends Fragment{
         reviewDialog = new ReviewDialog(getActivity());
         reviewsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
-        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivityNew)getActivity(), reviewCount);
+        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivity)getActivity(), reviewCount);
         View reviewsEmptyView = view.findViewById(R.id.reviews_empty_view);
         reviewsRecyclerView.setEmptyView(reviewsEmptyView);
         reviewsRecyclerView.setAdapter(reviewsAdapter);
@@ -82,7 +82,7 @@ public class RestaurantReviews extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         pbReviews.setVisibility(View.VISIBLE);
-        ((RestaurantActivityNew)getActivity()).restaurantReviewsCreated();
+        ((RestaurantActivity)getActivity()).restaurantReviewsCreated();
     }
 
     public void pictureLoaded(){
