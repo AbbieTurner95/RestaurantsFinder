@@ -6,19 +6,25 @@
             android:id="@+id/action_menu"
             android:enabled="true"
             android:icon="@drawable/ic_menu"
-            android:title="Menu"
+            android:title="@string/menu"
             app:showAsAction="ifRoom"/>
         <item
             android:id="@+id/action_favourite"
             android:enabled="true"
             android:icon="@drawable/ic_favourite"
-            android:title="Favourite"
+            android:title="@string/favourite"
             app:showAsAction="ifRoom"/>
         <item
             android:id="@+id/action_web_page"
             android:enabled="true"
             android:icon="@drawable/ic_webpage"
-            android:title="Web Page"
+            android:title="@string/web_page"
+            app:showAsAction="ifRoom"/>
 
+        <item
+            android:id="@+id/action_settings"
+            android:enabled="true"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings"
             app:showAsAction="ifRoom"/>
 </menu>
