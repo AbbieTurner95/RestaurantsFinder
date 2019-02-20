@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivityNew;
+import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -59,7 +59,9 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-
+                googleMap.getUiSettings().setAllGesturesEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                ((RestaurantActivity)getActivity()).restaurantMapReady();
             }
         });
 
@@ -69,7 +71,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((RestaurantActivityNew)getActivity()).restaurantMapReady();
+        ((RestaurantActivity)getActivity()).restaurantMapReady();
     }
 
     @Override

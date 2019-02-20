@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
@@ -31,7 +30,6 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +52,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private int cuisineID;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
+    private String TAG_RESTAURANT_ID;
     //private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
     @Override
@@ -69,6 +68,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
         navigationView.setNavigationItemSelectedListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -124,12 +124,11 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     @Override
     public void onRestaurantItemClick(Restaurant restaurant) {
-//        Gson gS = new Gson();
-//        String jsonRestaurant = gS.toJson(restaurant);
-//        Intent i = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
-//        i.putExtra(getResources().getString(R.string.TAG_RESTAURANT), jsonRestaurant);
-//        startActivity(i);
-        startActivity(new Intent(RestaurantsActivity.this, RestaurantActivityNew.class));
+        Intent intent = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
+
+        intent.putExtra(TAG_RESTAURANT_ID, restaurant.getId());
+
+        startActivity(intent);
     }
 
 
