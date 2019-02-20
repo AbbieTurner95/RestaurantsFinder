@@ -11,24 +11,21 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivityNew;
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
-import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewDialog;
-import com.example.abbieturner.restaurantsfinder.Interfaces.ISendReviews;
 import com.example.abbieturner.restaurantsfinder.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RestaurantReviews extends Fragment implements ISendReviews {
+public class RestaurantReviews extends Fragment{
 
     private ReviewsAdapter reviewsAdapter;
     private LinearLayoutManager reviewsLayoutManager;
@@ -44,7 +41,6 @@ public class RestaurantReviews extends Fragment implements ISendReviews {
     TextView reviewCount;
     @BindView(R.id.btn_add_review)
     TextView btnAddReview;
-
 
     public RestaurantReviews(){
 
@@ -66,7 +62,7 @@ public class RestaurantReviews extends Fragment implements ISendReviews {
         reviewDialog = new ReviewDialog(getActivity());
         reviewsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
-        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivityNew)getActivity());
+        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivityNew)getActivity(), reviewCount);
         View reviewsEmptyView = view.findViewById(R.id.reviews_empty_view);
         reviewsRecyclerView.setEmptyView(reviewsEmptyView);
         reviewsRecyclerView.setAdapter(reviewsAdapter);
@@ -89,12 +85,20 @@ public class RestaurantReviews extends Fragment implements ISendReviews {
         ((RestaurantActivityNew)getActivity()).restaurantReviewsCreated();
     }
 
+    public void pictureLoaded(){
+        reviewDialog.pictureLoaded();
+    }
 
-    @Override
-    public void sendReviews(List<UserReviews.UserReviewsData> reviews) {
+    public void hideDialog(){
+        reviewDialog.hideDialog();
+    }
 
-        reviewCount.setText(Integer.toString(reviews.size()));
-        reviewsAdapter.setReviewsList(reviews);
+    public void hideDialogsProgressBar(){
+        reviewDialog.hideProgressBar();
+    }
+
+    public void setReviews(List<ReviewFirebase> firebaseReviews, List<UserReviews.UserReviewsData> zomatoReviews){
         pbReviews.setVisibility(View.GONE);
+        reviewsAdapter.setReviews(firebaseReviews, zomatoReviews);
     }
 }

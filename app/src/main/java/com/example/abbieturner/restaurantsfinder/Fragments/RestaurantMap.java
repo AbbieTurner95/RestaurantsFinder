@@ -59,7 +59,9 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-
+                googleMap.getUiSettings().setAllGesturesEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                ((RestaurantActivityNew)getActivity()).restaurantMapReady();
             }
         });
 

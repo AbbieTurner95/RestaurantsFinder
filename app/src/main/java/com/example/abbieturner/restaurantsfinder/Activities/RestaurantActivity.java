@@ -38,6 +38,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Data.Review;
+import com.example.abbieturner.restaurantsfinder.Data.ReviewModel;
 import com.example.abbieturner.restaurantsfinder.Data.Reviews;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
@@ -147,7 +148,7 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        reviewsAdapter = new ReviewsAdapter(this, this);
+        reviewsAdapter = new ReviewsAdapter(this, this, null);
         recyclerView.setAdapter(reviewsAdapter);
 
         gson = new Gson();
@@ -367,7 +368,8 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onResponse(Call<UserReviews> call, Response<UserReviews> response) {
                         assert response.body() != null;
-                        reviewsAdapter.setReviewsList(response.body().getUser_reviews());
+                        //reviewsAdapter.setReviewsList(response.body().getUser_reviews());
+                        reviewsAdapter.setReviews(null, response.body().getUser_reviews());
                     }
 
                     @Override
@@ -468,7 +470,7 @@ public class RestaurantActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onReviewItemClick(UserReviews.UserReviewsData review) {
+    public void onReviewItemClick(ReviewModel review) {
 
     }
 

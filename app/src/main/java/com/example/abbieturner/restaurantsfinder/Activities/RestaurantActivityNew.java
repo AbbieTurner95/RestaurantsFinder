@@ -1,24 +1,36 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
+import com.example.abbieturner.restaurantsfinder.Data.ReviewModel;
+import com.example.abbieturner.restaurantsfinder.Data.ReviewSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
+import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewPictureDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Review;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Reviews;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantInfo;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantMap;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantReviews;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
-import com.example.abbieturner.restaurantsfinder.Interfaces.ISendReviews;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantPagerAdapter;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +40,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RestaurantActivityNew extends AppCompatActivity implements ReviewsAdapter.ReviewItemClick {
+public class RestaurantActivityNew extends AppCompatActivity implements ReviewsAdapter.ReviewItemClick, Review.ReviewListener, Reviews.ReviewsListener {
 
     private String jsonRestaurant, restaurantId;
     private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL;
@@ -39,8 +51,15 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
     private RestaurantMap restaurantMapFragment;
     private RestaurantReviews restaurantReviewsFragment;
     private ISendRestaurant restaurantInfoInterface, restaurantMapInterface;
-    private ISendReviews restaurantReviewsInterface;
     private Retrofit retrofit;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Review reviewDataAccess;
+    private Reviews reviewsDataAccess;
+    private ReviewPictureDialog pictureDialog;
+
+    private List<ReviewFirebase> firebaseReviews;
+    private List<UserReviews.UserReviewsData> zomatoReviews;
+    private boolean isFirebaseReviewLoaded, isZomatoReviewLoaded;
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -48,8 +67,6 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
     TabLayout tabLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +98,14 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
     }
 
     public void restaurantReviewsCreated(){
+        isZomatoReviewLoaded = false;
+        isFirebaseReviewLoaded = false;
         fetchReviews();
-        //getFirebaseReviews();
+        getFirebaseReviews();
     }
 
     public void getFirebaseReviews(){
-
+        reviewsDataAccess.getReviews(restaurant.getId());
     }
 
     public void restaurantMapReady(){
@@ -99,11 +118,17 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
                     @Override
                     public void onResponse(Call<UserReviews> call, Response<UserReviews> response) {
                         assert response.body() != null;
-                        restaurantReviewsInterface.sendReviews(response.body().getUser_reviews());
+                        isZomatoReviewLoaded = true;
+                        zomatoReviews.clear();
+                        zomatoReviews.addAll(response.body().getUser_reviews());
+                        setReviews();
+
                     }
 
                     @Override
                     public void onFailure(Call<UserReviews> call, Throwable t) {
+                        isZomatoReviewLoaded = true;
+                        setReviews();
                     }
                 });
     }
@@ -134,12 +159,17 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
     }
     private void initialiseNewInstances(){
         gson = new Gson();
+        firebaseReviews = new ArrayList<>();
+        zomatoReviews = new ArrayList<>();
+
+        reviewDataAccess = new Review(this);
+        reviewsDataAccess = new Reviews(this);
+        pictureDialog = new ReviewPictureDialog(this);
         restaurantInfoFragment = new RestaurantInfo();
         restaurantInfoInterface = (ISendRestaurant)restaurantInfoFragment;
         restaurantMapFragment = new RestaurantMap();
         restaurantMapInterface = (ISendRestaurant) restaurantMapFragment;
         restaurantReviewsFragment = new RestaurantReviews();
-        restaurantReviewsInterface = (ISendReviews)restaurantReviewsFragment;
 
 
         retrofit = new Retrofit.Builder()
@@ -174,7 +204,71 @@ public class RestaurantActivityNew extends AppCompatActivity implements ReviewsA
     }
 
     @Override
-    public void onReviewItemClick(UserReviews.UserReviewsData review) {
+    public void onReviewItemClick(ReviewModel review) {
+        if(review.isFirebaseReview() && review.getFirebaseReview().hasPictureUrl()){
+            pictureDialog.showDialog(review.getFirebaseReview());
+        }else{
+            Toast.makeText(this, "This review does not have any picture.", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    public void openCamera(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            ReviewSingleton.getInstance().getReview().setPicture(imageBitmap);
+
+            notifyReviewDialog();
+        }
+    }
+
+    private void notifyReviewDialog(){
+        restaurantReviewsFragment.pictureLoaded();
+    }
+
+    public void createReview(){
+        reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getId());
+    }
+
+    @Override
+    public void onReviewCreated(boolean hasFailed) {
+        if(hasFailed){
+            Toast.makeText(this, "Failed to create review. Please try again later.", Toast.LENGTH_LONG).show();
+            restaurantReviewsFragment.hideDialogsProgressBar();
+        }else{
+            Toast.makeText(this, "Review created.", Toast.LENGTH_LONG).show();
+            restaurantReviewsFragment.hideDialog();
+            getFirebaseReviews();
+        }
+    }
+
+    @Override
+    public void onReviewsLoaded(List<ReviewFirebase> reviews, boolean hasFailed) {
+        isFirebaseReviewLoaded = true;
+        if(hasFailed){
+            Toast.makeText(this, "Failed to load reviews", Toast.LENGTH_LONG).show();
+            isFirebaseReviewLoaded = true;
+            setReviews();
+        }else{
+            firebaseReviews.clear();
+            firebaseReviews.addAll(reviews);
+            setReviews();
+
+        }
+    }
+
+    private void setReviews(){
+        if(isFirebaseReviewLoaded && isZomatoReviewLoaded){
+            restaurantReviewsFragment.setReviews(firebaseReviews, zomatoReviews);
+        }
     }
 }
