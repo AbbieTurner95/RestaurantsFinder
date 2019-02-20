@@ -66,6 +66,9 @@ dependencies {
     //implementation 'com.facebook.android:facebook-login:VERSION'
     //implementation 'com.facebook.android:facebook-login:[4,5)'
 
+    //Settings
+    implementation 'com.android.support:preference-v7:26.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
