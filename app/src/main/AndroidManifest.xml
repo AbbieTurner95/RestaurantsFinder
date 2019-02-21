@@ -50,15 +50,15 @@
             android:name=".Activities.RestaurantActivity"
             android:label="@string/title_activity_restaurant_new">
 
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName=".Activities.RestaurantActivity">
+        <!--<activity-->
+            <!--android:name=".Activities.SettingsActivity"-->
+            <!--android:label="@string/action_settings"-->
+            <!--android:parentActivityName=".Activities.RestaurantActivity">-->
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.RestaurantActivity"/>
-        </activity>
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".Activities.RestaurantActivity"/>-->
+        <!--</activity>-->
         </activity>
     </application>
 

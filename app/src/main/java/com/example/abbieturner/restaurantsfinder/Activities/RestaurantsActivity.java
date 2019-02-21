@@ -235,6 +235,5 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 }

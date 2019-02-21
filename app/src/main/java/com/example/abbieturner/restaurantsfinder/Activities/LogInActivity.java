@@ -286,6 +286,5 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 }

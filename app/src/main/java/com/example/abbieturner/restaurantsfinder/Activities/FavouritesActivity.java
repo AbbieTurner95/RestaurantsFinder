@@ -164,6 +164,5 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 }

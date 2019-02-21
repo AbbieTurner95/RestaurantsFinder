@@ -181,6 +181,5 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 }
