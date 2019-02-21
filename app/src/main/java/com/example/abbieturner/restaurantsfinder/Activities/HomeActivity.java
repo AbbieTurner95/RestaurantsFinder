@@ -100,6 +100,7 @@ public class HomeActivity extends AppCompatActivity
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
 
         popularRestaurantsDataAccess = new PopularRestaurants(this);
+        mAuth = FirebaseAuth.getInstance();
 
         setUpNavigationDrawer();
 
@@ -294,10 +295,12 @@ public class HomeActivity extends AppCompatActivity
                     .show();
         } else if (id == R.id.nav_loginout) {
             if(mAuth == null){
-                Intent intent = new Intent(this, LogInActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, LogInActivity.class);
+//                startActivity(intent);
             } else {
                 mAuth.signOut();
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
             }
         }
 
