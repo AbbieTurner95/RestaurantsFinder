@@ -78,8 +78,6 @@ public class HomeActivity extends AppCompatActivity
     @BindView(R.id.pb_popular_restaurants)
     ProgressBar pbPopularRestaurants;
 
-
-
     private List<Restaurant> favoritesRestaurants;
     private FavouriteAdapter favouriteAdapter;
     private PopularRestaurantsAdapter popularAdapter;
