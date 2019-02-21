@@ -34,6 +34,7 @@ import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantPagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -68,6 +69,7 @@ public class RestaurantActivity extends AppCompatActivity
     private Review reviewDataAccess;
     private Reviews reviewsDataAccess;
     private ReviewPictureDialog pictureDialog;
+    private FirebaseAuth mAuth;
 
     private List<ReviewFirebase> firebaseReviews;
     private List<UserReviews.UserReviewsData> zomatoReviews;
@@ -348,10 +350,21 @@ public class RestaurantActivity extends AppCompatActivity
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth == null){
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+            } else {
+                mAuth.signOut();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

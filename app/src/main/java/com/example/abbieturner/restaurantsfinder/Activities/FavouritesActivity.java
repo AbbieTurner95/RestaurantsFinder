@@ -20,6 +20,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -37,6 +38,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,10 +149,21 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth == null){
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+            } else {
+                mAuth.signOut();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

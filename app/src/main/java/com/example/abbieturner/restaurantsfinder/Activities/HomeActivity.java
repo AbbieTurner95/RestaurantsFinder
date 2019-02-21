@@ -40,6 +40,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestauran
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -86,6 +87,7 @@ public class HomeActivity extends AppCompatActivity
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
     private String TAG_RESTAURANT_ID;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,7 +293,12 @@ public class HomeActivity extends AppCompatActivity
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth == null){
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+            } else {
+                mAuth.signOut();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -334,5 +341,11 @@ public class HomeActivity extends AppCompatActivity
 
         intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
         startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

@@ -24,6 +24,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -53,6 +54,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
     private String TAG_RESTAURANT_ID;
+    private FirebaseAuth mAuth;
     //private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
     @Override
@@ -208,7 +210,12 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth == null){
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+            } else {
+                mAuth.signOut();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -223,9 +230,11 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         dialog.show(ft, RestaurantsFilterDialog.TAG);
-
-
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
+    }
 }

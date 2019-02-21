@@ -123,7 +123,6 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
     }
 
     public void fetchCuisines() {
-
         service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
                 .enqueue(new Callback<Cuisines>() {
                     @Override
@@ -277,10 +276,16 @@ public class LogInActivity extends AppCompatActivity implements NavigationView.O
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-
+                mAuth.signOut();
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }
