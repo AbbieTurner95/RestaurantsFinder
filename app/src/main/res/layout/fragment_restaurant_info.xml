@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/activity_background">
 
     <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_directions_black_24dp" />
+                app:srcCompat="@drawable/ic_directions_black_24dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +57,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_local_phone_black_24dp"/>
+                app:srcCompat="@drawable/ic_local_phone_black_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +79,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_star_border_black_24dp"/>
+                app:srcCompat="@drawable/ic_star_border_grey_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +101,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_drive_eta_black_24dp"/>
+                app:srcCompat="@drawable/ic_drive_eta_black_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -150,7 +150,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_favorite_border_black_24dp"/>
+                app:srcCompat="@drawable/ic_favorite_border_black_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,7 +174,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_import_contacts_black_24dp"/>
+                app:srcCompat="@drawable/ic_import_contacts_black_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -198,7 +198,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_language_black_24dp"/>
+                app:srcCompat="@drawable/ic_language_black_24dp"/>
         </LinearLayout>
     </LinearLayout>
 

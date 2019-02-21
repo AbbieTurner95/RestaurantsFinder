@@ -48,7 +48,7 @@ tools:context=".Activities.HomeActivity">
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:src="@drawable/ic_list_color_primary_24dp" />
+            app:srcCompat="@drawable/ic_list_color_primary_24dp" />
     </LinearLayout>
 
     <LinearLayout

@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -48,18 +47,16 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".Activities.RestaurantActivity"
-            android:label="@string/title_activity_restaurant_new">
-        </activity>
-
+            android:label="@string/title_activity_restaurant_new"></activity>
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".Activities.RestaurantActivity">
-                <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.RestaurantActivity"/>
+                android:value=".Activities.RestaurantActivity" />
         </activity>
-
+        <activity android:name=".Activities.CreateRestaurantActivity"></activity>
     </application>
 
 </manifest>

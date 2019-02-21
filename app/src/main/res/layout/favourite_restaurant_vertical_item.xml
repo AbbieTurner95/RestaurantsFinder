@@ -54,7 +54,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_favorite_black_24dp"/>
+                app:srcCompat="@drawable/ic_favorite_black_24dp"/>
 
         </LinearLayout>
 

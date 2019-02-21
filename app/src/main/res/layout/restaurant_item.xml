@@ -73,7 +73,7 @@
             android:layout_width="45dp"
             android:layout_height="60dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_favorite_border_black_24dp"/>
+            app:srcCompat="@drawable/ic_favorite_border_black_24dp"/>
 
     </LinearLayout>
 
