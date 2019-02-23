@@ -24,6 +24,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -53,7 +54,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
     private String TAG_RESTAURANT_ID;
-    //private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    private DeviceLocation locationSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         recyclerView.setLayoutManager(layoutManager);
         restaurantsAdapter = new RestaurantsAdapter(this, this);
         recyclerView.setAdapter(restaurantsAdapter);
+
+        locationSingleton = DeviceLocation.getInstance();
 
         Intent intent = getIntent();
 
@@ -107,8 +110,10 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
     private void fetchRestaurants() {
 
-        service.getRestaurants("332", "city", "1", "20",
-                "53.382882", "-1.470300", cuisineID, "rating", "asc")
+        service.getRestaurants("5000","1", "20",
+                String.valueOf(locationSingleton.getLocation().latitude),
+                String.valueOf(locationSingleton.getLocation().longitude),
+                cuisineID, "rating", "asc")
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {

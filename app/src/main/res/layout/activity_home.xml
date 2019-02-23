@@ -19,28 +19,41 @@ tools:context=".Activities.HomeActivity">
     android:background="@drawable/shadow"
     android:orientation="horizontal">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:layout_weight="1">
 
-            <AutoCompleteTextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/autocomplete_cuisines"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:completionThreshold="1"/>
+                android:padding="5dp">
 
-            <Button
-                android:id="@+id/btn_clear"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="right|center_vertical"
-                android:background="@drawable/ic_clear_black_24dp" />
+                <AutoCompleteTextView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/autocomplete_cuisines"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:completionThreshold="1"/>
 
-        </FrameLayout>
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:background="@drawable/ic_clear_black_24dp" />
+
+            </FrameLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_load_cuisines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@color/progress_bar_background"/>
+        </RelativeLayout>
+
 
         <ImageView
             android:id="@+id/btn_all_cuisines"

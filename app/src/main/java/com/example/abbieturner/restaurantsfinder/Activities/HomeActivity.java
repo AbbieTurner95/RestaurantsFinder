@@ -29,19 +29,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.abbieturner.restaurantsfinder.API.API;
+import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Adapters.PopularRestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
+import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
@@ -49,6 +55,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -78,6 +89,8 @@ public class HomeActivity extends AppCompatActivity
     Button btnClear;
     @BindView(R.id.pb_popular_restaurants)
     ProgressBar pbPopularRestaurants;
+    @BindView(R.id.pb_load_cuisines)
+    ProgressBar pbLoadCuisines;
 
 
 
@@ -89,6 +102,12 @@ public class HomeActivity extends AppCompatActivity
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
     private String TAG_RESTAURANT_ID;
+    private DeviceLocation locationSingleton;
+    private API.ZomatoApiCalls service;
+    private GetLocationDialog getLocationDialog;
+    private Gson gson;
+    private String BASE_URL;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,21 +115,36 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        database = AppDatabase.getInstance(this);
-        converter = ModelConverter.getInstance();
-        TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
 
-        popularRestaurantsDataAccess = new PopularRestaurants(this);
+        createNewInstances();
 
         setUpNavigationDrawer();
 
         favoritesRestaurants = getFavouriteRestaurants();
 
-        setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
         setUpPopularRecyclerView();
         setUpFavouritesRecyclerView();
         setUpOnClickListeners();
     }
+
+    private void createNewInstances(){
+        database = AppDatabase.getInstance(this);
+        converter = ModelConverter.getInstance();
+        TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
+        popularRestaurantsDataAccess = new PopularRestaurants(this);
+        locationSingleton = DeviceLocation.getInstance();
+        getLocationDialog = new GetLocationDialog(this);
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
+                .create();
+        BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        service = retrofit.create(API.ZomatoApiCalls.class);
+    }
+
 
     private void setUpNavigationDrawer(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -229,6 +263,42 @@ public class HomeActivity extends AppCompatActivity
         favouriteAdapter.setCuisineList(favoritesRestaurants);
 
         getPopularRestaurants();
+
+        if(isDeviceLocationSet()){
+            pbLoadCuisines.setVisibility(View.VISIBLE);
+            fetchCuisines();
+        }else{
+            getLocationFromUser();
+        }
+    }
+
+    public void fetchCuisines() {
+
+        service.getCuisineId("332", String.valueOf(locationSingleton.getLocation().latitude),
+                String.valueOf(locationSingleton.getLocation().longitude))
+                .enqueue(new Callback<Cuisines>() {
+                    @Override
+                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
+                        assert response.body() != null;
+                        CuisinesSingleton.getInstance().setCuisines(response.body().cuisinesList);
+                        setUpAutocomplete(CuisinesSingleton.getInstance().getCuisines());
+                        pbLoadCuisines.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Cuisines> call, Throwable t) {
+                        t.printStackTrace();
+                        pbLoadCuisines.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void getLocationFromUser(){
+        getLocationDialog.showDialog();
+    }
+
+    private boolean isDeviceLocationSet(){
+        return locationSingleton.isLocationSet();
     }
 
     private void getPopularRestaurants(){
@@ -348,4 +418,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
+    public void locationSetFromUser(){
+        if(isDeviceLocationSet()){
+            pbLoadCuisines.setVisibility(View.VISIBLE);
+            fetchCuisines();
+        }
+    }
 }

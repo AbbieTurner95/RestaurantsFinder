@@ -1,10 +1,14 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
+import android.Manifest;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -21,6 +25,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.Services.LocationService;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -53,7 +58,10 @@ public class LogInActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
-    private API.ZomatoApiCalls service;
+    private int PERMISSION_ALL = 1;
+    private String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,37 +94,11 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
-                .create();
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
 
-        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        service = retrofit.create(API.ZomatoApiCalls.class);
-
-        fetchCuisines();
-
-    }
-
-    public void fetchCuisines() {
-
-        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
-                .enqueue(new Callback<Cuisines>() {
-                    @Override
-                    public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
-                        assert response.body() != null;
-                        CuisinesSingleton.getInstance().setCuisines(response.body().cuisinesList);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Cuisines> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+        startService(new Intent(this, LocationService.class));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,5 +180,16 @@ public class LogInActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions){
+        if(context != null && permissions != null){
+            for(String permission : permissions){
+                if(ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

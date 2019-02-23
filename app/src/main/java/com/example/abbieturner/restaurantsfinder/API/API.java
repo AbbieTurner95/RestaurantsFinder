@@ -16,8 +16,16 @@ public class API {
 
         @Headers("user-key: b48385ca8e173d7176550e050eae5fe9")
         @GET("api/v2.1/search")
-        Call<Restaurants> getRestaurants(@Query("entity_id") String entity_id,
-                                         @Query("entity_type") String entity_type,
+//        Call<Restaurants> getRestaurants(@Query("entity_id") String entity_id,
+//                                         @Query("entity_type") String entity_type,
+//                                         @Query("start") String start,
+//                                         @Query("count") String count,
+//                                         @Query("lat") String lat,
+//                                         @Query("lon") String lon,
+//                                         @Query("cuisines") int cuisine,
+//                                         @Query("sort") String sort,
+//                                         @Query("order") String order);
+        Call<Restaurants> getRestaurants(@Query("radius") String radius,
                                          @Query("start") String start,
                                          @Query("count") String count,
                                          @Query("lat") String lat,
