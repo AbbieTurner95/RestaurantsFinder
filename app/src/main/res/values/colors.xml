@@ -13,4 +13,6 @@
 
     <color name="activity_background">#ededed</color>
     <color name="progress_bar_background">#b9393939</color>
+    <color name="dark_grey">#575757</color>
+    <color name="light_grey">#a1a1a1</color>
 </resources>

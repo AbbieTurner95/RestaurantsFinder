@@ -4,103 +4,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/activity_background"
     android:orientation="vertical"
     tools:context=".Activities.LogInActivity">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mainheight"
-            android:layout_margin="@dimen/main_margin"
-            android:background="@drawable/rectangle_box" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:fontFamily="@font/pink"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/thirty_TS" />
-
-            <ImageView
-                android:layout_width="@dimen/rest_main_width"
-                android:layout_height="@dimen/rest_main_height"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_top_ten"
-                android:src="@drawable/restaurant" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin_top_ten"
-                android:text="@string/find_your_place_today"
-                android:fontFamily="@font/pink"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sixteen_TS"
-                android:textStyle="italic" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/view_height"
-            android:layout_margin="@dimen/margin_top_ten"
-            android:background="@drawable/rectangle_box" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/sign_in_btn"
-                android:layout_width="@dimen/button_enter_wdth"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_top_ten"
-                android:background="@android:color/white"
-                android:elevation="@dimen/elev_four"
-                android:text="@string/enter"
-                android:fontFamily="@font/pink"
-                android:textColor="@color/colorPrimaryDark" />
-            <Button
-                android:id="@+id/skip_login__btn"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_top_ten"
-                android:background="@android:color/white"
-                android:elevation="4sp"
-                android:text="Skip Login"
-                android:fontFamily="@font/pink"
-                android:textColor="@color/colorPrimaryDark" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/skip_login__btn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/ic_copyright_white_24dp" />
+        android:gravity="right"
+        android:padding="15dp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:text="Skip Login"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/black"
+            android:textSize="32sp" />
+
+        <ImageView
+            android:layout_width="@dimen/rest_main_width"
+            android:layout_height="@dimen/rest_main_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_top_ten"
+            android:src="@drawable/restaurant_finder_logo" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_top_ten"
+            android:text="@string/find_your_place_today"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sixteen_TS"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/sign_in_btn"
+            android:layout_width="@dimen/button_enter_wdth"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_top_ten"
+            android:background="@android:color/white"
+            android:elevation="@dimen/elev_four"
+            android:text="@string/enter"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_copyright_light_grey_24dp" />
+    </LinearLayout>
+
+
+
+
+
+
+
 
 </LinearLayout>
 
