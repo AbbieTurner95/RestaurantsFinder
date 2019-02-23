@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close Confirmation"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="20sp"
+        android:padding="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are you sure you want to close this activity?"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All unsaved changes will be lost!"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OK"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_margin="4dp"/>
+    </LinearLayout>
+</LinearLayout>

@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
@@ -237,12 +238,20 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_activity_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == R.id.action_create_restaurant) {
+            Intent intent = new Intent(HomeActivity.this, CreateRestaurantActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -337,4 +346,6 @@ public class HomeActivity extends AppCompatActivity
         intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
         startActivity(intent);
     }
+
+
 }
