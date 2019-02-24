@@ -12,9 +12,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -25,7 +27,7 @@ import java.util.HashMap;
 
 public class Restaurant {
     private FirebaseDatabase database;
-    private DatabaseReference reviewsRef;
+    private DatabaseReference restaurantsRef;
     private RestaurantListener callback;
     private StorageReference sRef;
     private FirebaseStorage storage;
@@ -35,12 +37,36 @@ public class Restaurant {
     public Restaurant(RestaurantListener callback){
         this.callback = callback;
         database = FirebaseDatabase.getInstance();
-        reviewsRef = database.getReference().child("restaurants");
+        restaurantsRef = database.getReference().child("restaurants");
         storage = FirebaseStorage.getInstance();
         sRef = storage.getReference();
 
         geofireRef = database.getReference().child("restaurantsGeoFire");
         geoFire = new GeoFire(geofireRef);
+    }
+
+    public void getRestaurant(String restaurantId){
+        final DatabaseReference rr = restaurantsRef.child(restaurantId);
+
+        rr.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant r =
+                        dataSnapshot.getValue(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant.class);
+
+                if(r != null){
+                    callback.onRestaurantLoaded(r, false);
+                }else{
+                    callback.onRestaurantLoaded(null, true);
+                }
+                rr.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onRestaurantLoaded(null, true);
+            }
+        });
     }
 
     public void createRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
@@ -87,7 +113,7 @@ public class Restaurant {
     }
 
     private void uploadRestaurant(final com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
-        reviewsRef.child(restaurant.getId()).setValue(createRestaurantHashMap(restaurant)).addOnCompleteListener(new OnCompleteListener<Void>() {
+        restaurantsRef.child(restaurant.getId()).setValue(createRestaurantHashMap(restaurant)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -130,6 +156,7 @@ public class Restaurant {
         hm.put("menu", restaurant.getMenu());
         hm.put("web", restaurant.getWeb());
         hm.put("pictureUrl", restaurant.getPictureUrl());
+        hm.put("cuisine", restaurant.getCuisine());
 
         return hm;
     }

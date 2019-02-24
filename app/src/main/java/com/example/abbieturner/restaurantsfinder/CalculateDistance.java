@@ -17,13 +17,12 @@ public class CalculateDistance {
         return theSingleton;
     }
 
-    public String getRestaurantDistance(Restaurant restaurant) {
-        return "Distance: " + Double.toString(calcDistance(restaurant)) + " miles";
+    public String getRestaurantDistance(Double lat, Double lng) {
+        return "Distance: " + Double.toString(calcDistance(lat, lng)) + " miles";
     }
 
-    public double calcDistance(Restaurant restaurant) {
-        double distance = UsersLocation.getDistance(Double.parseDouble(restaurant.getLocation().getLatitude())
-                , Double.parseDouble(restaurant.getLocation().getLongitude()));
+    public double calcDistance(Double lat, Double lng) {
+        double distance = UsersLocation.getDistance(lat, lng);
 
         return Math.round(distance * 100.0) / 100.0;
     }

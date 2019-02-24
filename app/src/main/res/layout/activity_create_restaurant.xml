@@ -162,6 +162,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cuisine"
+                android:paddingTop="10dp"
+                android:textColor="#000000"
+                android:fontFamily="@font/roboto_regular"
+                android:textAppearance="@android:style/TextAppearance.Medium"/>
+            <Spinner
+                android:id="@+id/cuisine_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="5dp"
             android:orientation="horizontal">
             <CheckBox

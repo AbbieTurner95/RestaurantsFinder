@@ -13,11 +13,13 @@ import android.widget.Toast;
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewModel;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewPictureDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Review;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Reviews;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantInfo;
@@ -41,14 +43,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestaurantActivity extends AppCompatActivity
-        implements  ReviewsAdapter.ReviewItemClick,
-                    Review.ReviewListener,
-                    Reviews.ReviewsListener
+        implements  ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
+                    Reviews.ReviewsListener, RestaurantListener
                                                 {
 
     private String jsonRestaurant, restaurantId;
-    private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL;
-    private Restaurant restaurant;
+    private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
+    private RestaurantModel restaurant;
     private Gson gson;
     private API.ZomatoApiCalls service;
     private RestaurantInfo restaurantInfoFragment;
@@ -60,10 +61,11 @@ public class RestaurantActivity extends AppCompatActivity
     private Review reviewDataAccess;
     private Reviews reviewsDataAccess;
     private ReviewPictureDialog pictureDialog;
+    private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant restaurantDataAccess;
 
     private List<ReviewFirebase> firebaseReviews;
     private List<UserReviews.UserReviewsData> zomatoReviews;
-    private boolean isFirebaseReviewLoaded, isZomatoReviewLoaded;
+    private boolean isFirebaseReviewLoaded, isZomatoReviewLoaded, isFirebaseRestaurant;
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -94,7 +96,7 @@ public class RestaurantActivity extends AppCompatActivity
         if(isRestaurantId()){
             getRestaurantById();
         }else if(isRestaurantJson()){
-            restaurant = gson.fromJson(jsonRestaurant, Restaurant.class); // Converts the JSON String to an Object
+            restaurant = new RestaurantModel(gson.fromJson(jsonRestaurant, Restaurant.class)); // Converts the JSON String to an Object
             displayRestaurantData();
         }else{
             // Error.....
@@ -104,12 +106,23 @@ public class RestaurantActivity extends AppCompatActivity
     public void restaurantReviewsCreated(){
         isZomatoReviewLoaded = false;
         isFirebaseReviewLoaded = false;
-        fetchReviews();
+
+        if(!restaurant.isFirebaseRestaurant()){
+            fetchReviews();
+        }else{
+            isZomatoReviewLoaded = true;
+        }
+
         getFirebaseReviews();
     }
 
     public void getFirebaseReviews(){
-        reviewsDataAccess.getReviews(restaurant.getId());
+        if(restaurant.isFirebaseRestaurant()){
+            reviewsDataAccess.getReviews(restaurant.getFirebaseRestaurant().getId());
+        }else{
+            reviewsDataAccess.getReviews(restaurant.getZomatoRestaurant().getId());
+        }
+
     }
 
     public void restaurantMapReady(){
@@ -117,7 +130,7 @@ public class RestaurantActivity extends AppCompatActivity
     }
 
     private void fetchReviews() {
-        service.getReviews(restaurant.getId())
+        service.getReviews(restaurant.getZomatoRestaurant().getId())
                 .enqueue(new Callback<UserReviews>() {
                     @Override
                     public void onResponse(Call<UserReviews> call, Response<UserReviews> response) {
@@ -150,10 +163,12 @@ public class RestaurantActivity extends AppCompatActivity
         TAG_RESTAURANT = getResources().getString(R.string.TAG_RESTAURANT);
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
         ZOOMATO_BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        TAG_IS_FIREBASE_RESTAURANT = getResources().getString(R.string.TAG_IS_FIREBASE_RESTAURANT);
     }
     private void getStringsExtra(){
         jsonRestaurant = getIntent().getStringExtra(TAG_RESTAURANT);
         restaurantId = getIntent().getStringExtra(TAG_RESTAURANT_ID);
+        isFirebaseRestaurant = getIntent().getExtras().getBoolean(TAG_IS_FIREBASE_RESTAURANT);
     }
     private boolean isRestaurantId(){
         return restaurantId != null;
@@ -181,29 +196,39 @@ public class RestaurantActivity extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(API.ZomatoApiCalls.class);
+
+        restaurantDataAccess = new com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant(this);
     }
     private void getRestaurantById(){
-        service.getRestaurant(restaurantId)
-                .enqueue(new Callback<Restaurant>() {
-                    @Override
-                    public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
-                        restaurant = response.body();
+        if(isFirebaseRestaurant){
+            restaurantDataAccess.getRestaurant(restaurantId);
+        }else{
+            service.getRestaurant(restaurantId)
+                    .enqueue(new Callback<Restaurant>() {
+                        @Override
+                        public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
+                            restaurant = new RestaurantModel(response.body());
 
-                        if(restaurant != null){
-                            displayRestaurantData();
+                            if(restaurant != null){
+                                displayRestaurantData();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Restaurant> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Restaurant> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+        }
     }
 
     private void displayRestaurantData(){
-        //getSupportActionBar().setTitle(restaurant.getName());
-        toolbar.setTitle(restaurant.getName());
+        if(restaurant.isFirebaseRestaurant()){
+            toolbar.setTitle(restaurant.getFirebaseRestaurant().getName());
+        }else{
+            toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
+        }
+
 
         restaurantInfoInterface.sendRestaurant(restaurant);
     }
@@ -241,7 +266,12 @@ public class RestaurantActivity extends AppCompatActivity
     }
 
     public void createReview(){
-        reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getId());
+        if(restaurant.isFirebaseRestaurant()){
+            reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getFirebaseRestaurant().getId());
+        }else{
+            reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getZomatoRestaurant().getId());
+        }
+
     }
 
     @Override
@@ -277,4 +307,19 @@ public class RestaurantActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onRestaurantCreated(boolean hasFailed) {
+
+    }
+
+    @Override
+    public void onRestaurantLoaded(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant, boolean hasFailed) {
+        if(hasFailed || restaurant == null){
+            Toast.makeText(this, "Failed to get restaurant", Toast.LENGTH_LONG).show();
+            finish();
+        }else{
+            this.restaurant = new RestaurantModel(restaurant);
+            displayRestaurantData();
+        }
+    }
 }

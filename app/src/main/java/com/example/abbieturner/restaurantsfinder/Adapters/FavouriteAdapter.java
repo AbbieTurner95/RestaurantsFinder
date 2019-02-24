@@ -60,7 +60,9 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
         String title = restaurant.getName();
         holder.restaurantName.setText(title);
 
-        String distance = CalculateDistance.getInstance().getRestaurantDistance(restaurant);
+        String distance = CalculateDistance.getInstance().getRestaurantDistance(
+                Double.parseDouble(restaurant.getLocation().getLatitude()),
+                Double.parseDouble(restaurant.getLocation().getLongitude()));
         holder.distanceTextView.setText(distance);
 
         holder.favourite.setOnClickListener(new View.OnClickListener() {

@@ -16,18 +16,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +45,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RestaurantsActivity extends AppCompatActivity implements RestaurantsAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
+public class RestaurantsActivity extends AppCompatActivity implements
+        RestaurantsAdapter.RestaurantItemClick,
+        NavigationView.OnNavigationItemSelectedListener,
+        RestaurantsListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -48,13 +58,20 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     Toolbar toolbar;
     @BindView(R.id.restaurants_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.pb_restaurants_loading)
+    ProgressBar pbRestaurantsLoading;
 
     private String name;
     private int cuisineID;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
-    private String TAG_RESTAURANT_ID;
+    private String TAG_RESTAURANT_ID, TAG_IS_FIREBASE_RESTAURANT;
     private DeviceLocation locationSingleton;
+    private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurants restaurantsDataAccess;
+    private boolean zoomatoRestaurantsLoaded, firebaseRestaurantsLoaded;
+    private List<Restaurant> zoomatoRestaurants;
+    private List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants;
+    private String cuisineName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +86,13 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        firebaseRestaurants = new ArrayList<>();
+        zoomatoRestaurants = new ArrayList<>();
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
+        TAG_IS_FIREBASE_RESTAURANT = getResources().getString(R.string.TAG_IS_FIREBASE_RESTAURANT);
+
         navigationView.setNavigationItemSelectedListener(this);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -78,6 +100,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         recyclerView.setAdapter(restaurantsAdapter);
 
         locationSingleton = DeviceLocation.getInstance();
+        restaurantsDataAccess = new com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurants(this);
 
         Intent intent = getIntent();
 
@@ -105,7 +128,21 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
 
         service = retrofit.create(API.ZomatoApiCalls.class);
 
+
+
+        getRestaurants();
+
+    }
+
+    private void getRestaurants(){
+        pbRestaurantsLoading.setVisibility(View.VISIBLE);
+        zoomatoRestaurantsLoaded = false;
+        firebaseRestaurantsLoaded = false;
         fetchRestaurants();
+
+        if(locationSingleton.isLocationSet()){
+            restaurantsDataAccess.getRestaurants(name);
+        }
     }
 
     private void fetchRestaurants() {
@@ -117,21 +154,39 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
-                        restaurantsAdapter.setRestaurantsList(response.body().restaurantsList);
+                        zoomatoRestaurants.addAll(response.body().restaurantsList);
+                        zoomatoRestaurantsLoaded = true;
+                        setRestaurants();
                     }
 
                     @Override
                     public void onFailure(Call<Restaurants> call, Throwable t) {
                         t.printStackTrace();
+                        zoomatoRestaurantsLoaded = true;
+                        Toast.makeText(RestaurantsActivity.this, "Failed to load Zoomato restaurants!", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
+    private void setRestaurants(){
+        if(zoomatoRestaurantsLoaded && firebaseRestaurantsLoaded){
+            pbRestaurantsLoading.setVisibility(View.GONE);
+            restaurantsAdapter.setRestaurantsList(zoomatoRestaurants, firebaseRestaurants);
+        }
+    }
+
     @Override
-    public void onRestaurantItemClick(Restaurant restaurant) {
+    public void onRestaurantItemClick(RestaurantModel restaurant) {
         Intent intent = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
 
-        intent.putExtra(TAG_RESTAURANT_ID, restaurant.getId());
+        if(restaurant.isFirebaseRestaurant()){
+            intent.putExtra(TAG_RESTAURANT_ID, restaurant.getFirebaseRestaurant().getId());
+            intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, restaurant.isFirebaseRestaurant());
+        }else{
+            intent.putExtra(TAG_RESTAURANT_ID, restaurant.getZomatoRestaurant().getId());
+            intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, restaurant.isFirebaseRestaurant());
+        }
+
 
         startActivity(intent);
     }
@@ -233,4 +288,15 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     }
 
 
+    @Override
+    public void onRestaurantsLoaded(boolean hasFailed, List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> restaurants) {
+        firebaseRestaurantsLoaded = true;
+        firebaseRestaurants.clear();
+        if(hasFailed){
+
+        }else{
+            firebaseRestaurants.addAll(restaurants);
+            setRestaurants();
+        }
+    }
 }

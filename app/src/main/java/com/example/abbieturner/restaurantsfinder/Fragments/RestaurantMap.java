@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +26,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
 
     MapView mMapView;
     private GoogleMap googleMap;
-    private Restaurant restaurant;
+    private RestaurantModel restaurant;
 
     public RestaurantMap(){
 
@@ -98,31 +99,47 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
         mMapView.onLowMemory();
     }
 
-    public void setRestaurant(Restaurant restaurant){
+    public void setRestaurant(RestaurantModel restaurant){
         this.restaurant = restaurant;
     }
 
+    private void addMarkerToMap(RestaurantModel restaurant){
+        if(restaurant.isFirebaseRestaurant()){
+            if(restaurant != null && restaurant.getFirebaseRestaurant().isLocationSet()){
+                // For dropping a marker at a point on the Map
+                LatLng restaurantPosition = new LatLng(
+                        restaurant.getFirebaseRestaurant().getLat(),
+                        restaurant.getFirebaseRestaurant().getLng());
+
+                googleMap.addMarker(new MarkerOptions().position(restaurantPosition).title(restaurant.getFirebaseRestaurant().getName()));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(restaurantPosition).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        }else{
+            if(restaurant != null && restaurant.getZomatoRestaurant().isLocationSet()){
+                // For dropping a marker at a point on the Map
+                LatLng restaurantPosition = new LatLng(
+                        Double.parseDouble(restaurant.getZomatoRestaurant().getLocation().getLatitude()),
+                        Double.parseDouble(restaurant.getZomatoRestaurant().getLocation().getLongitude()));
+
+                googleMap.addMarker(new MarkerOptions().position(restaurantPosition).title(restaurant.getZomatoRestaurant().getName()));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(restaurantPosition).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        }
+    }
+
+
     @Override
-    public void sendRestaurant(Restaurant restaurant) {
+    public void sendRestaurant(RestaurantModel restaurant) {
         this.restaurant = restaurant;
 
         if(googleMap != null && restaurant != null){
             addMarkerToMap(restaurant);
-        }
-    }
-
-    private void addMarkerToMap(Restaurant restaurant){
-        if(restaurant != null && restaurant.isLocationSet()){
-            // For dropping a marker at a point on the Map
-            LatLng restaurantPosition = new LatLng(
-                    Double.parseDouble(restaurant.getLocation().getLatitude()),
-                    Double.parseDouble(restaurant.getLocation().getLongitude()));
-
-            googleMap.addMarker(new MarkerOptions().position(restaurantPosition).title(restaurant.getName()));
-
-            // For zooming automatically to the location of the marker
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(restaurantPosition).zoom(12).build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
 }

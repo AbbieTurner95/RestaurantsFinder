@@ -35,4 +35,60 @@
     <string name="TAG_RESTAURANT_ID">restaurantIdTag</string>
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
+    <string name="TAG_IS_FIREBASE_RESTAURANT">isFirebaseRestaurant</string>
+
+    <string-array name="cuisines_list">
+        <item>American</item>
+        <item>Asian</item>
+        <item>BBQ</item>
+        <item>Bar Food</item>
+        <item>Bengali</item>
+        <item>Brazilian</item>
+        <item>Breakfast</item>
+        <item>British</item>
+        <item>Burger</item>
+        <item>Cafe</item>
+        <item>Cantonese</item>
+        <item>Chinese</item>
+        <item>Coffee and Tea</item>
+        <item>Contemporary</item>
+        <item>Desserts</item>
+        <item>Diner</item>
+        <item>Eastern European</item>
+        <item>European</item>
+        <item>Fast Food</item>
+        <item>Fish and Chips</item>
+        <item>French</item>
+        <item>Greek</item>
+        <item>Grill</item>
+        <item>Healthy Food</item>
+        <item>Indian</item>
+        <item>International</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Kebab</item>
+        <item>Latin American</item>
+        <item>Mediterranean</item>
+        <item>Mexican</item>
+        <item>Middle Eastern</item>
+        <item>Nepalese</item>
+        <item>North Indian</item>
+        <item>Others</item>
+        <item>Pakistani</item>
+        <item>Pizza</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Sandwich</item>
+        <item>Scandinavian</item>
+        <item>Seafood</item>
+        <item>South Indian</item>
+        <item>Spanish</item>
+        <item>Steak</item>
+        <item>Sushi</item>
+        <item>Tapas</item>
+        <item>Tea</item>
+        <item>Tex-Mex</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+    </string-array>
 </resources>

@@ -17,11 +17,13 @@ public class Restaurant {
     private String web;
     private Bitmap picture;
     private String pictureUrl;
+    private String cuisine;
 
     public Restaurant(){
         this.id = UUID.randomUUID().toString();
         lat = null;
         lng = null;
+        delivery = false;
     }
 
     public String getId() {
@@ -122,5 +124,17 @@ public class Restaurant {
 
     public boolean hasPicture(){
         return picture != null;
+    }
+
+    public String getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
+
+    public boolean isLocationSet(){
+        return lat != null && lng != null;
     }
 }

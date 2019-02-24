@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.abbieturner.restaurantsfinder.CalculateDistance;
 import com.example.abbieturner.restaurantsfinder.CustomFilter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable, PopularRestaurants.PopularRestaurantsListener {
 
-    private List<Restaurant> restaurantsList, filterList;
+    private List<RestaurantModel> restaurantsList, filterList;
     private CustomFilter filter;
     private final Context context;
     private final RestaurantItemClick listener;
@@ -54,16 +55,34 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
 
-    public void setRestaurantsList(List<Restaurant> restaurantsList) {
-        this.restaurantsList.clear();
-        this.restaurantsList.addAll(restaurantsList);
+    public void setRestaurantsList(List<Restaurant> zomatoRestaurants, List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants) {
+//
+//        this.restaurantsList.clear();
+//        this.restaurantsList.addAll(restaurantsList);
+//
+//        this.filterList.clear();
+//        this.filterList.addAll(restaurantsList);
+//        notifyDataSetChanged();
+//
 
-        this.filterList.clear();
-        this.filterList.addAll(restaurantsList);
+        restaurantsList.clear();
+
+        if(firebaseRestaurants != null && firebaseRestaurants.size() > 0){
+            for(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant: firebaseRestaurants){
+                restaurantsList.add(new RestaurantModel(restaurant));
+            }
+        }
+
+        if(zomatoRestaurants != null && zomatoRestaurants.size() > 0){
+            for(Restaurant r: zomatoRestaurants){
+                restaurantsList.add(new RestaurantModel(r));
+            }
+        }
+
         notifyDataSetChanged();
     }
 
-    public void setRestaurants(List<Restaurant> restaurantsList) {
+    public void setRestaurants(List<RestaurantModel> restaurantsList) {
         this.restaurantsList.clear();
         this.restaurantsList.addAll(restaurantsList);
 
@@ -79,28 +98,55 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(final RestaurantsViewHolder holder, int position) {
-        final Restaurant restaurant = restaurantsList.get(position);
+        final RestaurantModel restaurant = restaurantsList.get(position);
 
-        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
-            holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
-        }
+        if(restaurant.isFirebaseRestaurant()){
+            com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant fr = restaurant.getFirebaseRestaurant();
 
-        String title = restaurant.getName();
-        holder.restaurantName.setText(title);
-
-        String distance = CalculateDistance.getInstance().getRestaurantDistance(restaurant);
-        holder.distance.setText(distance);
-
-        String rating = restaurant.getUser_rating().getAggregate_rating();
-        holder.rating.setText("Rating: " + rating);
-
-        holder.favorites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFavoriteRestaurant(restaurant, holder);
+            if(database.restaurantsDAO().getRestaurant(fr.getId()) != null){
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
-        });
 
+            String title = fr.getName();
+            holder.restaurantName.setText(title);
+
+            String distance = CalculateDistance.getInstance().getRestaurantDistance(fr.getLat(), fr.getLng());
+            holder.distance.setText(distance);
+
+            String rating = fr.getRating().toString();
+            holder.rating.setText("Rating: " + rating);
+
+//            holder.favorites.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    toggleFavoriteRestaurant(fr, holder);
+//                }
+//            }); // TODO:
+        }else{
+            final Restaurant zr = restaurant.getZomatoRestaurant();
+
+            if(database.restaurantsDAO().getRestaurant(zr.getId()) != null){
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
+
+            String title = zr.getName();
+            holder.restaurantName.setText(title);
+
+            String distance = CalculateDistance.getInstance().getRestaurantDistance(
+                    Double.parseDouble(zr.getLocation().getLatitude()),
+                    Double.parseDouble(zr.getLocation().getLongitude()));
+            holder.distance.setText(distance);
+
+            String rating = zr.getUser_rating().getAggregate_rating();
+            holder.rating.setText("Rating: " + rating);
+
+            holder.favorites.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleFavoriteRestaurant(zr, holder);
+                }
+            });
+        }
     }
 
     @Override
@@ -151,7 +197,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     public interface RestaurantItemClick {
-        void onRestaurantItemClick(Restaurant restaurant);
+        void onRestaurantItemClick(RestaurantModel restaurant);
     }
 
     private void toggleFavoriteRestaurant(Restaurant restaurant, RestaurantsViewHolder holder) {

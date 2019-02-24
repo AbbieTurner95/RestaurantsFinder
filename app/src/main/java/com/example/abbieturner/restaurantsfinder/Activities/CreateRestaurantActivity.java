@@ -3,6 +3,7 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,12 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +38,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreateRestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, RestaurantListener {
+public class CreateRestaurantActivity extends AppCompatActivity implements
+        OnMapReadyCallback, RestaurantListener{
 
     private CloseCreateRestaurantDialog closeConfirmationDialog;
     private Restaurant newRestaurant;
@@ -72,6 +77,8 @@ public class CreateRestaurantActivity extends AppCompatActivity implements OnMap
     RelativeLayout rlPhotoHolder;
     @BindView(R.id.btn_remove_photo)
     ImageView btnRemovePhoto;
+    @BindView(R.id.cuisine_spinner)
+    Spinner cuisineSpinner;
 
 
 
@@ -81,10 +88,20 @@ public class CreateRestaurantActivity extends AppCompatActivity implements OnMap
         setContentView(R.layout.activity_create_restaurant);
         ButterKnife.bind(this);
 
+        setUpSpinner();
         setUpListeners();
         createNewInstances();
         setUpToolbar();
         setUpMap();
+    }
+
+    private void setUpSpinner(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.cuisines_list, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        cuisineSpinner.setAdapter(adapter);
     }
 
     private void setUpListeners(){
@@ -108,6 +125,19 @@ public class CreateRestaurantActivity extends AppCompatActivity implements OnMap
                 imgPhoto.setImageResource(android.R.color.transparent);
                 rlPhotoHolder.setVisibility(View.GONE);
                 btnTakePhoto.setVisibility(View.VISIBLE);
+            }
+        });
+        cuisineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCuisine = parent.getItemAtPosition(position).toString();
+
+                newRestaurant.setCuisine(selectedCuisine);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
@@ -187,10 +217,30 @@ public class CreateRestaurantActivity extends AppCompatActivity implements OnMap
         if(!isLocationSet()){
             Toast.makeText(CreateRestaurantActivity.this, "Map location is required", Toast.LENGTH_LONG).show();
         }
+
+        if(!isCuisineSet()){
+            setSpinnerError(cuisineSpinner, "Cuisine is required!");
+        }
+    }
+
+    private void setSpinnerError(Spinner spinner, String error){
+        View selectedView = spinner.getSelectedView();
+        if (selectedView != null && selectedView instanceof TextView) {
+            spinner.requestFocus();
+            TextView selectedTextView = (TextView) selectedView;
+            selectedTextView.setError(error); // any name of the error will do
+            selectedTextView.setTextColor(Color.RED); //text color in which you want your error message to be displayed
+            selectedTextView.setText(error); // actual error message
+            spinner.performClick(); // to open the spinner list if error is found.
+        }
     }
 
     private boolean requiredDataSet(){
-        return isNameSet() && isLocationSet() && isAddressSet();
+        return isNameSet() && isLocationSet() && isAddressSet() && isCuisineSet();
+    }
+
+    private boolean isCuisineSet(){
+        return newRestaurant.getCuisine() != null && !newRestaurant.getCuisine().isEmpty();
     }
 
     private boolean isLocationSet(){
@@ -275,6 +325,11 @@ public class CreateRestaurantActivity extends AppCompatActivity implements OnMap
             Toast.makeText(CreateRestaurantActivity.this, "Restaurant created.", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    @Override
+    public void onRestaurantLoaded(Restaurant restaurant, boolean hasFailed) {
+
     }
 
     private void showProgressDialog(){

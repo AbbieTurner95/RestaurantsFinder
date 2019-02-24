@@ -5,6 +5,7 @@ import android.widget.Filter;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.FilterModel;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -15,10 +16,10 @@ import java.util.List;
 public class CustomFilter extends Filter {
 
     private RestaurantsAdapter adapter;
-    private List<Restaurant> filterList;
+    private List<RestaurantModel> filterList;
     private FilterModel model;
 
-    public CustomFilter(List<Restaurant> filterList, RestaurantsAdapter adapter){
+    public CustomFilter(List<RestaurantModel> filterList, RestaurantsAdapter adapter){
         this.adapter=adapter;
         this.filterList=filterList;
         model = FilterModel.getInstance();
@@ -33,11 +34,11 @@ public class CustomFilter extends Filter {
         if(isSearchSet(constraint) || isDistanceSet() || isRatingSet()){
             constraint=constraint.toString().toUpperCase();
 
-            List<Restaurant> filteredRestaurans = new ArrayList<>();
+            List<RestaurantModel> filteredRestaurans = new ArrayList<>();
 
             for (int i=0;i<filterList.size();i++)
             {
-                Restaurant currentRestaurant = filterList.get(i);
+                RestaurantModel currentRestaurant = filterList.get(i);
 
                 if(containsName(currentRestaurant, constraint) && fitsDistance(currentRestaurant) && fitsRating(currentRestaurant))
                 {
@@ -65,17 +66,37 @@ public class CustomFilter extends Filter {
     private boolean isSearchSet(CharSequence constraint){
         return (constraint != null && constraint.length() > 0);
     }
-    private boolean containsName(Restaurant restaurant, CharSequence constraint){
-        return restaurant.getName().toUpperCase().contains(constraint);
+    private boolean containsName(RestaurantModel restaurant, CharSequence constraint){
+        if(restaurant.isFirebaseRestaurant()){
+            return restaurant.getFirebaseRestaurant().getName().toUpperCase().contains(constraint);
+        }else{
+            return restaurant.getZomatoRestaurant().getName().toUpperCase().contains(constraint);
+        }
+
     }
-    private boolean fitsDistance(Restaurant restaurant)
+    private boolean fitsDistance(RestaurantModel restaurant)
     {
-        Double distance = CalculateDistance.getInstance().calcDistance(restaurant);
+        Double distance = null;
+
+        if(restaurant.isFirebaseRestaurant()){
+            distance = CalculateDistance.getInstance().calcDistance(restaurant.getFirebaseRestaurant().getLat(), restaurant.getFirebaseRestaurant().getLng());
+        }else{
+            distance = CalculateDistance.getInstance().calcDistance(
+                    Double.parseDouble(restaurant.getZomatoRestaurant().getLocation().getLatitude()),
+                    Double.parseDouble(restaurant.getZomatoRestaurant().getLocation().getLongitude()));
+        }
 
         return model.getDistance() == 0 || distance.intValue() <= model.getDistance();
     }
-    private boolean fitsRating(Restaurant restaurant){
-        String ratingInString = restaurant.getUser_rating().getAggregate_rating();
+    private boolean fitsRating(RestaurantModel restaurant){
+        String ratingInString = null;
+
+        if(restaurant.isFirebaseRestaurant()){
+            ratingInString = restaurant.getFirebaseRestaurant().getRating().toString();
+        }else{
+            ratingInString = restaurant.getZomatoRestaurant().getUser_rating().getAggregate_rating();
+        }
+
         return stringToDouble(ratingInString) > model.getRating();
     }
 
@@ -99,7 +120,7 @@ public class CustomFilter extends Filter {
 //        //REFRESH
 //        adapter.notifyDataSetChanged();
 
-        adapter.setRestaurants((List<Restaurant>) results.values);
+        adapter.setRestaurants((List<RestaurantModel>) results.values);
     }
 
 }
