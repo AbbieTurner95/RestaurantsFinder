@@ -46,6 +46,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestauran
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -108,6 +109,7 @@ public class HomeActivity extends AppCompatActivity
     private Gson gson;
     private String BASE_URL;
     private Retrofit retrofit;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -423,5 +425,11 @@ public class HomeActivity extends AppCompatActivity
             pbLoadCuisines.setVisibility(View.VISIBLE);
             fetchCuisines();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

@@ -154,7 +154,6 @@ public class LogInActivity extends AppCompatActivity {
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
 
                 startActivity(intent);
-                //setEnterExitTransition(new Intent(LogInActivity.this, HomeActivity.class));
                 finish();
             } else {
 

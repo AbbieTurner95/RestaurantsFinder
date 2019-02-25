@@ -29,6 +29,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -72,6 +73,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
     private List<Restaurant> zoomatoRestaurants;
     private List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants;
     private String cuisineName;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,5 +300,11 @@ public class RestaurantsActivity extends AppCompatActivity implements
             firebaseRestaurants.addAll(restaurants);
             setRestaurants();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

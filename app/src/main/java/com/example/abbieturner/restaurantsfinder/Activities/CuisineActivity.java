@@ -26,6 +26,7 @@ import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
@@ -46,6 +47,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
     private CuisineAdapter cuisineAdapter;
     private LinearLayoutManager layoutManager;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,5 +171,11 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

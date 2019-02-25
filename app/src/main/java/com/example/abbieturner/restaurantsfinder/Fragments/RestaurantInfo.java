@@ -23,6 +23,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestauran
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 

@@ -29,6 +29,7 @@ import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantPagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestaurantActivity extends AppCompatActivity
         implements  ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
-                    Reviews.ReviewsListener, RestaurantListener
-                                                {
+        Reviews.ReviewsListener, RestaurantListener
+{
 
     private String jsonRestaurant, restaurantId;
     private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
@@ -61,6 +62,7 @@ public class RestaurantActivity extends AppCompatActivity
     private Review reviewDataAccess;
     private Reviews reviewsDataAccess;
     private ReviewPictureDialog pictureDialog;
+    private FirebaseAuth mAuth;
     private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant restaurantDataAccess;
 
     private List<ReviewFirebase> firebaseReviews;
@@ -321,5 +323,11 @@ public class RestaurantActivity extends AppCompatActivity
             this.restaurant = new RestaurantModel(restaurant);
             displayRestaurantData();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

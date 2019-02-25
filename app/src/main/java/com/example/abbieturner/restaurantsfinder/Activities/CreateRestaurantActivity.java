@@ -34,6 +34,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +50,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant restaurantDataAccess;
     private ProgressDialog progressDialog;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private FirebaseAuth mAuth;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -361,5 +363,11 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             rlPhotoHolder.setVisibility(View.VISIBLE);
             btnTakePhoto.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }
