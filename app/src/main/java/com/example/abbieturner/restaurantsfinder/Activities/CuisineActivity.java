@@ -166,7 +166,11 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-            //log in / out
+            if(mAuth != null){
+                mAuth.signOut();
+            } else {
+                Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);

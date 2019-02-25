@@ -82,8 +82,6 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     @BindView(R.id.cuisine_spinner)
     Spinner cuisineSpinner;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
