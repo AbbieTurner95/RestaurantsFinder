@@ -36,6 +36,12 @@
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
     <string name="TAG_IS_FIREBASE_RESTAURANT">isFirebaseRestaurant</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="share_app">Share App</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="log_in_out">Log in/out</string>
+    <string name="settings">Settings</string>
 
     <string-array name="cuisines_list">
         <item>American</item>
@@ -91,4 +97,33 @@
         <item>Thai</item>
         <item>Turkish</item>
     </string-array>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string name="settings_page">Settings Page</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+
 </resources>

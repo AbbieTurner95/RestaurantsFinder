@@ -55,6 +55,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         setContentView(R.layout.nav_drawer_layout_cuisines);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        setUpNavigationDrawer();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -107,6 +108,15 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         }
     }
 
+    private void setUpNavigationDrawer(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
@@ -127,7 +137,8 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_fave) {
-
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
@@ -171,15 +182,15 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
+        }else if (id == R.id.action_settings) {
+            Intent intent = new Intent(CuisineActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
+
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mAuth.signOut();
-    }
 }

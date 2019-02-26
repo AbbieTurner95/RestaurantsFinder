@@ -2,8 +2,10 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -68,7 +70,7 @@ public class HomeActivity extends AppCompatActivity
                                 FavouriteAdapter.RestaurantItemClick,
                                 NavigationView.OnNavigationItemSelectedListener,
                                 PopularRestaurants.PopularRestaurantsListener,
-                                PopularRestaurantsAdapter.RestaurantItemClick{
+                                PopularRestaurantsAdapter.RestaurantItemClick, SharedPreferences.OnSharedPreferenceChangeListener{
 
     @BindView(R.id.home_popular_recycler_view)
     EmptyRecyclerView popularRecyclerView;
@@ -337,6 +339,8 @@ public class HomeActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_fave) {
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -374,11 +378,40 @@ public class HomeActivity extends AppCompatActivity
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth != null){
+                mAuth.signOut();
+            } else {
+                Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        }else if (id == R.id.action_settings) {
+            Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
+
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private View.OnClickListener allCuisinesOnClickListener = new View.OnClickListener() {
@@ -425,11 +458,5 @@ public class HomeActivity extends AppCompatActivity
             pbLoadCuisines.setVisibility(View.VISIBLE);
             fetchCuisines();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mAuth.signOut();
     }
 }

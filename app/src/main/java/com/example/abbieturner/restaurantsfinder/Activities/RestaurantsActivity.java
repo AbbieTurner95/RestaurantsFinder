@@ -82,6 +82,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        setUpNavigationDrawer();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -210,6 +211,15 @@ public class RestaurantsActivity extends AppCompatActivity implements
         return true;
     }
 
+    private void setUpNavigationDrawer(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -232,7 +242,8 @@ public class RestaurantsActivity extends AppCompatActivity implements
             startActivity(intent);
 
         } else if (id == R.id.nav_fave) {
-
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -270,8 +281,17 @@ public class RestaurantsActivity extends AppCompatActivity implements
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-
+            if(mAuth != null){
+                mAuth.signOut();
+            } else {
+                Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.action_settings) {
+            Intent intent = new Intent(RestaurantsActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
+
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -300,11 +320,5 @@ public class RestaurantsActivity extends AppCompatActivity implements
             firebaseRestaurants.addAll(restaurants);
             setRestaurants();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mAuth.signOut();
     }
 }

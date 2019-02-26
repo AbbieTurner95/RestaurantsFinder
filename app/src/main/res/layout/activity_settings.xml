@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_page"
+        android:padding="@dimen/padding_eight"
+        android:textSize="@dimen/twentyeight_TS"
+        android:gravity="center"/>
+
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/activity_settings"
+        android:name="com.example.abbieturner.restaurantsfinder.Fragments.SettingsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

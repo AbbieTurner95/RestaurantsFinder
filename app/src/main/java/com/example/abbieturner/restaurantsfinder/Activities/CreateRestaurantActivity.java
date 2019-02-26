@@ -362,10 +362,4 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             btnTakePhoto.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mAuth.signOut();
-    }
 }

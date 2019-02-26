@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -39,6 +40,17 @@
         <activity android:name=".Activities.CuisineActivity" />
         <activity android:name=".Activities.RestaurantsActivity" />
         <activity android:name=".Activities.HomeActivity" />
+
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:label="@string/action_settings"
+            android:parentActivityName=".Activities.HomeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity"/>
+        </activity>
+
         <activity android:name=".Activities.FavouritesActivity" />
 
         <meta-data
@@ -51,7 +63,7 @@
         <activity
             android:name=".Activities.RestaurantActivity"
             android:label="@string/title_activity_restaurant_new" />
-        <activity android:name=".Activities.CreateRestaurantActivity"></activity>
+        <activity android:name=".Activities.CreateRestaurantActivity" />
 
         <service android:name=".Services.LocationService" />
     </application>
