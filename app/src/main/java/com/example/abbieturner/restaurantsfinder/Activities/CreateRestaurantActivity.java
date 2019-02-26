@@ -88,6 +88,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_create_restaurant);
         ButterKnife.bind(this);
 
+        mAuth = FirebaseAuth.getInstance();
         setUpSpinner();
         setUpListeners();
         createNewInstances();
@@ -361,5 +362,11 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             rlPhotoHolder.setVisibility(View.VISIBLE);
             btnTakePhoto.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

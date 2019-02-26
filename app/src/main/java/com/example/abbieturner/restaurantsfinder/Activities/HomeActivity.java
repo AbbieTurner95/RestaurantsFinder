@@ -119,6 +119,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        mAuth = FirebaseAuth.getInstance();
 
         createNewInstances();
 
@@ -458,5 +459,11 @@ public class HomeActivity extends AppCompatActivity
             pbLoadCuisines.setVisibility(View.VISIBLE);
             fetchCuisines();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

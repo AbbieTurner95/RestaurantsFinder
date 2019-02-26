@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        mAuth = FirebaseAuth.getInstance();
 
         ActionBar actionBar = this.getSupportActionBar();
 
@@ -29,5 +33,11 @@ public class SettingsActivity extends AppCompatActivity {
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

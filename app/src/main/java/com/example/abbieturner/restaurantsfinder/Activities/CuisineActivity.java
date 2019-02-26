@@ -56,6 +56,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
+        mAuth = FirebaseAuth.getInstance();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -191,6 +192,12 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 
 }

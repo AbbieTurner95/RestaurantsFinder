@@ -80,6 +80,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_bar_rests);
         ButterKnife.bind(this);
+        mAuth = FirebaseAuth.getInstance();
 
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
@@ -320,5 +321,11 @@ public class RestaurantsActivity extends AppCompatActivity implements
             firebaseRestaurants.addAll(restaurants);
             setRestaurants();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }

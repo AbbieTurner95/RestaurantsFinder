@@ -48,6 +48,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
+        mAuth = FirebaseAuth.getInstance();
 
         AppDatabase database = AppDatabase.getInstance(this);
         ModelConverter converter = ModelConverter.getInstance();
@@ -175,5 +176,11 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.signOut();
     }
 }
