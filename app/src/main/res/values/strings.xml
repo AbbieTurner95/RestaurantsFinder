@@ -125,5 +125,7 @@
         <item>-1</item>
     </string-array>
 
+    <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
+
 
 </resources>
