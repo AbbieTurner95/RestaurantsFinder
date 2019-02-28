@@ -158,6 +158,13 @@ public class Restaurant {
         hm.put("pictureUrl", restaurant.getPictureUrl());
         hm.put("cuisine", restaurant.getCuisine());
 
+        hm.put("stepsFreeAccess", restaurant.getStepsFreeAccess());
+        hm.put("accessibleToilets", restaurant.getAccessibleToilets());
+        hm.put("vegan", restaurant.getVegan());
+        hm.put("vegetarian", restaurant.getVegetarian());
+        hm.put("glutenFree", restaurant.getGlutenFree());
+        hm.put("dairyFree", restaurant.getDairyFree());
+
         return hm;
     }
 }
