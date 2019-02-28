@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LocationSharedPreferences {
     private static LocationSharedPreferences theSingleton = null;
-    private List<UsersDefaultLocation> usersLocation = new ArrayList<>();
+    private LatLng usersLocation = null;
 
     public static LocationSharedPreferences getInstance(){
         if (theSingleton == null) {
@@ -18,33 +18,19 @@ public class LocationSharedPreferences {
     }
 
 
-    public List<UsersDefaultLocation> getLocations(){
+    public LatLng getLocation(){
         return usersLocation;
     }
 
-    public void setLocations(List<UsersDefaultLocation> locations){
-        usersLocation.addAll(locations);
+    public void setLocation(LatLng location){
+        usersLocation = location;
     }
 
-    public boolean userHasLocationsSet(String userId){
-        for(int i = 0; i < usersLocation.size(); i++){
-            if(usersLocation.get(i).getId().equals(userId)
-                    && usersLocation.get(i).getLocation() != null){
-                return true;
-            }
-        }
-
-        return false;
+    public boolean userHasLocationsSet(){
+        return usersLocation != null;
     }
 
-    public LatLng getUsersLocation(String userId){
-        for(int i = 0; i < usersLocation.size(); i++){
-            if(usersLocation.get(i).getId().equals(userId)
-                    && usersLocation.get(i).getLocation() != null){
-                return usersLocation.get(i).getLocation();
-            }
-        }
-
-        return null;
+    public LatLng getUsersLocation(){
+        return usersLocation;
     }
 }

@@ -52,6 +52,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.example.abbieturner.restaurantsfinder.Singletons.LocationSharedPreferences;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,7 +149,7 @@ public class HomeActivity extends AppCompatActivity
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
         popularRestaurantsDataAccess = new PopularRestaurants(this);
         locationSingleton = DeviceLocation.getInstance();
-        getLocationDialog = new GetLocationDialog(this);
+        getLocationDialog = new GetLocationDialog(this, false);
         gson = new GsonBuilder()
                 .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
                 .create();
@@ -159,7 +160,8 @@ public class HomeActivity extends AppCompatActivity
                 .build();
         service = retrofit.create(API.ZomatoApiCalls.class);
 
-        mPrefs = getPreferences(MODE_PRIVATE);
+        //mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
     }
 
@@ -296,11 +298,11 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void useDefaultLocations(){
-        locationSingleton.setLocation(locationSharedPreferences.getUsersLocation(mAuth.getUid()));
+        locationSingleton.setLocation(locationSharedPreferences.getUsersLocation());
     }
 
     private boolean hasUserDefaultLocationSet(){
-        return isUserLoggedIn() && locationSharedPreferences.userHasLocationsSet(mAuth.getUid());
+        return isUserLoggedIn() && locationSharedPreferences.userHasLocationsSet();
     }
 
 
@@ -413,6 +415,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
                 mAuth.signOut();
+                clearSharedPreferences();
+                finish();
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
@@ -497,16 +501,15 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 
     private void getLocationsFromSharedPreferences(){
-        String json = mPrefs.getString(SHARED_PREFERENCES_DEFAULT_LOCATION, "");
+        String key = getLocationPreferencesKey();
+        String json = mPrefs.getString(key, "");
         Gson localGson = new Gson();
-        Type type = new TypeToken<List<UsersDefaultLocation>>(){}.getType();
-        List<UsersDefaultLocation> list = localGson.fromJson(json, type);
-        if(list != null){
-            locationSharedPreferences.setLocations(list);
+        LatLng defaultLocation = localGson.fromJson(json, LatLng.class);
+        if(defaultLocation != null){
+            locationSharedPreferences.setLocation(defaultLocation);
         }
 
     }
@@ -516,5 +519,14 @@ public class HomeActivity extends AppCompatActivity
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private String getLocationPreferencesKey(){
+        return mAuth.getUid() + SHARED_PREFERENCES_DEFAULT_LOCATION;
+    }
+
+    private void clearSharedPreferences(){
+        locationSharedPreferences.setLocation(null);
+        locationSingleton.setLocation(null);
     }
 }

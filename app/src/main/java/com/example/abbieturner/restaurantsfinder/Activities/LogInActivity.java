@@ -2,11 +2,13 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.Manifest;
 import android.app.ActivityOptions;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +31,19 @@ import com.example.abbieturner.restaurantsfinder.Services.LocationService;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.shashank.sony.fancydialoglib.FancyAlertDialog;
@@ -53,8 +66,12 @@ public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.sign_in_btn)
     Button signin_button;
+
     @BindView(R.id.skip_login__btn)
     TextView skipLoginBtn;
+
+    @BindView(R.id.btn_google)
+    SignInButton btnGoogle;
 
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
@@ -62,16 +79,27 @@ public class LogInActivity extends AppCompatActivity {
     private String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+    private GoogleSignInClient mGoogleSignInClient;
+    private ProgressDialog progressDialog;
+    private GoogleSignInOptions gso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
         ButterKnife.bind(this);
 
-        mAuth = FirebaseAuth.getInstance();
+        setNewInstances();
+        setListeners();
 
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+
+        startService(new Intent(this, LocationService.class));
+    }
+
+    private void setListeners(){
         signin_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,25 +122,57 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
-        if(!hasPermissions(this, PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-        }
+        btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGoogleSignInClient.signOut();
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, 101);
 
-        startService(new Intent(this, LocationService.class));
+            }
+        });
+    }
+
+    private void setNewInstances(){
+        mAuth = FirebaseAuth.getInstance();
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        progressDialog = new ProgressDialog(this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 101) {
+            showLoginProgressDialog();
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(LogInActivity.this, "Google sign in failed", Toast.LENGTH_LONG).show();
+                hideLoginProgressDialog();
+                // ...
+            }
+        }
+
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     finish();
-                    setEnterExitTransition(new Intent(LogInActivity.this, CuisineActivity.class));
+                    setEnterExitTransition(new Intent(LogInActivity.this, HomeActivity.class));
                 } else {
                     finish();
-                    startActivity(new Intent(LogInActivity.this, CuisineActivity.class));
+                    startActivity(new Intent(LogInActivity.this, HomeActivity.class));
                 }
             } else {
                 if (response == null) {
@@ -154,11 +214,9 @@ public class LogInActivity extends AppCompatActivity {
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
 
                 startActivity(intent);
-                finish();
             } else {
 
                 startActivity(new Intent(LogInActivity.this, HomeActivity.class));
-                finish();
             }
         }
     }
@@ -192,5 +250,35 @@ public class LogInActivity extends AppCompatActivity {
         return true;
     }
 
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        //Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(LogInActivity.this, HomeActivity.class));
+                            hideLoginProgressDialog();
+                        } else {
+                            Toast.makeText(LogInActivity.this, "Could not log in tvUser", Toast.LENGTH_LONG).show();
+                            hideLoginProgressDialog();
+                        }
+                    }
+                });
+    }
+
+    private void showLoginProgressDialog(){
+        progressDialog.setTitle("Login");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+    }
+
+    private void hideLoginProgressDialog(){
+        progressDialog.hide();
+    }
 
 }

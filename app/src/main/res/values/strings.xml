@@ -126,6 +126,6 @@
     </string-array>
 
     <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
-
+    <string name="btnPasswordLogin">Password Login</string>
 
 </resources>
