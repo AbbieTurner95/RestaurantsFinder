@@ -21,11 +21,15 @@ import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaura
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable, PopularRestaurants.PopularRestaurantsListener {
 
@@ -66,16 +70,19 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //
 
         restaurantsList.clear();
+        filterList.clear();
 
         if(firebaseRestaurants != null && firebaseRestaurants.size() > 0){
             for(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant: firebaseRestaurants){
                 restaurantsList.add(new RestaurantModel(restaurant));
+                filterList.add(new RestaurantModel(restaurant));
             }
         }
 
         if(zomatoRestaurants != null && zomatoRestaurants.size() > 0){
             for(Restaurant r: zomatoRestaurants){
                 restaurantsList.add(new RestaurantModel(r));
+                filterList.add(new RestaurantModel(r));
             }
         }
 
@@ -116,6 +123,9 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             String rating = fr.getRating().toString();
             holder.rating.setText("Rating: " + rating);
 
+            holder.imageLoader = new PicassoLoader();
+            holder.imageLoader.loadImage(holder.avatarView, restaurant.getFirebaseRestaurant().getPictureUrl(), restaurant.getFirebaseRestaurant().getName());
+
 //            holder.favorites.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -139,6 +149,9 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
             String rating = zr.getUser_rating().getAggregate_rating();
             holder.rating.setText("Rating: " + rating);
+
+            holder.imageLoader = new PicassoLoader();
+            holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getZomatoRestaurant().getName());
 
             holder.favorites.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,6 +193,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView restaurantName, distance, rating;
         ImageView favorites;
+        AvatarView avatarView;
+        IImageLoader imageLoader;
 
         public RestaurantsViewHolder(View view) {
             super(view);
@@ -187,6 +202,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             favorites = view.findViewById(R.id.restaurant_favorite_btn);
             distance = view.findViewById(R.id.restaurant_distance);
             rating = view.findViewById(R.id.restaurant_rating);
+            avatarView = view.findViewById(R.id.avatar_view);
             view.setOnClickListener(this);
         }
 

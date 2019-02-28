@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 
 public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineViewHolder> {
 
@@ -43,6 +47,9 @@ public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineV
 
         String title = cuisine.getCuisine_name();
         holder.cuisineTitle.setText(title);
+
+        holder.imageLoader = new PicassoLoader();
+        holder.imageLoader.loadImage(holder.avatarView, "sgsd", title);
     }
 
     @Override
@@ -52,10 +59,13 @@ public class CuisineAdapter extends RecyclerView.Adapter<CuisineAdapter.CuisineV
 
     public class CuisineViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView cuisineTitle;
+        AvatarView avatarView;
+        IImageLoader imageLoader;
 
         public CuisineViewHolder(View view) {
             super(view);
             cuisineTitle = view.findViewById(R.id.cuisine_title);
+            avatarView = view.findViewById(R.id.avatar_view);
             view.setOnClickListener(this);
         }
 

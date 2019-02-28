@@ -97,7 +97,7 @@ public class CustomFilter extends Filter {
             ratingInString = restaurant.getZomatoRestaurant().getUser_rating().getAggregate_rating();
         }
 
-        return stringToDouble(ratingInString) > model.getRating();
+        return stringToDouble(ratingInString) >= model.getRating();
     }
 
     private double stringToDouble(String number){
