@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -26,6 +28,14 @@ public class RestaurantsFilterDialog extends DialogFragment  {
     Button search, btnClearFilter;
     EditText searchInput;
     ImageView btnClearSearchText;
+
+    CheckBox delivery;
+    CheckBox stepFreeAccess;
+    CheckBox accessibleToilets;
+    CheckBox vegan;
+    CheckBox vegetarian;
+    CheckBox glutenFree;
+    CheckBox dairyFree;
 
 
     @Override
@@ -63,6 +73,14 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         search = view.findViewById(R.id.btn_search);
         btnClearSearchText = view.findViewById(R.id.btn_clear_search_text);
         btnClearFilter = view.findViewById(R.id.btn_clear_filter);
+
+        delivery = view.findViewById(R.id.checkBox_delivery);
+        stepFreeAccess = view.findViewById(R.id.checkBox_step_free_access);
+        accessibleToilets = view.findViewById(R.id.checkBox_accessible_toilets);
+        vegan = view.findViewById(R.id.checkBox_vegan);
+        vegetarian = view.findViewById(R.id.checkBox_vegetarian);
+        glutenFree = view.findViewById(R.id.checkBox_gluten_free);
+        dairyFree = view.findViewById(R.id.checkBox_dairy_free);
 
         setValues();
 
@@ -128,6 +146,55 @@ public class RestaurantsFilterDialog extends DialogFragment  {
             }
         });
 
+        delivery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setDelivery(isChecked);
+            }
+        });
+
+        stepFreeAccess.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setStepFreeAccess(isChecked);
+            }
+        });
+
+        accessibleToilets.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setAccessibleToilets(isChecked);
+            }
+        });
+
+        vegan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setVegan(isChecked);
+            }
+        });
+
+        vegetarian.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setVegetarian(isChecked);
+            }
+        });
+
+        glutenFree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setGlutenFree(isChecked);
+            }
+        });
+
+        dairyFree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FilterModel.getInstance().setDairyFree(isChecked);
+            }
+        });
+
         btnClearSearchText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,17 +219,43 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         model.setDistance(0);
         model.setRating(0);
         model.setSearch("");
+        model.setDelivery(false);
+        model.setStepFreeAccess(false);
+        model.setAccessibleToilets(false);
+        model.setVegan(false);
+        model.setVegetarian(false);
+        model.setGlutenFree(false);
+        model.setDairyFree(false);
     }
 
     private void setValues(){
         FilterModel model = FilterModel.getInstance();
-        //distance.setText(model.getDistance() + " miles");
-        distance.setText("Off");
-        //rating.setText(String.valueOf(model.getRating()));
-        rating.setText("Off");
+        if(model.getDistance() > 0){
+            distance.setText(String.valueOf(model.getDistance()) + " miles");
+        }else{
+            distance.setText("Off");
+        }
+
+        if(model.getRating() > 0){
+            rating.setText(String.valueOf(model.getRating()));
+        }else{
+            rating.setText("Off");
+        }
+
         searchInput.setText(model.getSearch());
         distanceBar.setProgress(model.getDistance());
         ratingBar.setProgress(model.getRating());
+
+
+        delivery.setChecked(model.isDelivery());
+        stepFreeAccess.setChecked(model.isStepFreeAccess());
+        accessibleToilets.setChecked(model.isAccessibleToilets());
+        vegan.setChecked(model.isVegan());
+        vegetarian.setChecked(model.isVegetarian());
+        glutenFree.setChecked(model.isGlutenFree());
+        dairyFree.setChecked(model.isDairyFree());
+
+
     }
 
     @Override

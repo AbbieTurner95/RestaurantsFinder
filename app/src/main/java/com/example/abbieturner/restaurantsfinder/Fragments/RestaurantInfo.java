@@ -30,7 +30,7 @@ import java.util.List;
 public class RestaurantInfo extends Fragment implements ISendRestaurant, PopularRestaurants.PopularRestaurantsListener {
 
     private RestaurantModel restaurant;
-    private TextView tvAddress, tvRating, tvHasOnlineDelivery, tvPhone;
+    private TextView tvAddress, tvRating, tvHasOnlineDelivery, tvPhone, tvStepFreeAccess, tvAccessibleToilets, tvVegan, tvVegetarian, tvGlutenFree, tvDairyFree ;
     private View view;
     private ImageView btnDirection, btnPhone, btnShare, btnFavourites, btnMenu, btnWeb;
     private AppDatabase database;
@@ -63,6 +63,12 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnFavourites = (ImageView) view.findViewById(R.id.btn_favourites);
         btnMenu = (ImageView) view.findViewById(R.id.btn_menu);
         btnWeb = (ImageView) view.findViewById(R.id.btn_web);
+        tvStepFreeAccess = view.findViewById(R.id.tv_step_free_access);
+        tvAccessibleToilets = view.findViewById(R.id.tv_accessible_toilets);
+        tvVegan = view.findViewById(R.id.tv_vegan);
+        tvVegetarian = view.findViewById(R.id.tv_vegetarian);
+        tvGlutenFree = view.findViewById(R.id.tv_gluten_free);
+        tvDairyFree = view.findViewById(R.id.tv_dairy_free);
         database = AppDatabase.getInstance(getActivity());
         converter = ModelConverter.getInstance();
         popularRestaurantDataAccess = new PopularRestaurants(this);
@@ -166,6 +172,13 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
         }
+
+        tvStepFreeAccess.setText(restaurant.getStepFreeAccess());
+        tvAccessibleToilets.setText(restaurant.getAccessibleToilets());
+        tvVegan.setText(restaurant.getVegan());
+        tvVegetarian.setText(restaurant.getVegetarian());
+        tvGlutenFree.setText(restaurant.getGlutenFree());
+        tvDairyFree.setText(restaurant.getDairyFree());
 
     }
 

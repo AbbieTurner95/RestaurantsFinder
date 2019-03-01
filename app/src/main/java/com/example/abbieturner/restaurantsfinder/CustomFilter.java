@@ -31,7 +31,7 @@ public class CustomFilter extends Filter {
 
         constraint = model.getSearch();
 
-        if(isSearchSet(constraint) || isDistanceSet() || isRatingSet()){
+        if(isAnySearchSet(constraint)){
             constraint=constraint.toString().toUpperCase();
 
             List<RestaurantModel> filteredRestaurans = new ArrayList<>();
@@ -40,7 +40,7 @@ public class CustomFilter extends Filter {
             {
                 RestaurantModel currentRestaurant = filterList.get(i);
 
-                if(containsName(currentRestaurant, constraint) && fitsDistance(currentRestaurant) && fitsRating(currentRestaurant))
+                if(mathesSearch(currentRestaurant, constraint))
                 {
                     //ADD RESTAURANT TO FILTERED
                     filteredRestaurans.add(filterList.get(i));
@@ -57,6 +57,128 @@ public class CustomFilter extends Filter {
         return results;
     }
 
+    private boolean mathesSearch(RestaurantModel currentRestaurant, CharSequence constraint){
+        return containsName(currentRestaurant, constraint)
+                && fitsDistance(currentRestaurant)
+                && fitsRating(currentRestaurant)
+                && hasDelivery(currentRestaurant)
+                && hasStepFreeAccess(currentRestaurant)
+                && hasAccessibleToilets(currentRestaurant)
+                && isVegan(currentRestaurant)
+                && isVegetarian(currentRestaurant)
+                && isGlutenFree(currentRestaurant)
+                && isDairyFree(currentRestaurant);
+    }
+    private boolean hasDelivery(RestaurantModel currentRestaurant){
+        if(isDeliverySet()){
+            if(currentRestaurant.hasDelivery()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean hasStepFreeAccess(RestaurantModel restaurant){
+        if(isStepFreeAccessSet()){
+            if(restaurant.hasStepFreeAccess()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean hasAccessibleToilets(RestaurantModel restaurant){
+        if(isAccessibleToiletsSet()){
+            if(restaurant.hasAccessibleToilets()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean isVegan(RestaurantModel restaurant){
+        if(isVeganSet()){
+            if(restaurant.isVegan()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+           return true;
+        }
+    }
+    private boolean isVegetarian(RestaurantModel restaurant){
+        if(isVegetarianSet()){
+            if(restaurant.isVegetarian()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean isGlutenFree(RestaurantModel restaurant){
+        if(isGlutenFreeSet()){
+            if(restaurant.isGlutenFree()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean isDairyFree(RestaurantModel restaurant){
+        if(isDairyFreeSet()){
+            if(restaurant.isDiaryFree()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+    private boolean isAnySearchSet(CharSequence constraint){
+        return isSearchSet(constraint)
+                || isDistanceSet()
+                || isRatingSet()
+                || isDeliverySet()
+                || isStepFreeAccessSet()
+                || isAccessibleToiletsSet()
+                || isVeganSet()
+                || isVegetarianSet()
+                || isGlutenFreeSet()
+                || isDairyFreeSet();
+    }
+    private boolean isDeliverySet(){
+        return model.isDelivery();
+    }
+    private boolean isStepFreeAccessSet(){
+        return model.isStepFreeAccess();
+    }
+    private boolean isAccessibleToiletsSet(){
+        return model.isAccessibleToilets();
+    }
+    private boolean isVeganSet(){
+        return model.isVegan();
+    }
+    private boolean isVegetarianSet(){
+        return model.isVegetarian();
+    }
+    private boolean isGlutenFreeSet(){
+        return model.isGlutenFree();
+    }
+    private boolean isDairyFreeSet(){
+        return model.isDairyFree();
+    }
     private boolean isRatingSet(){
         return model.getRating() > 0;
     }
@@ -74,8 +196,7 @@ public class CustomFilter extends Filter {
         }
 
     }
-    private boolean fitsDistance(RestaurantModel restaurant)
-    {
+    private boolean fitsDistance(RestaurantModel restaurant) {
         Double distance = null;
 
         if(restaurant.isFirebaseRestaurant()){
@@ -99,7 +220,6 @@ public class CustomFilter extends Filter {
 
         return stringToDouble(ratingInString) >= model.getRating();
     }
-
     private double stringToDouble(String number){
         DecimalFormat df = new DecimalFormat();
         DecimalFormatSymbols sfs = new DecimalFormatSymbols();
