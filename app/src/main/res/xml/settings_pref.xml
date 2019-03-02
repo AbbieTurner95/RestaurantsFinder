@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
+        android:key="GPS"
         app:key="Allow app to use GPS?"
         app:title="Enable GPS"/>
 
     <SwitchPreferenceCompat
+        android:key="CAMERA"
         app:key="Allow app to use Camera?"
         app:title="Enable Camera"/>
 
