@@ -2,6 +2,7 @@ package com.example.abbieturner.restaurantsfinder.Dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -11,14 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.abbieturner.restaurantsfinder.Activities.HomeActivity;
+import com.example.abbieturner.restaurantsfinder.Activities.SettingsActivity;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
+import com.example.abbieturner.restaurantsfinder.Singletons.LocationSharedPreferences;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class GetLocationDialog implements OnMapReadyCallback{
     private AlertDialog dialog;
@@ -27,8 +34,11 @@ public class GetLocationDialog implements OnMapReadyCallback{
     private GoogleMap mMap;
     private DeviceLocation locationSingleton;
     private LatLng location;
+    private boolean isSettingActivity;
+    private LocationSharedPreferences locationSharedPreferences;
 
-    public GetLocationDialog(Context context){
+    public GetLocationDialog(Context context, boolean isSettingActivity){
+        this.isSettingActivity = isSettingActivity;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         locationSingleton = DeviceLocation.getInstance();
@@ -39,6 +49,8 @@ public class GetLocationDialog implements OnMapReadyCallback{
     private void createDialog(){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
         View mView= inflater.inflate(R.layout.dialog_get_location, null);
+
+        locationSharedPreferences = LocationSharedPreferences.getInstance();
 
         setUpMap();
 
@@ -63,8 +75,13 @@ public class GetLocationDialog implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 locationSingleton.setLocation(location);
-                ((HomeActivity)context).locationSetFromUser();
-                hideDialog();
+                if(isSettingActivity){
+                    ((SettingsActivity)context).locationSetFromUser(location);
+                    hideDialog();
+                }else{
+                    ((HomeActivity)context).locationSetFromUser();
+                    hideDialog();
+                }
             }
         });
 
@@ -80,8 +97,13 @@ public class GetLocationDialog implements OnMapReadyCallback{
     }
 
     private void setUpMap(){
-        SupportMapFragment mapFragment = (SupportMapFragment)((HomeActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if(isSettingActivity){
+            SupportMapFragment mapFragment = (SupportMapFragment)((SettingsActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }else{
+            SupportMapFragment mapFragment = (SupportMapFragment)((HomeActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
     }
 
     public void showDialog(){
@@ -95,6 +117,10 @@ public class GetLocationDialog implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if(locationSharedPreferences.userHasLocationsSet()){
+            addMarker();
+        }
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -105,5 +131,10 @@ public class GetLocationDialog implements OnMapReadyCallback{
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         });
+    }
+
+    private void addMarker(){
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(locationSharedPreferences.getLocation()).title("My location"));
     }
 }

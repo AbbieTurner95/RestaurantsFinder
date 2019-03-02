@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
+import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 
 public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularRestaurantsAdapter.PopularRestaurantViewHolder>{
     private List<PopularRestaurant> popularRestaurantsList;
@@ -38,7 +42,8 @@ public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularResta
         PopularRestaurant restaurant = popularRestaurantsList.get(position);
 
         holder.name.setText(restaurant.getName());
-
+        holder.imageLoader = new PicassoLoader();
+        holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
     }
 
     @Override
@@ -49,11 +54,14 @@ public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularResta
 
     public class PopularRestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
+        AvatarView avatarView;
+        IImageLoader imageLoader;
 
 
         public PopularRestaurantViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.restaurant_name);
+            avatarView = view.findViewById(R.id.avatar_view);
             view.setOnClickListener(this);
         }
 

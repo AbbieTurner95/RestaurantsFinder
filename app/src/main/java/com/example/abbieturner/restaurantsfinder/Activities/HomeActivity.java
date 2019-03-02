@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -41,18 +43,23 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.UsersDefaultLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
+import com.example.abbieturner.restaurantsfinder.Singletons.LocationSharedPreferences;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +111,7 @@ public class HomeActivity extends AppCompatActivity
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
-    private String TAG_RESTAURANT_ID;
+    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION;
     private DeviceLocation locationSingleton;
     private API.ZomatoApiCalls service;
     private GetLocationDialog getLocationDialog;
@@ -112,6 +119,8 @@ public class HomeActivity extends AppCompatActivity
     private String BASE_URL;
     private Retrofit retrofit;
     private FirebaseAuth mAuth;
+    private LocationSharedPreferences locationSharedPreferences;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,15 +139,17 @@ public class HomeActivity extends AppCompatActivity
         setUpPopularRecyclerView();
         setUpFavouritesRecyclerView();
         setUpOnClickListeners();
+        getLocationsFromSharedPreferences();
     }
 
     private void createNewInstances(){
         database = AppDatabase.getInstance(this);
         converter = ModelConverter.getInstance();
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
+        SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
         popularRestaurantsDataAccess = new PopularRestaurants(this);
         locationSingleton = DeviceLocation.getInstance();
-        getLocationDialog = new GetLocationDialog(this);
+        getLocationDialog = new GetLocationDialog(this, false);
         gson = new GsonBuilder()
                 .registerTypeAdapter(Cuisine.class, new CuisineJsonAdapter())
                 .create();
@@ -148,6 +159,10 @@ public class HomeActivity extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         service = retrofit.create(API.ZomatoApiCalls.class);
+
+        //mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        locationSharedPreferences = LocationSharedPreferences.getInstance();
     }
 
 
@@ -272,11 +287,28 @@ public class HomeActivity extends AppCompatActivity
         if(isDeviceLocationSet()){
             pbLoadCuisines.setVisibility(View.VISIBLE);
             fetchCuisines();
-        }else{
+        }else if(hasUserDefaultLocationSet()){
+            useDefaultLocations();
+            pbLoadCuisines.setVisibility(View.VISIBLE);
+            fetchCuisines();
+        }
+        else{
             getLocationFromUser();
         }
     }
 
+    private void useDefaultLocations(){
+        locationSingleton.setLocation(locationSharedPreferences.getUsersLocation());
+    }
+
+    private boolean hasUserDefaultLocationSet(){
+        return isUserLoggedIn() && locationSharedPreferences.userHasLocationsSet();
+    }
+
+
+    private boolean isUserLoggedIn(){
+        return mAuth.getCurrentUser() != null;
+    }
     public void fetchCuisines() {
 
         service.getCuisineId("332", String.valueOf(locationSingleton.getLocation().latitude),
@@ -307,8 +339,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getPopularRestaurants(){
-        pbPopularRestaurants.setVisibility(View.VISIBLE);
-        popularRestaurantsDataAccess.getPopularRestaurants();
+        if(isNetworkAvailable()){
+            pbPopularRestaurants.setVisibility(View.VISIBLE);
+            popularRestaurantsDataAccess.getPopularRestaurants();
+        }
     }
 
     @Override
@@ -381,6 +415,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
                 mAuth.signOut();
+                clearSharedPreferences();
+                finish();
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
@@ -411,8 +447,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+//        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
+//                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private View.OnClickListener allCuisinesOnClickListener = new View.OnClickListener() {
@@ -464,6 +501,32 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
+    }
+
+    private void getLocationsFromSharedPreferences(){
+        String key = getLocationPreferencesKey();
+        String json = mPrefs.getString(key, "");
+        Gson localGson = new Gson();
+        LatLng defaultLocation = localGson.fromJson(json, LatLng.class);
+        if(defaultLocation != null){
+            locationSharedPreferences.setLocation(defaultLocation);
+        }
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private String getLocationPreferencesKey(){
+        return mAuth.getUid() + SHARED_PREFERENCES_DEFAULT_LOCATION;
+    }
+
+    private void clearSharedPreferences(){
+        locationSharedPreferences.setLocation(null);
+        locationSingleton.setLocation(null);
     }
 }

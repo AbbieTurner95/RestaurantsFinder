@@ -17,10 +17,14 @@ import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
+import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.RestaurantViewHolder> implements PopularRestaurants.PopularRestaurantsListener{
     private List<Restaurant> restaurantList;
@@ -71,6 +75,9 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
                 toggleFavoriteRestaurant(restaurant);
             }
         });
+
+        holder.imageLoader = new PicassoLoader();
+        holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
     }
 
     @Override
@@ -95,12 +102,15 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
     public class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView restaurantName, distanceTextView;
         ImageView favourite;
+        AvatarView avatarView;
+        IImageLoader imageLoader;
 
         public RestaurantViewHolder(View view) {
             super(view);
             restaurantName = view.findViewById(R.id.favourite_restaurant_name);
             favourite = view.findViewById(R.id.btn_favourites);
             distanceTextView = view.findViewById(R.id.distance_txt);
+            avatarView = view.findViewById(R.id.avatar_view);
             view.setOnClickListener(this);
         }
 

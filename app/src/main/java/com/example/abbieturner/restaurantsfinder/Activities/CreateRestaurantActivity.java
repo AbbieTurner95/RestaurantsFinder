@@ -71,6 +71,20 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     TextView tvMenuUrl;
     @BindView(R.id.checkBox_delivery)
     CheckBox checkBoxDelivery;
+
+    @BindView(R.id.checkBox_step_free_access)
+    CheckBox checkBoxStepFreeAccess;
+    @BindView(R.id.checkBox_accessible_toilets)
+    CheckBox checkBoxAccessibleToilets;
+    @BindView(R.id.checkBox_vegan)
+    CheckBox checkBoxVegan;
+    @BindView(R.id.checkBox_vegetarian)
+    CheckBox checkBoxVegetarian;
+    @BindView(R.id.checkBox_gluten_free)
+    CheckBox checkBoxGlutenFree;
+    @BindView(R.id.checkBox_dairy_free)
+    CheckBox checkBoxDairyFree;
+
     @BindView(R.id.btn_take_photo)
     LinearLayout btnTakePhoto;
     @BindView(R.id.image_view_photo)
@@ -139,6 +153,48 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        checkBoxStepFreeAccess.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setStepsFreeAccess(isChecked);
+            }
+        });
+
+        checkBoxAccessibleToilets.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setAccessibleToilets(isChecked);
+            }
+        });
+
+        checkBoxVegan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setVegan(isChecked);
+            }
+        });
+
+        checkBoxVegetarian.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setVegetarian(isChecked);
+            }
+        });
+
+        checkBoxGlutenFree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setGlutenFree(isChecked);
+            }
+        });
+
+        checkBoxDairyFree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                newRestaurant.setDairyFree(isChecked);
             }
         });
     }
@@ -367,6 +423,5 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.signOut();
     }
 }
