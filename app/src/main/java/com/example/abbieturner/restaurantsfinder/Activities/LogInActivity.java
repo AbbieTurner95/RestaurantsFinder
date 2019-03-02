@@ -138,14 +138,19 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void fetchCuisines() {
-        service.getCuisineId("332", "53.382882", "-1.470300") //(TODO) set to yorkshire - later on will use gps of users phone
+
+        service.getCuisineId("332", "53.382882", "-1.470300") //
                 .enqueue(new Callback<Cuisines>() {
                     @Override
                     public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
                         assert response.body() != null;
                         CuisinesSingleton.getInstance().setCuisines(response.body().cuisinesList);
                     }
-    private void setNewInstances(){
+                };
+
+    }
+
+    private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

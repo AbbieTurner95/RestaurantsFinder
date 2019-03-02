@@ -204,5 +204,6 @@
 
     <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
     <string name="btnPasswordLogin">Password Login</string>
+    <string name="create_restaurant">Create Restaurant</string>
 
 </resources>

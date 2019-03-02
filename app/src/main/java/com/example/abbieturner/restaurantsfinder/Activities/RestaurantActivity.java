@@ -55,8 +55,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestaurantActivity extends AppCompatActivity
         implements  ReviewsAdapter.ReviewItemClick,
         Review.ReviewListener,
-        Reviews.ReviewsListener, NavigationView.OnNavigationItemSelectedListener
-{
+        Reviews.ReviewsListener, NavigationView.OnNavigationItemSelectedListener, RestaurantListener {
 
     private String jsonRestaurant, restaurantId;
     private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
@@ -331,22 +330,6 @@ public class RestaurantActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRestaurantCreated(boolean hasFailed) {
-
-    }
-
-    @Override
-    public void onRestaurantLoaded(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant, boolean hasFailed) {
-        if(hasFailed || restaurant == null){
-            Toast.makeText(this, "Failed to get restaurant", Toast.LENGTH_LONG).show();
-            finish();
-        }else{
-            this.restaurant = new RestaurantModel(restaurant);
-            displayRestaurantData();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
@@ -402,9 +385,9 @@ public class RestaurantActivity extends AppCompatActivity
                     .setPositiveButton("Email", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
+                                    Uri.fromParts(
                                     "mailto", "info@restaurantfinder.com", null));
-                                    "mailto","info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -446,6 +429,22 @@ public class RestaurantActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onRestaurantCreated(boolean hasFailed) {
+
+    }
+
+    @Override
+    public void onRestaurantLoaded(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant, boolean hasFailed) {
+        if(hasFailed || restaurant == null){
+            Toast.makeText(this, "Failed to get restaurant", Toast.LENGTH_LONG).show();
+            finish();
+        }else{
+            this.restaurant = new RestaurantModel(restaurant);
+            displayRestaurantData();
+        }
     }
 }
 
