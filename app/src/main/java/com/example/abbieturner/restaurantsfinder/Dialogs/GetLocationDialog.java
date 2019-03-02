@@ -2,9 +2,6 @@ package com.example.abbieturner.restaurantsfinder.Dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,10 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class GetLocationDialog implements OnMapReadyCallback{
     private AlertDialog dialog;
@@ -70,20 +63,20 @@ public class GetLocationDialog implements OnMapReadyCallback{
             }
         });
 
-        TextView btnSet = mView.findViewById(R.id.btn_set);
-        btnSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                locationSingleton.setLocation(location);
-                if(isSettingActivity){
-                    ((SettingsActivity)context).locationSetFromUser(location);
-                    hideDialog();
-                }else{
-                    ((HomeActivity)context).locationSetFromUser();
-                    hideDialog();
-                }
-            }
-        });
+//        TextView btnSet = mView.findViewById(R.id.btn_set);
+//        btnSet.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                locationSingleton.setLocation(location);
+//                if(isSettingActivity){
+//                    ((SettingsActivity)context).locationSetFromUser(location);
+//                    hideDialog();
+//                }else{
+//                    ((HomeActivity)context).locationSetFromUser();
+//                    hideDialog();
+//                }
+//            }
+//        });
 
         mBuilder.setView(mView);
         dialog = mBuilder.create();
