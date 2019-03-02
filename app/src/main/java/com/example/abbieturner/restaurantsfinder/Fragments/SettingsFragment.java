@@ -90,7 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         locationSingleton = DeviceLocation.getInstance();
         gson = new Gson();
         //sharedPreferences = getPreferences(MODE_PRIVATE);
-        sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        //sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
     }

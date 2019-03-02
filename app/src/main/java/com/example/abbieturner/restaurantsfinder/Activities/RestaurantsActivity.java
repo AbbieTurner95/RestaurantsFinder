@@ -66,7 +66,6 @@ public class RestaurantsActivity extends AppCompatActivity implements
     private int cuisineID;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
-    private String TAG_RESTAURANT_ID;
     private FirebaseAuth mAuth;
     //private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
     private String TAG_RESTAURANT_ID, TAG_IS_FIREBASE_RESTAURANT;
@@ -76,7 +75,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
     private List<Restaurant> zoomatoRestaurants;
     private List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants;
     private String cuisineName;
-    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

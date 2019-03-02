@@ -1,11 +1,5 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import com.example.abbieturner.restaurantsfinder.R;
-
-public class CreateRestaurantActivity extends AppCompatActivity {
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,8 +39,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreateRestaurantActivity extends AppCompatActivity implements
-        OnMapReadyCallback, RestaurantListener{
+
+public class CreateRestaurantActivity extends AppCompatActivity implements OnMapReadyCallback, RestaurantListener {
 
     private CloseCreateRestaurantDialog closeConfirmationDialog;
     private Restaurant newRestaurant;
@@ -429,5 +423,10 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

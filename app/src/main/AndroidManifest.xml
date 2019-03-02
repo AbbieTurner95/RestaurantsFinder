@@ -19,17 +19,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
         <activity android:name=".Activities.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,21 +26,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Activities.CuisineActivity" />
         <activity android:name=".Activities.RestaurantsActivity" />
         <activity android:name=".Activities.HomeActivity" />
+        <activity android:name=".Activities.FavouritesActivity" />
+        <activity android:name=".Activities.CreateRestaurantActivity"/>
+        <service android:name=".Services.LocationService" />
 
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".Activities.HomeActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity"/>
         </activity>
 
-        <activity android:name=".Activities.FavouritesActivity" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -60,22 +63,7 @@
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:theme="@android:style/Theme.Translucent" />
-        <activity
-            android:name=".Activities.RestaurantActivity"
-            android:label="@string/title_activity_restaurant_new"></activity>
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName=".Activities.RestaurantActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.RestaurantActivity" />
-        </activity>
-        <activity android:name=".Activities.CreateRestaurantActivity"></activity>
-            android:label="@string/title_activity_restaurant_new" />
-        <activity android:name=".Activities.CreateRestaurantActivity" />
 
-        <service android:name=".Services.LocationService" />
     </application>
 
 </manifest>

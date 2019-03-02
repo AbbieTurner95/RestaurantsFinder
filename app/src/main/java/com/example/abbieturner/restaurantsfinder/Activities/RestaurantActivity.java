@@ -56,8 +56,6 @@ public class RestaurantActivity extends AppCompatActivity
         implements  ReviewsAdapter.ReviewItemClick,
         Review.ReviewListener,
         Reviews.ReviewsListener, NavigationView.OnNavigationItemSelectedListener
-        implements  ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
-        Reviews.ReviewsListener, RestaurantListener, NavigationView.OnNavigationItemSelectedListener
 {
 
     private String jsonRestaurant, restaurantId;
@@ -114,14 +112,6 @@ public class RestaurantActivity extends AppCompatActivity
         setupViewPager();
     }
 
-    private void setUpNavigationDrawer(){
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(this);
-    }
 
     public void restaurantInfoLoaded(){
         if(isRestaurantId()){
@@ -459,4 +449,3 @@ public class RestaurantActivity extends AppCompatActivity
     }
 }
 
-}

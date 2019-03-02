@@ -109,8 +109,6 @@ public class HomeActivity extends AppCompatActivity
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
-    private String TAG_RESTAURANT_ID;
-    private FirebaseAuth mAuth;
     private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION;
     private DeviceLocation locationSingleton;
     private API.ZomatoApiCalls service;
@@ -176,14 +174,17 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
     }
+
     private void setUpOnClickListeners(){
         allCuisines.setOnClickListener(allCuisinesOnClickListener);
         btnClear.setOnClickListener(btnClearOnClickListener);
         btnManageFavourites.setOnClickListener(btnManageFavouritesOnClickListener);
     }
+
     private List<Restaurant> getFavouriteRestaurants(){
         return converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
     }
+
     private void setUpFavouritesRecyclerView(){
         favouriteLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         favouriteAdapter = new FavouriteAdapter(this, this, R.layout.favourite_restaurant_item);
@@ -197,6 +198,7 @@ public class HomeActivity extends AppCompatActivity
         SnapHelper favouriteSnapHelper = new StartSnapHelper();
         favouriteSnapHelper.attachToRecyclerView(favouritesRecyclerView);
     }
+
     private void setUpPopularRecyclerView(){
         popularLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         popularAdapter = new PopularRestaurantsAdapter(this);
@@ -415,14 +417,6 @@ public class HomeActivity extends AppCompatActivity
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-            if(mAuth == null){
-//                Intent intent = new Intent(this, LogInActivity.class);
-//                startActivity(intent);
-            } else {
-                mAuth.signOut();
-                Intent intent = new Intent(this, LogInActivity.class);
-                startActivity(intent);
-            }
             if(mAuth != null){
                 mAuth.signOut();
                 clearSharedPreferences();
@@ -449,8 +443,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-
 
     }
 
