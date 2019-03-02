@@ -22,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
-import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantJsonAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.Restaurants;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Services.LocationService;
 import com.firebase.ui.auth.AuthUI;
@@ -61,7 +63,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.sign_in_btn)
@@ -73,6 +74,7 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.btn_google)
     SignInButton btnGoogle;
 
+    private API.ZomatoApiCalls service;
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
     private int PERMISSION_ALL = 1;
@@ -93,17 +95,30 @@ public class LogInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         ButterKnife.bind(this);
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Restaurant.class, new RestaurantJsonAdapter())
+                .create();
+
+        final String BASE_URL = getResources().getString(R.string.BASE_URL_API);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        service = retrofit.create(API.ZomatoApiCalls.class);
+
+        fetchCuisines();
         setNewInstances();
         setListeners();
 
-        if(!hasPermissions(this, PERMISSIONS)){
+        if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
 
         startService(new Intent(this, LocationService.class));
     }
 
-    private void setListeners(){
+    private void setListeners() {
         signin_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,15 +153,19 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void fetchCuisines() {
-
-        service.getCuisineId("332", "53.382882", "-1.470300") //
+        service.getCuisineId("332", "53.382882", "-1.470300")
                 .enqueue(new Callback<Cuisines>() {
                     @Override
                     public void onResponse(Call<Cuisines> call, Response<Cuisines> response) {
                         assert response.body() != null;
                         CuisinesSingleton.getInstance().setCuisines(response.body().cuisinesList);
                     }
-                };
+
+                    @Override
+                    public void onFailure(Call<Cuisines> call, Throwable t) {
+
+                    }
+                });
 
     }
 
@@ -256,10 +275,10 @@ public class LogInActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static boolean hasPermissions(Context context, String... permissions){
-        if(context != null && permissions != null){
-            for(String permission : permissions){
-                if(ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
             }
@@ -287,14 +306,14 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
-    private void showLoginProgressDialog(){
+    private void showLoginProgressDialog() {
         progressDialog.setTitle("Login");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
 
-    private void hideLoginProgressDialog(){
+    private void hideLoginProgressDialog() {
         progressDialog.hide();
     }
 
