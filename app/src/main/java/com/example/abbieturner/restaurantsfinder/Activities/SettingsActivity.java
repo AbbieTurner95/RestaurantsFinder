@@ -31,19 +31,6 @@ import butterknife.ButterKnife;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private GetLocationDialog locationDialog;
-    private DeviceLocation locationSingleton;
-    private Gson gson;
-    private SharedPreferences sharedPreferences;
-    private LocationSharedPreferences locationSharedPreferences;
-    private String SHARED_PREFERENCES_DEFAULT_LOCATION;
-
-    @BindView(R.id.btn_manage_default_location)
-    TextView btnManageDefaultLocation;
-    @BindView(R.id.default_location_status)
-    TextView defaultLocationStatus;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,82 +45,8 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        setNewInstances();
-        setListeners();
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        if(locationSharedPreferences.userHasLocationsSet()){
-            defaultLocationStatus.setText("location set");
-        }else{
-            defaultLocationStatus.setText("location not set");
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    private void setListeners(){
-        btnManageDefaultLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isUserLoggedIn()){
-                    locationDialog.showDialog();
-                }else{
-                    Toast.makeText(SettingsActivity.this, "Login required", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
-
-    private void setNewInstances(){
-        mAuth = FirebaseAuth.getInstance();
-        locationDialog = new GetLocationDialog(this, true);
-        locationSingleton = DeviceLocation.getInstance();
-        gson = new Gson();
-        //sharedPreferences = getPreferences(MODE_PRIVATE);
-        sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        locationSharedPreferences = LocationSharedPreferences.getInstance();
-        SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
-    }
-
-    public void locationSetFromUser(LatLng location){
-        locationSharedPreferences.setLocation(location);
-
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        if(locationSharedPreferences.userHasLocationsSet()){
-            String json = gson.toJson(locationSharedPreferences.getUsersLocation());
-            prefsEditor.putString(getLocationPreferencesKey(), json);
-            prefsEditor.commit();
-
-
-
-            String key = getLocationPreferencesKey();
-            String jsonn = sharedPreferences.getString(key, "");
-            Gson localGson = new Gson();
-            LatLng defaultLocation = localGson.fromJson(jsonn, LatLng.class);
-        }
-    }
-
-    private boolean isUserLoggedIn(){
-        return mAuth.getCurrentUser() != null;
-    }
-
-    private String getLocationPreferencesKey(){
-        return mAuth.getUid() + SHARED_PREFERENCES_DEFAULT_LOCATION;
-    }
 }
