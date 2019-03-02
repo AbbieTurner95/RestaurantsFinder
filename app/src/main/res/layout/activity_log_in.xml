@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/activity_background"
     android:orientation="vertical"
     tools:context=".Activities.LogInActivity">
@@ -39,7 +40,71 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_top_ten"
                 android:src="@drawable/restaurant_finder" />
+        android:padding="15dp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:text="Skip Login"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/black"
+            android:textSize="32sp" />
+
+        <ImageView
+            android:layout_width="@dimen/rest_main_width"
+            android:layout_height="@dimen/rest_main_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_top_ten"
+            android:src="@drawable/restaurant_finder_logo" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_top_ten"
+            android:text="@string/find_your_place_today"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sixteen_TS"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/sign_in_btn"
+            android:layout_width="@dimen/button_enter_wdth"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_top_ten"
+            android:background="@android:color/white"
+            android:elevation="@dimen/elev_four"
+            android:text="@string/enter"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimaryDark" />
+
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"></com.google.android.gms.common.SignInButton>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_copyright_light_grey_24dp" />
+    </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,6 +144,12 @@
                 android:layout_gravity="center"
                 android:background="@drawable/ic_copyright_grey_24dp" />
         </LinearLayout>
+
+
+
+
+
+
 
 </LinearLayout>
 

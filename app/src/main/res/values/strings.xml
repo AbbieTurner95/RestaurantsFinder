@@ -112,4 +112,97 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
+    <string name="TAG_IS_FIREBASE_RESTAURANT">isFirebaseRestaurant</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="share_app">Share App</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="log_in_out">Log in/out</string>
+    <string name="settings">Settings</string>
+
+    <string-array name="cuisines_list">
+        <item>American</item>
+        <item>Asian</item>
+        <item>BBQ</item>
+        <item>Bar Food</item>
+        <item>Bengali</item>
+        <item>Brazilian</item>
+        <item>Breakfast</item>
+        <item>British</item>
+        <item>Burger</item>
+        <item>Cafe</item>
+        <item>Cantonese</item>
+        <item>Chinese</item>
+        <item>Coffee and Tea</item>
+        <item>Contemporary</item>
+        <item>Desserts</item>
+        <item>Diner</item>
+        <item>Eastern European</item>
+        <item>European</item>
+        <item>Fast Food</item>
+        <item>Fish and Chips</item>
+        <item>French</item>
+        <item>Greek</item>
+        <item>Grill</item>
+        <item>Healthy Food</item>
+        <item>Indian</item>
+        <item>International</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Kebab</item>
+        <item>Latin American</item>
+        <item>Mediterranean</item>
+        <item>Mexican</item>
+        <item>Middle Eastern</item>
+        <item>Nepalese</item>
+        <item>North Indian</item>
+        <item>Others</item>
+        <item>Pakistani</item>
+        <item>Pizza</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Sandwich</item>
+        <item>Scandinavian</item>
+        <item>Seafood</item>
+        <item>South Indian</item>
+        <item>Spanish</item>
+        <item>Steak</item>
+        <item>Sushi</item>
+        <item>Tapas</item>
+        <item>Tea</item>
+        <item>Tex-Mex</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+    </string-array>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string name="settings_page">Settings Page</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
+    <string name="btnPasswordLogin">Password Login</string>
+
 </resources>

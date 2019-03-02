@@ -14,21 +14,26 @@ import android.widget.Toast;
 import com.example.abbieturner.restaurantsfinder.CalculateDistance;
 import com.example.abbieturner.restaurantsfinder.CustomFilter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
+import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
+
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder> implements Serializable, Filterable, PopularRestaurants.PopularRestaurantsListener {
 
-    private List<Restaurant> restaurantsList, filterList;
+    private List<RestaurantModel> restaurantsList, filterList;
     private CustomFilter filter;
     private final Context context;
     private final RestaurantItemClick listener;
@@ -54,16 +59,37 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
 
-    public void setRestaurantsList(List<Restaurant> restaurantsList) {
-        this.restaurantsList.clear();
-        this.restaurantsList.addAll(restaurantsList);
+    public void setRestaurantsList(List<Restaurant> zomatoRestaurants, List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants) {
+//
+//        this.restaurantsList.clear();
+//        this.restaurantsList.addAll(restaurantsList);
+//
+//        this.filterList.clear();
+//        this.filterList.addAll(restaurantsList);
+//        notifyDataSetChanged();
+//
 
-        this.filterList.clear();
-        this.filterList.addAll(restaurantsList);
+        restaurantsList.clear();
+        filterList.clear();
+
+        if(firebaseRestaurants != null && firebaseRestaurants.size() > 0){
+            for(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant: firebaseRestaurants){
+                restaurantsList.add(new RestaurantModel(restaurant));
+                filterList.add(new RestaurantModel(restaurant));
+            }
+        }
+
+        if(zomatoRestaurants != null && zomatoRestaurants.size() > 0){
+            for(Restaurant r: zomatoRestaurants){
+                restaurantsList.add(new RestaurantModel(r));
+                filterList.add(new RestaurantModel(r));
+            }
+        }
+
         notifyDataSetChanged();
     }
 
-    public void setRestaurants(List<Restaurant> restaurantsList) {
+    public void setRestaurants(List<RestaurantModel> restaurantsList) {
         this.restaurantsList.clear();
         this.restaurantsList.addAll(restaurantsList);
 
@@ -79,28 +105,61 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(final RestaurantsViewHolder holder, int position) {
-        final Restaurant restaurant = restaurantsList.get(position);
+        final RestaurantModel restaurant = restaurantsList.get(position);
 
-        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
-            holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
-        }
+        if(restaurant.isFirebaseRestaurant()){
+            com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant fr = restaurant.getFirebaseRestaurant();
 
-        String title = restaurant.getName();
-        holder.restaurantName.setText(title);
-
-        String distance = CalculateDistance.getInstance().getRestaurantDistance(restaurant);
-        holder.distance.setText(distance);
-
-        String rating = restaurant.getUser_rating().getAggregate_rating();
-        holder.rating.setText("Rating: " + rating);
-
-        holder.favorites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFavoriteRestaurant(restaurant, holder);
+            if(database.restaurantsDAO().getRestaurant(fr.getId()) != null){
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
-        });
 
+            String title = fr.getName();
+            holder.restaurantName.setText(title);
+
+            String distance = CalculateDistance.getInstance().getRestaurantDistance(fr.getLat(), fr.getLng());
+            holder.distance.setText(distance);
+
+            String rating = fr.getRating().toString();
+            holder.rating.setText("Rating: " + rating);
+
+            holder.imageLoader = new PicassoLoader();
+            holder.imageLoader.loadImage(holder.avatarView, restaurant.getFirebaseRestaurant().getPictureUrl(), restaurant.getFirebaseRestaurant().getName());
+
+//            holder.favorites.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    toggleFavoriteRestaurant(fr, holder);
+//                }
+//            }); // TODO:
+        }else{
+            final Restaurant zr = restaurant.getZomatoRestaurant();
+
+            if(database.restaurantsDAO().getRestaurant(zr.getId()) != null){
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
+
+            String title = zr.getName();
+            holder.restaurantName.setText(title);
+
+            String distance = CalculateDistance.getInstance().getRestaurantDistance(
+                    Double.parseDouble(zr.getLocation().getLatitude()),
+                    Double.parseDouble(zr.getLocation().getLongitude()));
+            holder.distance.setText(distance);
+
+            String rating = zr.getUser_rating().getAggregate_rating();
+            holder.rating.setText("Rating: " + rating);
+
+            holder.imageLoader = new PicassoLoader();
+            holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getZomatoRestaurant().getName());
+
+            holder.favorites.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleFavoriteRestaurant(zr, holder);
+                }
+            });
+        }
     }
 
     @Override
@@ -134,6 +193,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView restaurantName, distance, rating;
         ImageView favorites;
+        AvatarView avatarView;
+        IImageLoader imageLoader;
 
         public RestaurantsViewHolder(View view) {
             super(view);
@@ -141,6 +202,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             favorites = view.findViewById(R.id.restaurant_favorite_btn);
             distance = view.findViewById(R.id.restaurant_distance);
             rating = view.findViewById(R.id.restaurant_rating);
+            avatarView = view.findViewById(R.id.avatar_view);
             view.setOnClickListener(this);
         }
 
@@ -151,7 +213,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     }
 
     public interface RestaurantItemClick {
-        void onRestaurantItemClick(Restaurant restaurant);
+        void onRestaurantItemClick(RestaurantModel restaurant);
     }
 
     private void toggleFavoriteRestaurant(Restaurant restaurant, RestaurantsViewHolder holder) {

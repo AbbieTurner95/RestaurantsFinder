@@ -19,11 +19,21 @@
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground">
 
-        <ImageView
+        <!--<ImageView-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@drawable/restaurant" />-->
+
+        <agency.tango.android.avatarview.views.AvatarView
+            android:id="@+id/avatar_view"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:src="@drawable/restaurant" />
+            app:av_border_color="@color/avatar_border"
+            app:av_border_width="2dp"
+            android:layout_margin="5dp"
+            app:av_text_size_percentage="35" />
 
         <TextView
             android:id="@+id/cuisine_title"

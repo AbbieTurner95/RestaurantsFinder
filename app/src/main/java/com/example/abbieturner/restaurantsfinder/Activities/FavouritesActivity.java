@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
@@ -46,6 +47,8 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         setContentView(R.layout.nav_drawer_fav);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        setUpNavigationDrawer();
+        mAuth = FirebaseAuth.getInstance();
 
         AppDatabase database = AppDatabase.getInstance(this);
         ModelConverter converter = ModelConverter.getInstance();
@@ -88,6 +91,15 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         }
     }
 
+    private void setUpNavigationDrawer(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
@@ -109,7 +121,8 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
             startActivity(intent);
 
         } else if (id == R.id.nav_fave) {
-
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -155,7 +168,17 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
             } else {
                 mAuth.signOut();
             }
+            if(mAuth != null){
+                mAuth.signOut();
+            } else {
+                Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        }else if (id == R.id.action_settings) {
+            Intent intent = new Intent(FavouritesActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
+
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
