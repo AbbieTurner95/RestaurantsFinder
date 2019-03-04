@@ -16,4 +16,12 @@
     <string name="website_link_icon">Icona di collegamento del sito Web</string>
     <string name="favorite_icon">Icona preferita</string>
     <string name="image_of_food">Immagine del cibo</string>
+    <string name="title_activity_restaurant_new">Attività del ristorante</string>
+    <string name="home">Casa</string>
+    <string name="favorites">Preferite</string>
+    <string name="share_app">Condividi app</string>
+    <string name="contact_us">Contattaci</string>
+    <string name="log_in_out">Entra / Esci</string>
+    <string name="settings">impostazioni</string>
+    <string name="cuisine_list">Elenco di cucina</string>
 </resources>

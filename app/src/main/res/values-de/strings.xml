@@ -16,4 +16,12 @@
     <string name="website_link_icon">Symbol für Website-Links</string>
     <string name="favorite_icon">Lieblingssymbol</string>
     <string name="image_of_food">Bild von Lebensmitteln</string>
+    <string name="title_activity_restaurant_new">Restaurant-Aktivität</string>
+    <string name="home">Zuhause</string>
+    <string name="favorites">Favoriten</string>
+    <string name="share_app">App teilen</string>
+    <string name="contact_us">Kontaktiere uns</string>
+    <string name="log_in_out">An- / Abmelden</string>
+    <string name="settings">die Einstellungen</string>
+    <string name="cuisine_list">Küchenliste</string>
 </resources>
