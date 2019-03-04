@@ -32,10 +32,10 @@
     <string name="google_maps_key" translatable="false">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
     <string name="title_activity_navig" translatable="false">NavigActivity</string>
     <string name="RestaurantsFilterDialog" translatable="false">RestaurantsFilterDialog</string>
-    <string name="TAG_RESTAURANT_ID">restaurantIdTag</string>
+    <string name="TAG_RESTAURANT_ID" translatable="false">restaurantIdTag</string>
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
-    <string name="TAG_IS_FIREBASE_RESTAURANT">isFirebaseRestaurant</string>
+    <string name="TAG_IS_FIREBASE_RESTAURANT" translatable="false">isFirebaseRestaurant</string>
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
     <string name="share_app">Share App</string>
@@ -97,38 +97,8 @@
         <item>Thai</item>
         <item>Turkish</item>
     </string-array>
-    <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string name="settings_page">Settings Page</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
-    <string name="btnPasswordLogin">Password Login</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="widget_cd">This is the restaurant finder widget.</string>
+    <string name="cuisine_list">Cuisine List</string>
 
 </resources>
