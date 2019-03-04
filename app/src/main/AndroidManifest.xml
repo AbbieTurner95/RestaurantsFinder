@@ -19,6 +19,17 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <receiver android:name=".Widget.RestaurantWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/restaurant_widget_info" />
+        </receiver>
+
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -40,17 +51,14 @@
         <activity android:name=".Activities.CuisineActivity" />
         <activity android:name=".Activities.RestaurantsActivity" />
         <activity android:name=".Activities.HomeActivity" />
-
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".Activities.HomeActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.HomeActivity"/>
+                android:value=".Activities.HomeActivity" />
         </activity>
-
         <activity android:name=".Activities.FavouritesActivity" />
 
         <meta-data

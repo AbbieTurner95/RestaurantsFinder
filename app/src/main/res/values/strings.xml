@@ -127,5 +127,8 @@
 
     <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
     <string name="btnPasswordLogin">Password Login</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_cd">This is the restaurant finder widget.</string>
 
 </resources>
