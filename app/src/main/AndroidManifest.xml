@@ -16,6 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:configChanges="orientation"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
@@ -48,18 +50,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.CuisineActivity" />
-        <activity android:name=".Activities.RestaurantsActivity" />
-        <activity android:name=".Activities.HomeActivity" />
+        <activity
+            android:name=".Activities.CuisineActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.RestaurantsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.SettingsActivity"
+            android:configChanges="orientation"
             android:label="@string/action_settings"
-            android:parentActivityName=".Activities.HomeActivity">
+            android:parentActivityName=".Activities.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
         </activity>
-        <activity android:name=".Activities.FavouritesActivity" />
+        <activity
+            android:name=".Activities.FavouritesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -67,11 +83,18 @@
 
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".Activities.RestaurantActivity"
-            android:label="@string/title_activity_restaurant_new" />
-        <activity android:name=".Activities.CreateRestaurantActivity" />
+            android:configChanges="orientation"
+            android:label="@string/title_activity_restaurant_new"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.CreateRestaurantActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".Services.LocationService" />
     </application>
