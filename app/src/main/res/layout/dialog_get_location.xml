@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,21 +10,24 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/c"
             android:fontFamily="@font/roboto_medium"
-            android:textSize="20sp"
             android:padding="10dp"
-            android:text="Set Your Location"/>
+            android:text="@string/set_your_location"
+            android:textColor="@color/c"
+            android:textSize="20sp" />
+
         <ImageView
             android:id="@+id/btn_close_dialog"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:src="@drawable/ic_close_white_24dp"/>
+            app:srcCompat="@drawable/ic_close_white_24dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -32,48 +35,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <fragment
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
-            android:layout_margin="5dp"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_margin="5dp"
             tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/btn_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_margin="5dp"
-                android:padding="10dp"
-                android:textColor="@color/white"
+                android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:fontFamily="@font/roboto_medium"
-                android:textSize="18sp"
-                android:text="Cancel"/>
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/cancel"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/btn_set"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:background="@color/colorPrimary"
                 android:layout_margin="5dp"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
                 android:padding="10dp"
-                android:textSize="18sp"
-                android:text="Set"/>
+                android:text="@string/set"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
-
-
 </LinearLayout>

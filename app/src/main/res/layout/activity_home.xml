@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:focusable="true"
-android:focusableInTouchMode="true"
-android:orientation="vertical"
-android:background="@color/activity_background"
-tools:context=".Activities.HomeActivity">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".Activities.HomeActivity">
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:background="@drawable/shadow"
-    android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -29,19 +27,18 @@ tools:context=".Activities.HomeActivity">
                 android:layout_height="wrap_content"
                 android:padding="5dp">
 
-                <AutoCompleteTextView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/autocomplete_cuisines"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:completionThreshold="1"/>
+                    android:completionThreshold="1" />
 
                 <Button
                     android:id="@+id/btn_clear"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="right|center_vertical"
+                    android:layout_gravity="end|center_vertical"
                     android:background="@drawable/ic_clear_black_24dp" />
 
             </FrameLayout>
@@ -50,8 +47,8 @@ tools:context=".Activities.HomeActivity">
                 android:id="@+id/pb_load_cuisines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:background="@color/progress_bar_background"/>
+                android:background="@color/progress_bar_background"
+                android:visibility="gone" />
         </RelativeLayout>
 
 
@@ -61,7 +58,8 @@ tools:context=".Activities.HomeActivity">
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:src="@drawable/ic_list_color_primary_24dp" />
+            app:srcCompat="@drawable/ic_list_color_primary_24dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -73,41 +71,43 @@ tools:context=".Activities.HomeActivity">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:background="@color/activity_background"
                 android:padding="10dp"
+                android:text="@string/popular_restaurants"
+                android:textColor="#000000"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:text="Popular Restaurants"/>
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView
                     android:id="@+id/home_popular_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:id="@+id/popular_empty_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:textAlignment="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="No Popular Restaurants"/>
+                        android:text="@string/no_popular_restaurants" />
                 </LinearLayout>
 
                 <ProgressBar
@@ -116,7 +116,7 @@ tools:context=".Activities.HomeActivity">
                     android:layout_height="match_parent"
                     android:background="@color/activity_background"
                     android:padding="70dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -125,81 +125,61 @@ tools:context=".Activities.HomeActivity">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="1"
             android:background="@color/activity_background"
-            android:layout_marginBottom="15dp"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:text="@string/favourite_restaurants"
                     android:textColor="#000000"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:text="Favourite Restaurants"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btn_manage_favourites"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:textColor="@color/colorPrimary"
                     android:fontFamily="@font/roboto_bold"
-                    android:textSize="20sp"/>
+                    android:text="@string/manage"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
 
-                <!--<Button-->
-                    <!--android:id="@+id/btn_manage_favourites"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/custom_button"-->
-                    <!--android:text="Manage"-->
-                    <!--android:textColor="@color/white"/>-->
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView
                     android:id="@+id/home_favourites_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:id="@+id/favourites_empty_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:textAlignment="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="No Favourites Restaurants"/>
+                        android:text="@string/no_favourites_restaurants" />
                 </LinearLayout>
-
             </RelativeLayout>
-
-
-
+        </LinearLayout>
     </LinearLayout>
-
-
-
-
-
-
-
-
-    </LinearLayout>
-
-
-
-
 </LinearLayout>

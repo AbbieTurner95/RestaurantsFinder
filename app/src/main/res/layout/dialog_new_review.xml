@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -12,21 +12,25 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/c"
             android:fontFamily="@font/roboto_medium"
-            android:textSize="20sp"
             android:padding="10dp"
-            android:text="New Review"/>
+            android:text="@string/new_review"
+            android:textColor="@color/c"
+            android:textSize="20sp" />
+
         <ImageView
             android:id="@+id/btn_close_dialog"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:contentDescription="@string/close_button"
             android:padding="10dp"
-            android:src="@drawable/ic_close_white_24dp"/>
+            app:srcCompat="@drawable/ic_close_white_24dp" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -38,43 +42,50 @@
             android:layout_height="wrap_content"
             android:background="@color/activity_background"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="18sp"
                 android:padding="10dp"
-                android:text="Rating"/>
+                android:text="@string/rating"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/star_1"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_star_border_24dp"/>
+                    app:srcCompat="@drawable/ic_star_border_24dp" />
+
                 <ImageView
                     android:id="@+id/star_2"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_star_border_24dp"/>
+                    app:srcCompat="@drawable/ic_star_border_24dp" />
+
                 <ImageView
                     android:id="@+id/star_3"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_star_border_24dp"/>
+                    app:srcCompat="@drawable/ic_star_border_24dp" />
+
                 <ImageView
                     android:id="@+id/star_4"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_star_border_24dp"/>
+                    app:srcCompat="@drawable/ic_star_border_24dp" />
+
                 <ImageView
                     android:id="@+id/star_5"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_star_border_24dp"/>
+                    app:srcCompat="@drawable/ic_star_border_24dp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -87,18 +98,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:padding="10dp"
+                    android:background="@drawable/edittextround"
                     android:inputType="textMultiLine"
-                    android:background="@drawable/edittextround" />
+                    android:padding="10dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
+                    android:background="#ffffff"
                     android:includeFontPadding="false"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Review"
-                    android:background="#ffffff"
+                    android:text="@string/review"
                     android:textAppearance="@android:style/TextAppearance.Medium" />
             </RelativeLayout>
 
@@ -106,19 +118,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:textSize="18sp"
                 android:padding="10dp"
-                android:text="Picture"/>
+                android:text="@string/picture"
+                android:textSize="18sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center">
+
                 <ImageView
                     android:id="@+id/image_picture"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:visibility="gone"/>
+                    android:contentDescription="@string/image_taken_from_camera"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/btn_camera"
@@ -126,19 +140,20 @@
                     android:layout_height="150dp"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <ImageView
 
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_photo_camera_24dp"/>
+                        app:srcCompat="@drawable/ic_photo_camera_24dp" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Click to take photo"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/click_to_take_photo" />
                 </LinearLayout>
-
 
 
             </RelativeLayout>
@@ -148,32 +163,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="5dp">
+
                 <TextView
                     android:id="@+id/btn_clear_review"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:layout_margin="5dp"
-                    android:padding="10dp"
-                    android:textColor="@color/white"
+                    android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:text="Clear"/>
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/clear"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/btn_create_review"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/colorPrimary"
                     android:layout_margin="5dp"
-                    android:textColor="@color/white"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
                     android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Add"/>
+                    android:text="@string/add"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -181,12 +198,8 @@
             android:id="@+id/pb_create_review"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:background="@color/progress_bar_background"
             android:padding="120dp"
-            android:background="@color/progress_bar_background"/>
+            android:visibility="gone" />
     </RelativeLayout>
-
-
-
-
 </LinearLayout>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/restaurants_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/list_background"/>
+            android:background="@color/list_background" />
+
         <ProgressBar
             android:id="@+id/pb_restaurants_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="130dp"
-            android:background="@color/progress_bar_background"/>
-    </RelativeLayout>
+            android:background="@color/progress_bar_background"
+            android:padding="130dp" />
 
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

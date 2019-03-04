@@ -8,39 +8,44 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings_page"
+        android:gravity="center"
         android:padding="@dimen/padding_eight"
-        android:textSize="@dimen/twentyeight_TS"
-        android:gravity="center"/>
+        android:text="@string/settings_page"
+        android:textSize="@dimen/twentyeight_TS" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
+            android:text="@string/default_location"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="Default Location:"/>
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/default_location_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/roboto_regular"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="1"/>
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/btn_manage_default_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:text="Manage"
-            android:textColor="@color/colorPrimary"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="20sp"/>
+            android:padding="15dp"
+            android:text="@string/manage"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,6 +53,6 @@
         android:name="com.example.abbieturner.restaurantsfinder.Fragments.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
 </LinearLayout>
