@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
                 android:padding="15dp"
-                android:text="Add"
+                android:text="@string/add"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="No  Reviews" />
+                    android:text="@string/no_reviews" />
             </LinearLayout>
 
             <ProgressBar
@@ -84,6 +84,4 @@
 
         </RelativeLayout>
     </LinearLayout>
-
-
 </android.support.v4.widget.NestedScrollView>

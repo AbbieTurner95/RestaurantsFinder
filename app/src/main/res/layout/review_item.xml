@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/colorPrimary"
     android:layout_margin="5dp"
+    android:background="@color/colorPrimary"
     android:elevation="@dimen/elev_four"
     android:padding="@dimen/padd_2"
     app:cardMaxElevation="@dimen/elev_four">
@@ -22,25 +19,24 @@
 
         <TextView
             android:id="@+id/review_msg"
-            android:fontFamily="@font/roboto_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            android:gravity="left"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="start"
             android:padding="@dimen/padding_eight"
-            android:textSize="18sp"
-            android:text="Review message"/>
+            android:text="@string/review_message"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/btn_picture"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="gone"
             android:layout_gravity="center"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_gallery_24dp" />
 
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>
