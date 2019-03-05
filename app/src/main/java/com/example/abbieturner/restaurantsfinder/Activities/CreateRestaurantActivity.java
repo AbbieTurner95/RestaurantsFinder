@@ -28,6 +28,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.CloseCreateRestaurantDi
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -418,10 +419,5 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             rlPhotoHolder.setVisibility(View.VISIBLE);
             btnTakePhoto.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }

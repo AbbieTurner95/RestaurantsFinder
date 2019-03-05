@@ -24,6 +24,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.CuisineAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -180,6 +181,9 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
                 mAuth.signOut();
+                AuthUI.getInstance().signOut(getApplicationContext());
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
@@ -193,10 +197,4 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
 }

@@ -29,6 +29,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.RestaurantsFilterDialog
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -284,6 +285,9 @@ public class RestaurantsActivity extends AppCompatActivity implements
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
                 mAuth.signOut();
+                AuthUI.getInstance().signOut(getApplicationContext());
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }

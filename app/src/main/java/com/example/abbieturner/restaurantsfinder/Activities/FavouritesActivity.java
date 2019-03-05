@@ -21,6 +21,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -164,6 +165,9 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
                 mAuth.signOut();
+                AuthUI.getInstance().signOut(getApplicationContext());
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
@@ -176,10 +180,5 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }

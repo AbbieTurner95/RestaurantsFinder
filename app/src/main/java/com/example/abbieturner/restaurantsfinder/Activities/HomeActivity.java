@@ -52,6 +52,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.example.abbieturner.restaurantsfinder.Singletons.LocationSharedPreferences;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -103,7 +104,6 @@ public class HomeActivity extends AppCompatActivity
     ProgressBar pbLoadCuisines;
 
 
-
     private List<Restaurant> favoritesRestaurants;
     private FavouriteAdapter favouriteAdapter;
     private PopularRestaurantsAdapter popularAdapter;
@@ -111,12 +111,11 @@ public class HomeActivity extends AppCompatActivity
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
-    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION;
+    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION, BASE_URL;
     private DeviceLocation locationSingleton;
     private API.ZomatoApiCalls service;
     private GetLocationDialog getLocationDialog;
     private Gson gson;
-    private String BASE_URL;
     private Retrofit retrofit;
     private FirebaseAuth mAuth;
     private LocationSharedPreferences locationSharedPreferences;
@@ -131,9 +130,7 @@ public class HomeActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
 
         createNewInstances();
-
         setUpNavigationDrawer();
-
         favoritesRestaurants = getFavouriteRestaurants();
 
         setUpPopularRecyclerView();
@@ -414,9 +411,12 @@ public class HomeActivity extends AppCompatActivity
                     .show();
         } else if (id == R.id.nav_loginout) {
             if(mAuth != null){
-                mAuth.signOut();
                 clearSharedPreferences();
                 finish();
+                mAuth.signOut();
+                AuthUI.getInstance().signOut(getApplicationContext());
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
