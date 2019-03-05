@@ -15,16 +15,16 @@ public class CloseCreateRestaurantDialog {
     private Context context;
     private LayoutInflater inflater;
 
-    public CloseCreateRestaurantDialog(Context context){
+    public CloseCreateRestaurantDialog(Context context) {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         createDialog();
     }
 
-    private void createDialog(){
+    private void createDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView= inflater.inflate(R.layout.dialog_close_create_restaurant, null);
+        View mView = inflater.inflate(R.layout.dialog_close_create_restaurant, null);
 
         TextView btnCancel = mView.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -48,18 +48,20 @@ public class CloseCreateRestaurantDialog {
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount=0.9f;
+        lp.dimAmount = 0.9f;
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
-    public void showDialog(){
+    public void showDialog() {
         dialog.show();
     }
-    public void hideDialog(){
+
+    public void hideDialog() {
         dialog.hide();
     }
-    private void closeCreateRestaurantActivity(){
-        ((CreateRestaurantActivity)context).finish();
+
+    private void closeCreateRestaurantActivity() {
+        ((CreateRestaurantActivity) context).finish();
     }
 }

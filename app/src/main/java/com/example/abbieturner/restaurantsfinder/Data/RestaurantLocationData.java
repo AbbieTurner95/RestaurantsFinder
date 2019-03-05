@@ -2,15 +2,8 @@ package com.example.abbieturner.restaurantsfinder.Data;
 
 public class RestaurantLocationData {
 
-    private String address;
-    private String locality;
-    private String city;
-    private int city_id;
-    private String latitude;
-    private String longitude;
-    private String zipcode;
-    private int country_id;
-    private String locality_verbose;
+    private String address, locality, city, latitude, longitude, zipcode, locality_verbose;
+    private int city_id, country_id;
 
     public RestaurantLocationData() {
 

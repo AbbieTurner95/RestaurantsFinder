@@ -22,15 +22,9 @@ public class FilterModel {
     }
 
     private String search;
-    private int distance;
-    private int rating;
-    private boolean delivery;
-    private boolean stepFreeAccess;
-    private boolean accessibleToilets;
-    private boolean vegan;
-    private boolean vegetarian;
-    private boolean glutenFree;
-    private boolean dairyFree;
+    private int distance, rating;
+    private boolean delivery, stepFreeAccess, accessibleToilets, vegan, vegetarian, glutenFree, dairyFree;
+
 
     public static FilterModel getTheSingleton() {
         return theSingleton;
@@ -96,7 +90,7 @@ public class FilterModel {
         this.dairyFree = dairyFree;
     }
 
-    public FilterModel(String search, int distance){
+    public FilterModel(String search, int distance) {
         this.search = search;
         this.distance = distance;
     }

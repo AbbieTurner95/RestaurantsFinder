@@ -2,12 +2,8 @@ package com.example.abbieturner.restaurantsfinder.Data;
 
 public class Location {
 
-    public String address;
-    public String locality;
-    public String city;
-    public String city_id;
-    public double lat;
-    public double longt;
+    public String address, locality, city, city_id;
+    public double lat, longt;
 
     public Location(double lat, double lng) {
         this.lat = lat;

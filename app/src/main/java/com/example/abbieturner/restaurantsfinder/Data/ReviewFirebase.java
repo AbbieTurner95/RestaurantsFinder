@@ -5,15 +5,14 @@ import android.graphics.Bitmap;
 import java.util.UUID;
 
 public class ReviewFirebase {
-    private String id;
+    private String id, pictureUrl, review;
     private int rating;
     private Bitmap picture;
-    private String pictureUrl;
-    private String review;
 
-    public ReviewFirebase(){
+    public ReviewFirebase() {
         this.id = UUID.randomUUID().toString();
     }
+
     public String getId() {
         return id;
     }
@@ -54,11 +53,11 @@ public class ReviewFirebase {
         this.review = review;
     }
 
-    public boolean hasPicture(){
+    public boolean hasPicture() {
         return picture != null;
     }
 
-    public boolean hasPictureUrl(){
+    public boolean hasPictureUrl() {
         return pictureUrl != null && !pictureUrl.isEmpty();
     }
 }

@@ -5,28 +5,13 @@ import android.graphics.Bitmap;
 import java.util.UUID;
 
 public class Restaurant {
-    private String id;
-    private String name;
-    private String address;
-    private Double lng;
-    private Double lat;
-    private String phone;
-    private Double rating;
-    private Boolean delivery;
-    private String menu;
-    private String web;
+    private String id, name, address, phone, menu, web, pictureUrl, cuisine;
+    private Double lng, lat, rating;
+    private Boolean delivery, stepsFreeAccess, accessibleToilets, vegan, vegetarian, glutenFree, dairyFree;
     private Bitmap picture;
-    private String pictureUrl;
-    private String cuisine;
 
-    private Boolean stepsFreeAccess;
-    private Boolean accessibleToilets;
-    private Boolean vegan;
-    private Boolean vegetarian;
-    private Boolean glutenFree;
-    private Boolean dairyFree;
 
-    public Restaurant(){
+    public Restaurant() {
         this.id = UUID.randomUUID().toString();
         lat = null;
         lng = null;
@@ -135,7 +120,7 @@ public class Restaurant {
         this.pictureUrl = pictureUrl;
     }
 
-    public boolean hasPicture(){
+    public boolean hasPicture() {
         return picture != null;
     }
 
@@ -147,7 +132,7 @@ public class Restaurant {
         this.cuisine = cuisine;
     }
 
-    public boolean isLocationSet(){
+    public boolean isLocationSet() {
         return lat != null && lng != null;
     }
 

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.example.abbieturner.restaurantsfinder.Activities.CuisineActivity;
-import com.example.abbieturner.restaurantsfinder.Activities.FavouritesActivity;
-import com.example.abbieturner.restaurantsfinder.Activities.RestaurantsActivity;
 import com.example.abbieturner.restaurantsfinder.R;
 
 public class RestaurantWidgetProvider extends AppWidgetProvider {
@@ -18,7 +16,7 @@ public class RestaurantWidgetProvider extends AppWidgetProvider {
                                 int appWidgetId) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(),
-                                    R.layout.restaurant_widget_provider);
+                R.layout.restaurant_widget_provider);
 
         Intent intent = new Intent(context, CuisineActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RestaurantReviews extends Fragment{
+public class RestaurantReviews extends Fragment {
 
     private ReviewsAdapter reviewsAdapter;
     private LinearLayoutManager reviewsLayoutManager;
@@ -42,7 +42,7 @@ public class RestaurantReviews extends Fragment{
     @BindView(R.id.btn_add_review)
     TextView btnAddReview;
 
-    public RestaurantReviews(){
+    public RestaurantReviews() {
 
     }
 
@@ -62,7 +62,7 @@ public class RestaurantReviews extends Fragment{
         reviewDialog = new ReviewDialog(getActivity());
         reviewsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
-        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivity)getActivity(), reviewCount);
+        reviewsAdapter = new ReviewsAdapter(getActivity(), (RestaurantActivity) getActivity(), reviewCount);
         View reviewsEmptyView = view.findViewById(R.id.reviews_empty_view);
         reviewsRecyclerView.setEmptyView(reviewsEmptyView);
         reviewsRecyclerView.setAdapter(reviewsAdapter);
@@ -82,22 +82,22 @@ public class RestaurantReviews extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         pbReviews.setVisibility(View.VISIBLE);
-        ((RestaurantActivity)getActivity()).restaurantReviewsCreated();
+        ((RestaurantActivity) getActivity()).restaurantReviewsCreated();
     }
 
-    public void pictureLoaded(){
+    public void pictureLoaded() {
         reviewDialog.pictureLoaded();
     }
 
-    public void hideDialog(){
+    public void hideDialog() {
         reviewDialog.hideDialog();
     }
 
-    public void hideDialogsProgressBar(){
+    public void hideDialogsProgressBar() {
         reviewDialog.hideProgressBar();
     }
 
-    public void setReviews(List<ReviewFirebase> firebaseReviews, List<UserReviews.UserReviewsData> zomatoReviews){
+    public void setReviews(List<ReviewFirebase> firebaseReviews, List<UserReviews.UserReviewsData> zomatoReviews) {
         pbReviews.setVisibility(View.GONE);
         reviewsAdapter.setReviews(firebaseReviews, zomatoReviews);
     }

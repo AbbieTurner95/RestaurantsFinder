@@ -22,7 +22,6 @@ public class UsersLocation {
 
 
     public static double getDistance(double lat2, double lon2) {
-        // unit M - miles, K - kilometres, N - nautical
         final String unit = "M";
         if ((lat == lat2) && (lng == lon2)) {
             return 0;

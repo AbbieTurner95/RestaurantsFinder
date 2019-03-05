@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
-import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -28,7 +27,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
     private GoogleMap googleMap;
     private RestaurantModel restaurant;
 
-    public RestaurantMap(){
+    public RestaurantMap() {
 
     }
 
@@ -62,7 +61,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
 
                 googleMap.getUiSettings().setAllGesturesEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                ((RestaurantActivity)getActivity()).restaurantMapReady();
+                ((RestaurantActivity) getActivity()).restaurantMapReady();
             }
         });
 
@@ -72,7 +71,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((RestaurantActivity)getActivity()).restaurantMapReady();
+        ((RestaurantActivity) getActivity()).restaurantMapReady();
     }
 
     @Override
@@ -99,13 +98,13 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
         mMapView.onLowMemory();
     }
 
-    public void setRestaurant(RestaurantModel restaurant){
+    public void setRestaurant(RestaurantModel restaurant) {
         this.restaurant = restaurant;
     }
 
-    private void addMarkerToMap(RestaurantModel restaurant){
-        if(restaurant.isFirebaseRestaurant()){
-            if(restaurant != null && restaurant.getFirebaseRestaurant().isLocationSet()){
+    private void addMarkerToMap(RestaurantModel restaurant) {
+        if (restaurant.isFirebaseRestaurant()) {
+            if (restaurant != null && restaurant.getFirebaseRestaurant().isLocationSet()) {
                 // For dropping a marker at a point on the Map
                 LatLng restaurantPosition = new LatLng(
                         restaurant.getFirebaseRestaurant().getLat(),
@@ -117,8 +116,8 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(restaurantPosition).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
-        }else{
-            if(restaurant != null && restaurant.getZomatoRestaurant().isLocationSet()){
+        } else {
+            if (restaurant != null && restaurant.getZomatoRestaurant().isLocationSet()) {
                 // For dropping a marker at a point on the Map
                 LatLng restaurantPosition = new LatLng(
                         Double.parseDouble(restaurant.getZomatoRestaurant().getLocation().getLatitude()),
@@ -138,7 +137,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
     public void sendRestaurant(RestaurantModel restaurant) {
         this.restaurant = restaurant;
 
-        if(googleMap != null && restaurant != null){
+        if (googleMap != null && restaurant != null) {
             addMarkerToMap(restaurant);
         }
     }

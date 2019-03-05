@@ -12,13 +12,14 @@ public class ReviewSingleton {
         if (theSingleton == null) {
             theSingleton = new ReviewSingleton();
         }
-        return theSingleton;    // here’s one I made earlier !!
+        return theSingleton;
     }
 
     public ReviewFirebase getReview() {
         return this.review;
     }
-    public void clearReview(){
+
+    public void clearReview() {
         this.review = new ReviewFirebase();
     }
 }

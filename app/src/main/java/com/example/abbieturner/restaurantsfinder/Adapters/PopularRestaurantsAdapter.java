@@ -16,7 +16,7 @@ import java.util.List;
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 
-public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularRestaurantsAdapter.PopularRestaurantViewHolder>{
+public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularRestaurantsAdapter.PopularRestaurantViewHolder> {
     private List<PopularRestaurant> popularRestaurantsList;
     private final RestaurantItemClick listener;
 
@@ -74,5 +74,4 @@ public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularResta
     public interface RestaurantItemClick {
         void onRestaurantItemClick(PopularRestaurant review);
     }
-
 }

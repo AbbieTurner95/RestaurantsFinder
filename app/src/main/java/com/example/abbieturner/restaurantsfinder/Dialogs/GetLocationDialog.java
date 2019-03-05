@@ -20,7 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GetLocationDialog implements OnMapReadyCallback{
+public class GetLocationDialog implements OnMapReadyCallback {
     private AlertDialog dialog;
     private Context context;
     private LayoutInflater inflater;
@@ -30,7 +30,7 @@ public class GetLocationDialog implements OnMapReadyCallback{
     private boolean isSettingActivity;
     private LocationSharedPreferences locationSharedPreferences;
 
-    public GetLocationDialog(Context context, boolean isSettingActivity){
+    public GetLocationDialog(Context context, boolean isSettingActivity) {
         this.isSettingActivity = isSettingActivity;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -39,9 +39,9 @@ public class GetLocationDialog implements OnMapReadyCallback{
         createDialog();
     }
 
-    private void createDialog(){
+    private void createDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView= inflater.inflate(R.layout.dialog_get_location, null);
+        View mView = inflater.inflate(R.layout.dialog_get_location, null);
 
         locationSharedPreferences = LocationSharedPreferences.getInstance();
 
@@ -63,46 +63,32 @@ public class GetLocationDialog implements OnMapReadyCallback{
             }
         });
 
-//        TextView btnSet = mView.findViewById(R.id.btn_set);
-//        btnSet.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                locationSingleton.setLocation(location);
-//                if(isSettingActivity){
-//                    ((SettingsActivity)context).locationSetFromUser(location);
-//                    hideDialog();
-//                }else{
-//                    ((HomeActivity)context).locationSetFromUser();
-//                    hideDialog();
-//                }
-//            }
-//        });
-
         mBuilder.setView(mView);
         dialog = mBuilder.create();
 
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount=0.9f;
+        lp.dimAmount = 0.9f;
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
-    private void setUpMap(){
-        if(isSettingActivity){
-            SupportMapFragment mapFragment = (SupportMapFragment)((SettingsActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
+    private void setUpMap() {
+        if (isSettingActivity) {
+            SupportMapFragment mapFragment = (SupportMapFragment) ((SettingsActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }else{
-            SupportMapFragment mapFragment = (SupportMapFragment)((HomeActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
+        } else {
+            SupportMapFragment mapFragment = (SupportMapFragment) ((HomeActivity) context).getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
     }
 
-    public void showDialog(){
+    public void showDialog() {
         dialog.show();
     }
-    public void hideDialog(){
+
+    public void hideDialog() {
         dialog.hide();
     }
 
@@ -110,7 +96,7 @@ public class GetLocationDialog implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if(locationSharedPreferences.userHasLocationsSet()){
+        if (locationSharedPreferences.userHasLocationsSet()) {
             addMarker();
         }
 
@@ -126,7 +112,7 @@ public class GetLocationDialog implements OnMapReadyCallback{
         });
     }
 
-    private void addMarker(){
+    private void addMarker() {
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(locationSharedPreferences.getLocation()).title("My location"));
     }

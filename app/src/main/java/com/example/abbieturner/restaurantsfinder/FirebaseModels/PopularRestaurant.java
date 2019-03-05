@@ -1,11 +1,10 @@
 package com.example.abbieturner.restaurantsfinder.FirebaseModels;
 
 public class PopularRestaurant {
-    private String restaurantId;
+    private String restaurantId, name;
     private int count;
-    private String name;
 
-    public PopularRestaurant(){
+    public PopularRestaurant() {
 
     }
 
@@ -25,15 +24,15 @@ public class PopularRestaurant {
         this.count = count;
     }
 
-    public void increateCountByOne(){
+    public void increateCountByOne() {
         count = (count + 1);
     }
 
-    public void decreaseCountByOne(){
-        count = (count -1);
+    public void decreaseCountByOne() {
+        count = (count - 1);
     }
 
-    public boolean hasMultipleLikes(){
+    public boolean hasMultipleLikes() {
         return count > 1;
     }
 

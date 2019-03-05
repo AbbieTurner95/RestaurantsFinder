@@ -15,7 +15,7 @@ public class CuisinesSingleton {
         if (theSingleton == null) {
             theSingleton = new CuisinesSingleton();
         }
-        return theSingleton;    // here’s one I made earlier !!
+        return theSingleton;
     }
 
     public List<Cuisine> getCuisines() {

@@ -5,7 +5,6 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 
 @Database(entities = {DatabaseRestaurant.class}, version = 1, exportSchema = false)

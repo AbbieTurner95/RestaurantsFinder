@@ -6,9 +6,8 @@ import java.util.List;
 
 public class UserReviews {
 
-    private int reviews_count;
-    private int reviews_start;
-    private int reviews_shown;
+    private int reviews_count, reviews_start, reviews_shown;
+
     @SerializedName("Respond to reviews via Zomato Dashboard")
     private String _$RespondToReviewsViaZomatoDashboard198;
     private List<UserReviewsData> user_reviews;

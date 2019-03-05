@@ -19,7 +19,7 @@ import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.FilterModel;
 import com.example.abbieturner.restaurantsfinder.R;
 
-public class RestaurantsFilterDialog extends DialogFragment  {
+public class RestaurantsFilterDialog extends DialogFragment {
     public static String TAG;
 
     private RestaurantsAdapter adapter;
@@ -28,15 +28,7 @@ public class RestaurantsFilterDialog extends DialogFragment  {
     Button search, btnClearFilter;
     EditText searchInput;
     ImageView btnClearSearchText;
-
-    CheckBox delivery;
-    CheckBox stepFreeAccess;
-    CheckBox accessibleToilets;
-    CheckBox vegan;
-    CheckBox vegetarian;
-    CheckBox glutenFree;
-    CheckBox dairyFree;
-
+    CheckBox delivery, stepFreeAccess, accessibleToilets, vegan, vegetarian, glutenFree, dairyFree;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,11 +50,6 @@ public class RestaurantsFilterDialog extends DialogFragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.layout_filter_dialog, container, false);
-
-//        Bundle b = getArguments();
-//        String name = b.getString("KEY", "DEFAULT_VALUE");
-//        //and get whatever you have sent
-
         setUpToolbar(view);
 
         searchInput = view.findViewById(R.id.et_search);
@@ -89,13 +76,13 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         return view;
     }
 
-    private void setUpListeners(){
+    private void setUpListeners() {
         distanceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress == 0){
+                if (progress == 0) {
                     distance.setText("Off");
-                }else{
+                } else {
                     distance.setText(progress + " miles");
                 }
 
@@ -115,9 +102,9 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         ratingBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress == 0){
+                if (progress == 0) {
                     rating.setText("Off");
-                }else{
+                } else {
                     rating.setText(String.valueOf(progress));
                 }
 
@@ -214,7 +201,7 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         });
     }
 
-    private void clearModel(){
+    private void clearModel() {
         FilterModel model = FilterModel.getInstance();
         model.setDistance(0);
         model.setRating(0);
@@ -228,17 +215,17 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         model.setDairyFree(false);
     }
 
-    private void setValues(){
+    private void setValues() {
         FilterModel model = FilterModel.getInstance();
-        if(model.getDistance() > 0){
+        if (model.getDistance() > 0) {
             distance.setText(String.valueOf(model.getDistance()) + " miles");
-        }else{
+        } else {
             distance.setText("Off");
         }
 
-        if(model.getRating() > 0){
+        if (model.getRating() > 0) {
             rating.setText(String.valueOf(model.getRating()));
-        }else{
+        } else {
             rating.setText("Off");
         }
 
@@ -254,8 +241,6 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         vegetarian.setChecked(model.isVegetarian());
         glutenFree.setChecked(model.isGlutenFree());
         dairyFree.setChecked(model.isDairyFree());
-
-
     }
 
     @Override
@@ -269,7 +254,7 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         }
     }
 
-    private void setUpToolbar(View view){
+    private void setUpToolbar(View view) {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -281,7 +266,7 @@ public class RestaurantsFilterDialog extends DialogFragment  {
         toolbar.setTitle("Search");
     }
 
-    private void closeDialog(){
+    private void closeDialog() {
         getActivity().getSupportFragmentManager().beginTransaction().remove(RestaurantsFilterDialog.this).commit();
     }
 }

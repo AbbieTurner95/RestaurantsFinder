@@ -7,7 +7,7 @@ public class DeviceLocation {
     private LatLng location;
     private final float kmToMiles = 0.621471f;
 
-    public static DeviceLocation getInstance(){
+    public static DeviceLocation getInstance() {
         if (theSingleton == null) {
             theSingleton = new DeviceLocation();
         }
@@ -17,10 +17,12 @@ public class DeviceLocation {
     public LatLng getLocation() {
         return location;
     }
+
     public void setLocation(LatLng location) {
         this.location = location;
     }
-    public boolean isLocationSet(){
+
+    public boolean isLocationSet() {
         return location != null;
     }
 }

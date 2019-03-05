@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -39,7 +40,8 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
     @BindView(R.id.nav_view)
     NavigationView navigationView;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+
+    private Toolbar toolbar;
     private FirebaseAuth mAuth;
 
     @Override
@@ -92,7 +94,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
         }
     }
 
-    private void setUpNavigationDrawer(){
+    private void setUpNavigationDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -125,7 +127,6 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
             Intent intent = new Intent(this, FavouritesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
-
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             String shareBody = "Hey check out this cool restaurant finder app!";
@@ -134,7 +135,6 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         } else if (id == R.id.nav_contact) {
-
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTopColorRes(R.color.design_default_color_primary)
                     .setButtonsColorRes(R.color.white)
@@ -145,7 +145,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
                         @Override
                         public void onClick(View v) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto","info@restaurantfinder.com", null));
+                                    "mailto", "info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -163,7 +163,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-            if(mAuth != null){
+            if (mAuth != null) {
                 mAuth.signOut();
                 AuthUI.getInstance().signOut(getApplicationContext());
                 Intent intent = new Intent(this, LogInActivity.class);
@@ -171,7 +171,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
-        }else if (id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(FavouritesActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;

@@ -17,22 +17,21 @@ import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
 
-public class ReviewDialog{
+public class ReviewDialog {
     private AlertDialog dialog;
     private Context context;
     private LayoutInflater inflater;
-    private TextView answer, question;
+    private TextView createReview, clearReview;
     private ReviewFirebase review;
     private ProgressBar pbCreateReview;
 
     private EditText reviewMsg;
-    private ImageView picture, closeDialog;
-    private TextView createReview, clearReview;
-    private ImageView star1, star2, star3, star4, star5;
+    private ImageView picture, closeDialog, star1, star2, star3, star4, star5;
+    ;
     private ImageView[] stars = new ImageView[5];
     private LinearLayout cameraPlaceHolder;
 
-    public ReviewDialog(Context context){
+    public ReviewDialog(Context context) {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.review = ReviewSingleton.getInstance().getReview();
@@ -40,11 +39,9 @@ public class ReviewDialog{
         createDialog();
     }
 
-    private void createDialog(){
+    private void createDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView= inflater.inflate(R.layout.dialog_new_review, null);
-
-
+        View mView = inflater.inflate(R.layout.dialog_new_review, null);
 
         reviewMsg = mView.findViewById(R.id.tv_review_msg);
         cameraPlaceHolder = mView.findViewById(R.id.btn_camera);
@@ -92,7 +89,7 @@ public class ReviewDialog{
         cameraPlaceHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((RestaurantActivity)context).openCamera();
+                ((RestaurantActivity) context).openCamera();
             }
         });
 
@@ -108,6 +105,7 @@ public class ReviewDialog{
                 hideDialog();
             }
         });
+
         clearReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,14 +113,15 @@ public class ReviewDialog{
                 clearUI();
             }
         });
+
         createReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reviewIsValid()){
+                if (reviewIsValid()) {
                     getDataFromUI();
-                    ((RestaurantActivity)context).createReview();
+                    ((RestaurantActivity) context).createReview();
                     showProgressBar();
-                }else{
+                } else {
                     Toast.makeText(context, "Please fill required fields.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -135,75 +134,81 @@ public class ReviewDialog{
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount=0.9f;
+        lp.dimAmount = 0.9f;
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
-    private boolean reviewIsValid(){
+    private boolean reviewIsValid() {
         String review = reviewMsg.getText().toString();
 
-        if(review.isEmpty()){
+        if (review.isEmpty()) {
             return false;
         }
 
-        if(ReviewSingleton.getInstance().getReview().getRating() == 0){
+        if (ReviewSingleton.getInstance().getReview().getRating() == 0) {
             return false;
         }
 
         return true;
     }
 
-    private void getDataFromUI(){
+    private void getDataFromUI() {
         ReviewSingleton.getInstance().getReview().setReview(reviewMsg.getText().toString());
     }
 
-    private void clearUI(){
+    private void clearUI() {
         updateStarsUI();
         reviewMsg.setText("");
         picture.setImageResource(android.R.color.transparent);
         picture.setVisibility(View.GONE);
         cameraPlaceHolder.setVisibility(View.VISIBLE);
     }
-    private void clearReview(){
+
+    private void clearReview() {
         ReviewSingleton.getInstance().clearReview();
     }
-    public void showDialog(){
+
+    public void showDialog() {
         clearReview();
         dialog.show();
         hideProgressBar();
     }
-    public void hideDialog(){
+
+    public void hideDialog() {
         clearReview();
         clearUI();
         dialog.hide();
         hideProgressBar();
     }
-    private void setRating(int stars){
+
+    private void setRating(int stars) {
         ReviewSingleton.getInstance().getReview().setRating(stars);
 
         updateStarsUI();
     }
-    private void updateStarsUI(){
-        for(int i = 0; i < stars.length; i++){
-            if(i < ReviewSingleton.getInstance().getReview().getRating()){
+
+    private void updateStarsUI() {
+        for (int i = 0; i < stars.length; i++) {
+            if (i < ReviewSingleton.getInstance().getReview().getRating()) {
                 stars[i].setImageResource(R.drawable.ic_star_24dp);
-            }else{
+            } else {
                 stars[i].setImageResource(R.drawable.ic_star_border_24dp);
             }
         }
     }
 
-    public void pictureLoaded(){
+    public void pictureLoaded() {
         picture.setVisibility(View.VISIBLE);
         cameraPlaceHolder.setVisibility(View.GONE);
         picture.setImageBitmap(ReviewSingleton.getInstance().getReview().getPicture());
     }
 
-    private void showProgressBar(){
+    private void showProgressBar() {
         pbCreateReview.setVisibility(View.VISIBLE);
     }
-    public void hideProgressBar(){
+
+    public void hideProgressBar() {
         pbCreateReview.setVisibility(View.GONE);
     }
 }

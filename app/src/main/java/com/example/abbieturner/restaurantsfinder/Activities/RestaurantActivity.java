@@ -54,12 +54,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestaurantActivity extends AppCompatActivity
-        implements  ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
-        Reviews.ReviewsListener, RestaurantListener, NavigationView.OnNavigationItemSelectedListener
-{
+        implements ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
+        Reviews.ReviewsListener, RestaurantListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private String jsonRestaurant, restaurantId;
-    private String TAG_RESTAURANT_ID, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
+    private String TAG_RESTAURANT_ID, jsonRestaurant, restaurantId, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
     private RestaurantModel restaurant;
     private Gson gson;
     private API.ZomatoApiCalls service;
@@ -110,39 +108,39 @@ public class RestaurantActivity extends AppCompatActivity
         setupViewPager();
     }
 
-    public void restaurantInfoLoaded(){
-        if(isRestaurantId()){
+    public void restaurantInfoLoaded() {
+        if (isRestaurantId()) {
             getRestaurantById();
-        }else if(isRestaurantJson()){
+        } else if (isRestaurantJson()) {
             restaurant = new RestaurantModel(gson.fromJson(jsonRestaurant, Restaurant.class)); // Converts the JSON String to an Object
             displayRestaurantData();
-        }else{
+        } else {
             Toast.makeText(this, "Error: Restaurant info not loaded.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void restaurantReviewsCreated(){
+    public void restaurantReviewsCreated() {
         isZomatoReviewLoaded = false;
         isFirebaseReviewLoaded = false;
 
-        if(!restaurant.isFirebaseRestaurant()){
+        if (!restaurant.isFirebaseRestaurant()) {
             fetchReviews();
-        }else{
+        } else {
             isZomatoReviewLoaded = true;
         }
 
         getFirebaseReviews();
     }
 
-    public void getFirebaseReviews(){
-        if(restaurant.isFirebaseRestaurant()){
+    public void getFirebaseReviews() {
+        if (restaurant.isFirebaseRestaurant()) {
             reviewsDataAccess.getReviews(restaurant.getFirebaseRestaurant().getId());
-        }else{
+        } else {
             reviewsDataAccess.getReviews(restaurant.getZomatoRestaurant().getId());
         }
     }
 
-    public void restaurantMapReady(){
+    public void restaurantMapReady() {
         restaurantMapInterface.sendRestaurant(restaurant);
     }
 
@@ -176,28 +174,28 @@ public class RestaurantActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setTags(){
+    private void setTags() {
         TAG_RESTAURANT = getResources().getString(R.string.TAG_RESTAURANT);
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
         ZOOMATO_BASE_URL = getResources().getString(R.string.BASE_URL_API);
         TAG_IS_FIREBASE_RESTAURANT = getResources().getString(R.string.TAG_IS_FIREBASE_RESTAURANT);
     }
 
-    private void getStringsExtra(){
+    private void getStringsExtra() {
         jsonRestaurant = getIntent().getStringExtra(TAG_RESTAURANT);
         restaurantId = getIntent().getStringExtra(TAG_RESTAURANT_ID);
         isFirebaseRestaurant = getIntent().getExtras().getBoolean(TAG_IS_FIREBASE_RESTAURANT);
     }
 
-    private boolean isRestaurantId(){
+    private boolean isRestaurantId() {
         return restaurantId != null;
     }
 
-    private boolean isRestaurantJson(){
+    private boolean isRestaurantJson() {
         return jsonRestaurant != null;
     }
 
-    private void initialiseNewInstances(){
+    private void initialiseNewInstances() {
         gson = new Gson();
         firebaseReviews = new ArrayList<>();
         zomatoReviews = new ArrayList<>();
@@ -221,17 +219,17 @@ public class RestaurantActivity extends AppCompatActivity
         restaurantDataAccess = new com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant(this);
     }
 
-    private void getRestaurantById(){
-        if(isFirebaseRestaurant){
+    private void getRestaurantById() {
+        if (isFirebaseRestaurant) {
             restaurantDataAccess.getRestaurant(restaurantId);
-        }else{
+        } else {
             service.getRestaurant(restaurantId)
                     .enqueue(new Callback<Restaurant>() {
                         @Override
                         public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
                             restaurant = new RestaurantModel(response.body());
 
-                            if(restaurant != null){
+                            if (restaurant != null) {
                                 displayRestaurantData();
                             }
                         }
@@ -244,8 +242,8 @@ public class RestaurantActivity extends AppCompatActivity
         }
     }
 
-    private void displayRestaurantData(){
-        if(restaurant.isFirebaseRestaurant()){
+    private void displayRestaurantData() {
+        if (restaurant.isFirebaseRestaurant()) {
             toolbar.setTitle(restaurant.getFirebaseRestaurant().getName());
         } else {
             toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
@@ -255,14 +253,14 @@ public class RestaurantActivity extends AppCompatActivity
 
     @Override
     public void onReviewItemClick(ReviewModel review) {
-        if(review.isFirebaseReview() && review.getFirebaseReview().hasPictureUrl()){
+        if (review.isFirebaseReview() && review.getFirebaseReview().hasPictureUrl()) {
             pictureDialog.showDialog(review.getFirebaseReview());
         } else {
             Toast.makeText(this, "This review does not have any picture.", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void openCamera(){
+    public void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -276,19 +274,18 @@ public class RestaurantActivity extends AppCompatActivity
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
             ReviewSingleton.getInstance().getReview().setPicture(imageBitmap);
-
             notifyReviewDialog();
         }
     }
 
-    private void notifyReviewDialog(){
+    private void notifyReviewDialog() {
         restaurantReviewsFragment.pictureLoaded();
     }
 
-    public void createReview(){
-        if(restaurant.isFirebaseRestaurant()){
+    public void createReview() {
+        if (restaurant.isFirebaseRestaurant()) {
             reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getFirebaseRestaurant().getId());
-        }else{
+        } else {
             reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getZomatoRestaurant().getId());
         }
 
@@ -296,10 +293,10 @@ public class RestaurantActivity extends AppCompatActivity
 
     @Override
     public void onReviewCreated(boolean hasFailed) {
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to create review. Please try again later.", Toast.LENGTH_LONG).show();
             restaurantReviewsFragment.hideDialogsProgressBar();
-        }else{
+        } else {
             Toast.makeText(this, "Review created.", Toast.LENGTH_LONG).show();
             restaurantReviewsFragment.hideDialog();
             getFirebaseReviews();
@@ -309,11 +306,11 @@ public class RestaurantActivity extends AppCompatActivity
     @Override
     public void onReviewsLoaded(List<ReviewFirebase> reviews, boolean hasFailed) {
         isFirebaseReviewLoaded = true;
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to load reviews", Toast.LENGTH_LONG).show();
             isFirebaseReviewLoaded = true;
             setReviews();
-        }else{
+        } else {
             firebaseReviews.clear();
             firebaseReviews.addAll(reviews);
             setReviews();
@@ -321,8 +318,8 @@ public class RestaurantActivity extends AppCompatActivity
         }
     }
 
-    private void setReviews(){
-        if(isFirebaseReviewLoaded && isZomatoReviewLoaded){
+    private void setReviews() {
+        if (isFirebaseReviewLoaded && isZomatoReviewLoaded) {
             restaurantReviewsFragment.setReviews(firebaseReviews, zomatoReviews);
         }
     }
@@ -334,10 +331,10 @@ public class RestaurantActivity extends AppCompatActivity
 
     @Override
     public void onRestaurantLoaded(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant, boolean hasFailed) {
-        if(hasFailed || restaurant == null){
+        if (hasFailed || restaurant == null) {
             Toast.makeText(this, "Failed to get restaurant", Toast.LENGTH_LONG).show();
             finish();
-        }else{
+        } else {
             this.restaurant = new RestaurantModel(restaurant);
             displayRestaurantData();
         }
@@ -348,7 +345,7 @@ public class RestaurantActivity extends AppCompatActivity
         return true;
     }
 
-    private void setUpNavigationDrawer(){
+    private void setUpNavigationDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -394,7 +391,7 @@ public class RestaurantActivity extends AppCompatActivity
                         @Override
                         public void onClick(View v) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto","info@restaurantfinder.com", null));
+                                    "mailto", "info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -412,7 +409,7 @@ public class RestaurantActivity extends AppCompatActivity
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-            if(mAuth != null){
+            if (mAuth != null) {
                 mAuth.signOut();
                 AuthUI.getInstance().signOut(getApplicationContext());
                 Intent intent = new Intent(this, LogInActivity.class);
@@ -420,7 +417,7 @@ public class RestaurantActivity extends AppCompatActivity
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
-        }  else if (id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(RestaurantActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
@@ -429,10 +426,4 @@ public class RestaurantActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
 }

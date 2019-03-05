@@ -59,9 +59,9 @@ public class SettingsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        if(locationSharedPreferences.userHasLocationsSet()){
+        if (locationSharedPreferences.userHasLocationsSet()) {
             defaultLocationStatus.setText("location set");
-        }else{
+        } else {
             defaultLocationStatus.setText("location not set");
         }
     }
@@ -80,11 +80,11 @@ public class SettingsActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void setListeners(){
+    private void setListeners() {
         btnManageDefaultLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isUserLoggedIn()){
+                if (isUserLoggedIn()) {
                     locationDialog.showDialog();
                 } else {
                     Toast.makeText(SettingsActivity.this, "Log In Required", Toast.LENGTH_SHORT).show();
@@ -93,7 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void setNewInstances(){
+    private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
         locationDialog = new GetLocationDialog(this, true);
         locationSingleton = DeviceLocation.getInstance();
@@ -104,11 +104,11 @@ public class SettingsActivity extends AppCompatActivity {
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
     }
 
-    public void locationSetFromUser(LatLng location){
+    public void locationSetFromUser(LatLng location) {
         locationSharedPreferences.setLocation(location);
 
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        if(locationSharedPreferences.userHasLocationsSet()){
+        if (locationSharedPreferences.userHasLocationsSet()) {
             String json = gson.toJson(locationSharedPreferences.getUsersLocation());
             prefsEditor.putString(getLocationPreferencesKey(), json);
             prefsEditor.commit();
@@ -120,12 +120,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isUserLoggedIn(){
+    private boolean isUserLoggedIn() {
         return mAuth.getCurrentUser() != null;
     }
 
-    private String getLocationPreferencesKey(){
+    private String getLocationPreferencesKey() {
         return mAuth.getUid() + SHARED_PREFERENCES_DEFAULT_LOCATION;
     }
-
 }

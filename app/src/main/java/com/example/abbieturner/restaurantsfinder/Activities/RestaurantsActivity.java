@@ -63,17 +63,15 @@ public class RestaurantsActivity extends AppCompatActivity implements
     @BindView(R.id.pb_restaurants_loading)
     ProgressBar pbRestaurantsLoading;
 
-    private String name;
     private int cuisineID;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
-    private String TAG_RESTAURANT_ID, TAG_IS_FIREBASE_RESTAURANT;
+    private String TAG_RESTAURANT_ID, TAG_IS_FIREBASE_RESTAURANT, name;
     private DeviceLocation locationSingleton;
     private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurants restaurantsDataAccess;
     private boolean zoomatoRestaurantsLoaded, firebaseRestaurantsLoaded;
     private List<Restaurant> zoomatoRestaurants;
     private List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants;
-    private String cuisineName;
     private FirebaseAuth mAuth;
 
     @Override
@@ -98,7 +96,6 @@ public class RestaurantsActivity extends AppCompatActivity implements
 
         navigationView.setNavigationItemSelectedListener(this);
 
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         restaurantsAdapter = new RestaurantsAdapter(this, this);
@@ -112,13 +109,9 @@ public class RestaurantsActivity extends AppCompatActivity implements
         if (intent != null) {
             cuisineID = intent.getIntExtra("cuisine_id", cuisineID);
             name = intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_NAME));
-
             toolbar.setTitle(name);
-        } else {
-            Log.e("ERROR INTENT", "Intent is null!");
-        }
+        } else { Log.e("ERROR INTENT", "Intent is null!"); }
 
-//        toolbar.inflateMenu(R.menu.menu_restaurants);
         this.setTitle(name);
 
         Gson gson = new GsonBuilder()
@@ -133,26 +126,23 @@ public class RestaurantsActivity extends AppCompatActivity implements
 
         service = retrofit.create(API.ZomatoApiCalls.class);
 
-
-
         getRestaurants();
-
     }
 
-    private void getRestaurants(){
+    private void getRestaurants() {
         pbRestaurantsLoading.setVisibility(View.VISIBLE);
         zoomatoRestaurantsLoaded = false;
         firebaseRestaurantsLoaded = false;
         fetchRestaurants();
 
-        if(locationSingleton.isLocationSet()){
+        if (locationSingleton.isLocationSet()) {
             restaurantsDataAccess.getRestaurants(name);
         }
     }
 
     private void fetchRestaurants() {
 
-        service.getRestaurants("5000","1", "20",
+        service.getRestaurants("5000", "1", "20",
                 String.valueOf(locationSingleton.getLocation().latitude),
                 String.valueOf(locationSingleton.getLocation().longitude),
                 cuisineID, "rating", "asc")
@@ -173,8 +163,8 @@ public class RestaurantsActivity extends AppCompatActivity implements
                 });
     }
 
-    private void setRestaurants(){
-        if(zoomatoRestaurantsLoaded && firebaseRestaurantsLoaded){
+    private void setRestaurants() {
+        if (zoomatoRestaurantsLoaded && firebaseRestaurantsLoaded) {
             pbRestaurantsLoading.setVisibility(View.GONE);
             restaurantsAdapter.setRestaurantsList(zoomatoRestaurants, firebaseRestaurants);
         }
@@ -183,15 +173,13 @@ public class RestaurantsActivity extends AppCompatActivity implements
     @Override
     public void onRestaurantItemClick(RestaurantModel restaurant) {
         Intent intent = new Intent(RestaurantsActivity.this, RestaurantActivity.class);
-
-        if(restaurant.isFirebaseRestaurant()){
+        if (restaurant.isFirebaseRestaurant()) {
             intent.putExtra(TAG_RESTAURANT_ID, restaurant.getFirebaseRestaurant().getId());
             intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, restaurant.isFirebaseRestaurant());
-        }else{
+        } else {
             intent.putExtra(TAG_RESTAURANT_ID, restaurant.getZomatoRestaurant().getId());
             intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, restaurant.isFirebaseRestaurant());
         }
-
 
         startActivity(intent);
     }
@@ -213,7 +201,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
         return true;
     }
 
-    private void setUpNavigationDrawer(){
+    private void setUpNavigationDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -283,7 +271,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
                     })
                     .show();
         } else if (id == R.id.nav_loginout) {
-            if(mAuth != null){
+            if (mAuth != null) {
                 mAuth.signOut();
                 AuthUI.getInstance().signOut(getApplicationContext());
                 Intent intent = new Intent(this, LogInActivity.class);
@@ -310,25 +298,16 @@ public class RestaurantsActivity extends AppCompatActivity implements
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         dialog.show(ft, RestaurantsFilterDialog.TAG);
-
-
     }
-
 
     @Override
     public void onRestaurantsLoaded(boolean hasFailed, List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> restaurants) {
         firebaseRestaurantsLoaded = true;
         firebaseRestaurants.clear();
-        if(hasFailed){
-
-        }else{
+        if (hasFailed) {
+        } else {
             firebaseRestaurants.addAll(restaurants);
             setRestaurants();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }

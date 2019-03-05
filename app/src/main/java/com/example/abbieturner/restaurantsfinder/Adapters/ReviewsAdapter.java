@@ -14,7 +14,6 @@ import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.R;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
@@ -31,17 +30,17 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         this.reviewCounter = reviewCounter;
     }
 
-    public void setReviews(List<ReviewFirebase> firebaseReviews, List<UserReviews.UserReviewsData> zomatoReviews){
+    public void setReviews(List<ReviewFirebase> firebaseReviews, List<UserReviews.UserReviewsData> zomatoReviews) {
         reviewsList.clear();
 
-        if(firebaseReviews != null && firebaseReviews.size() > 0){
-            for(ReviewFirebase review: firebaseReviews){
+        if (firebaseReviews != null && firebaseReviews.size() > 0) {
+            for (ReviewFirebase review : firebaseReviews) {
                 reviewsList.add(new ReviewModel(review));
             }
         }
 
-        if(zomatoReviews != null && zomatoReviews.size() > 0){
-            for(UserReviews.UserReviewsData review: zomatoReviews){
+        if (zomatoReviews != null && zomatoReviews.size() > 0) {
+            for (UserReviews.UserReviewsData review : zomatoReviews) {
                 reviewsList.add(new ReviewModel(review.getReview()));
             }
         }
@@ -62,13 +61,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         ReviewModel review = reviewsList.get(position);
         String title = null;
 
-        if(review.isFirebaseReview()){
+        if (review.isFirebaseReview()) {
             title = review.getFirebaseReview().getReview();
             boolean hasPictureUrl = review.getFirebaseReview().hasPictureUrl();
-            if(hasPictureUrl){
+            if (hasPictureUrl) {
                 holder.picture.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             title = review.getReview().getReview_text();
         }
 

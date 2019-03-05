@@ -21,7 +21,7 @@ public class Reviews {
     private StorageReference sRef;
     private FirebaseStorage storage;
 
-    public Reviews(ReviewsListener callback){
+    public Reviews(ReviewsListener callback) {
         this.callback = callback;
         database = FirebaseDatabase.getInstance();
         reviewsRef = database.getReference().child("reviews");
@@ -29,11 +29,11 @@ public class Reviews {
         sRef = storage.getReference();
     }
 
-    public interface ReviewsListener{
+    public interface ReviewsListener {
         void onReviewsLoaded(List<ReviewFirebase> reviews, boolean hasFailed);
     }
 
-    public void getReviews(String restaurantId){
+    public void getReviews(String restaurantId) {
         final DatabaseReference ref = reviewsRef.child(restaurantId);
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -41,7 +41,7 @@ public class Reviews {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<ReviewFirebase> list = new ArrayList<>();
 
-                for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     ReviewFirebase review = postSnapshot.getValue(ReviewFirebase.class);
                     list.add(review);
                 }

@@ -2,10 +2,7 @@ package com.example.abbieturner.restaurantsfinder.Data;
 
 public class RestaurantUserRating {
 
-    private String aggregate_rating;
-    private String rating_text;
-    private String rating_color;
-    private String votes;
+    private String aggregate_rating, rating_text, rating_color, votes;
 
     public RestaurantUserRating(String aggregate_rating, String rating_text, String rating_color, String votes) {
         this.aggregate_rating = aggregate_rating;

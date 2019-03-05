@@ -2,7 +2,6 @@ package com.example.abbieturner.restaurantsfinder.FirebaseAccess;
 
 import android.support.annotation.NonNull;
 
-import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
@@ -30,7 +29,7 @@ public class Restaurants {
     private DeviceLocation locationSingleton;
     private List<Restaurant> restaurantsList;
 
-    public Restaurants(RestaurantsListener callback){
+    public Restaurants(RestaurantsListener callback) {
         restaurants = new ArrayList<>();
         restaurantsList = new ArrayList<>();
         locationSingleton = DeviceLocation.getInstance();
@@ -41,7 +40,8 @@ public class Restaurants {
         geofireRef = database.getReference().child("restaurantsGeoFire");
         geoFire = new GeoFire(geofireRef);
     }
-    public void getRestaurants(final String cuisine){
+
+    public void getRestaurants(final String cuisine) {
         restaurants.clear();
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(locationSingleton.getLocation().latitude, locationSingleton.getLocation().longitude), (200 * 1.609));
 
@@ -73,18 +73,18 @@ public class Restaurants {
         });
     }
 
-    private void getRestaurantsById(final String cuisine){
-        if(restaurants.size() == 0){
+    private void getRestaurantsById(final String cuisine) {
+        if (restaurants.size() == 0) {
             callback.onRestaurantsLoaded(false, restaurantsList);
         }
 
-        for(int i = 0; i < restaurants.size(); i++){
-            if(!isLastElement(i)){
+        for (int i = 0; i < restaurants.size(); i++) {
+            if (!isLastElement(i)) {
                 restaurantsRef.child(restaurants.get(i)).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Restaurant r = dataSnapshot.getValue(Restaurant.class);
-                        if(r != null && r.getCuisine().equals(cuisine)){
+                        if (r != null && r.getCuisine().equals(cuisine)) {
                             restaurantsList.add(r);
                         }
                     }
@@ -94,12 +94,12 @@ public class Restaurants {
                         callback.onRestaurantsLoaded(true, null);
                     }
                 });
-            }else{
+            } else {
                 restaurantsRef.child(restaurants.get(i)).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Restaurant r = dataSnapshot.getValue(Restaurant.class);
-                        if(r != null && r.getCuisine().equals(cuisine)){
+                        if (r != null && r.getCuisine().equals(cuisine)) {
                             r.setId(dataSnapshot.getKey());
                             restaurantsList.add(r);
                         }
@@ -117,7 +117,7 @@ public class Restaurants {
         }
     }
 
-    private boolean isLastElement(int i){
+    private boolean isLastElement(int i) {
         return i == restaurants.size() - 1;
     }
 }

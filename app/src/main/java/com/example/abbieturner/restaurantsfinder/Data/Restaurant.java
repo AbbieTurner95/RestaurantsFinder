@@ -1,28 +1,13 @@
 package com.example.abbieturner.restaurantsfinder.Data;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
-import com.google.gson.annotations.SerializedName;
-
 
 public class Restaurant {
 
-    private String id;
-    private String name;
-    private String url;
+    private String id,name, url, cuisines, currency, photos_url, menu_url, featured_image;
+    private int average_cost_for_two, price_range, has_online_delivery;
     private RestaurantLocationData location;
-    private String cuisines;
-    private int average_cost_for_two;
-    private int price_range;
-    private String currency;
     private RestaurantUserRating user_rating;
-    private String photos_url;
-    private String menu_url;
-    private String featured_image;
-    private int has_online_delivery;
 
     public Restaurant() {
 
@@ -163,10 +148,9 @@ public class Restaurant {
         this.has_online_delivery = has_online_delivery;
     }
 
-    public boolean isLocationSet(){
+    public boolean isLocationSet() {
         return location != null
                 && !location.getLongitude().isEmpty()
                 && !location.getLongitude().isEmpty();
     }
-
 }

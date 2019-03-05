@@ -15,7 +15,6 @@ import com.example.abbieturner.restaurantsfinder.CalculateDistance;
 import com.example.abbieturner.restaurantsfinder.CustomFilter;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
-import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
@@ -60,27 +59,18 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
 
     public void setRestaurantsList(List<Restaurant> zomatoRestaurants, List<com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant> firebaseRestaurants) {
-//
-//        this.restaurantsList.clear();
-//        this.restaurantsList.addAll(restaurantsList);
-//
-//        this.filterList.clear();
-//        this.filterList.addAll(restaurantsList);
-//        notifyDataSetChanged();
-//
-
         restaurantsList.clear();
         filterList.clear();
 
-        if(firebaseRestaurants != null && firebaseRestaurants.size() > 0){
-            for(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant: firebaseRestaurants){
+        if (firebaseRestaurants != null && firebaseRestaurants.size() > 0) {
+            for (com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant : firebaseRestaurants) {
                 restaurantsList.add(new RestaurantModel(restaurant));
                 filterList.add(new RestaurantModel(restaurant));
             }
         }
 
-        if(zomatoRestaurants != null && zomatoRestaurants.size() > 0){
-            for(Restaurant r: zomatoRestaurants){
+        if (zomatoRestaurants != null && zomatoRestaurants.size() > 0) {
+            for (Restaurant r : zomatoRestaurants) {
                 restaurantsList.add(new RestaurantModel(r));
                 filterList.add(new RestaurantModel(r));
             }
@@ -107,10 +97,10 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public void onBindViewHolder(final RestaurantsViewHolder holder, int position) {
         final RestaurantModel restaurant = restaurantsList.get(position);
 
-        if(restaurant.isFirebaseRestaurant()){
+        if (restaurant.isFirebaseRestaurant()) {
             com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant fr = restaurant.getFirebaseRestaurant();
 
-            if(database.restaurantsDAO().getRestaurant(fr.getId()) != null){
+            if (database.restaurantsDAO().getRestaurant(fr.getId()) != null) {
                 holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
 
@@ -132,10 +122,10 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //                    toggleFavoriteRestaurant(fr, holder);
 //                }
 //            }); // TODO:
-        }else{
+        } else {
             final Restaurant zr = restaurant.getZomatoRestaurant();
 
-            if(database.restaurantsDAO().getRestaurant(zr.getId()) != null){
+            if (database.restaurantsDAO().getRestaurant(zr.getId()) != null) {
                 holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
 
@@ -169,7 +159,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public Filter getFilter() {
-        if(filter == null){
+        if (filter == null) {
             filter = new CustomFilter(filterList, this);
         }
 
@@ -178,16 +168,13 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
-        if(hasFailed){
-
-        }else{
-
+        if (hasFailed) {
+        } else {
         }
     }
 
     @Override
     public void onRestaurantUpdated() {
-
     }
 
     public class RestaurantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -220,22 +207,16 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
 
-        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
             popularRestaurantsDataAccess.removePopularRestaurant(restaurant.getId());
             database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-        }else{
+        } else {
             popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
             holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
-
-
-
-
     }
-
-
 }

@@ -25,7 +25,7 @@ public class Review {
     private StorageReference sRef;
     private FirebaseStorage storage;
 
-    public Review(ReviewListener callback){
+    public Review(ReviewListener callback) {
         this.callback = callback;
         database = FirebaseDatabase.getInstance();
         reviewsRef = database.getReference().child("reviews");
@@ -33,19 +33,19 @@ public class Review {
         sRef = storage.getReference();
     }
 
-    public interface ReviewListener{
+    public interface ReviewListener {
         void onReviewCreated(boolean hasFailed);
     }
 
-    public void createReview(ReviewFirebase newReview, String restaurantId){
-        if(newReview.hasPicture()){
+    public void createReview(ReviewFirebase newReview, String restaurantId) {
+        if (newReview.hasPicture()) {
             uploadPicture(newReview, restaurantId);
-        }else{
+        } else {
             uploadReview(newReview, restaurantId);
         }
     }
 
-    private void uploadPicture(final ReviewFirebase newReview, final String restaurantId){
+    private void uploadPicture(final ReviewFirebase newReview, final String restaurantId) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         newReview.getPicture().compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
@@ -61,40 +61,40 @@ public class Review {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 sRef
-                .child("reviewImages")
-                .child(newReview.getId() + ".jpg")
-                .getDownloadUrl()
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task task) {
-                        if(task.isSuccessful()){
-                            newReview.setPictureUrl(task.getResult().toString());
+                        .child("reviewImages")
+                        .child(newReview.getId() + ".jpg")
+                        .getDownloadUrl()
+                        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull com.google.android.gms.tasks.Task task) {
+                                if (task.isSuccessful()) {
+                                    newReview.setPictureUrl(task.getResult().toString());
 
-                            uploadReview(newReview, restaurantId);
-                        }else{
-                            callback.onReviewCreated(true);
-                        }
-                    }
-                });
+                                    uploadReview(newReview, restaurantId);
+                                } else {
+                                    callback.onReviewCreated(true);
+                                }
+                            }
+                        });
             }
         });
     }
 
-    private void uploadReview(ReviewFirebase newReview, String restaurantId){
+    private void uploadReview(ReviewFirebase newReview, String restaurantId) {
         DatabaseReference ref = reviewsRef.child(restaurantId);
         ref.child(newReview.getId()).setValue(createHashMap(newReview)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     callback.onReviewCreated(false);
-                }else{
+                } else {
                     callback.onReviewCreated(true);
                 }
             }
         });
     }
 
-    private HashMap createHashMap(ReviewFirebase newReview){
+    private HashMap createHashMap(ReviewFirebase newReview) {
         HashMap hm = new HashMap();
 
         hm.put("id", newReview.getId());

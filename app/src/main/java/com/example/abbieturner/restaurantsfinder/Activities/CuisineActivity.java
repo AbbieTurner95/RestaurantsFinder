@@ -55,9 +55,11 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_drawer_layout_cuisines);
         ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
         mAuth = FirebaseAuth.getInstance();
+        this.setTitle(R.string.title_cuisines);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,14 +67,11 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
-        this.setTitle(R.string.title_cuisines);
-
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
         cuisineAdapter = new CuisineAdapter(this, this);
         recyclerView.setAdapter(cuisineAdapter);
-
         cuisineAdapter.setCuisineList(CuisinesSingleton.getInstance().getCuisines());
 
         AdRequest adRequest = new AdRequest.Builder()
@@ -94,7 +93,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         int id = cuisines.getCuisine_id();
         String name = cuisines.getCuisine_name();
 
-
         Intent intent = new Intent(CuisineActivity.this, RestaurantsActivity.class);
         intent.putExtra("cuisine_id", id);
         intent.putExtra(getResources().getString(R.string.TAG_CUISINE_NAME), name);
@@ -110,7 +108,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
         }
     }
 
-    private void setUpNavigationDrawer(){
+    private void setUpNavigationDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -150,7 +148,6 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         } else if (id == R.id.nav_contact) {
-
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                     .setTopColorRes(R.color.design_default_color_primary)
                     .setButtonsColorRes(R.color.white)
@@ -161,7 +158,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                         @Override
                         public void onClick(View v) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto","info@restaurantfinder.com", null));
+                                    "mailto", "info@restaurantfinder.com", null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                             startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
@@ -179,7 +176,7 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
                     .show();
 
         } else if (id == R.id.nav_loginout) {
-            if(mAuth != null){
+            if (mAuth != null) {
                 mAuth.signOut();
                 AuthUI.getInstance().signOut(getApplicationContext());
                 Intent intent = new Intent(this, LogInActivity.class);
@@ -187,12 +184,11 @@ public class CuisineActivity extends AppCompatActivity implements CuisineAdapter
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
             }
-        }else if (id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(CuisineActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }
-
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

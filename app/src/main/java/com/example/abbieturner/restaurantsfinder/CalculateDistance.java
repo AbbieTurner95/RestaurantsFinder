@@ -1,6 +1,5 @@
 package com.example.abbieturner.restaurantsfinder;
 
-import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 
 public class CalculateDistance {

@@ -21,11 +21,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.API.API;
-import com.example.abbieturner.restaurantsfinder.Adapters.CuisineJsonAdapter;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
-import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
-import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Services.LocationService;
 import com.firebase.ui.auth.AuthUI;
@@ -44,8 +39,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 import com.shashank.sony.fancydialoglib.Animation;
@@ -55,11 +48,6 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class LogInActivity extends AppCompatActivity {
@@ -92,14 +80,14 @@ public class LogInActivity extends AppCompatActivity {
         setNewInstances();
         setListeners();
 
-        if(!hasPermissions(this, PERMISSIONS)){
+        if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
 
         startService(new Intent(this, LocationService.class));
     }
 
-    private void setListeners(){
+    private void setListeners() {
         signin_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +121,7 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
-    private void setNewInstances(){
+    private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -147,19 +135,15 @@ public class LogInActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 101) {
             showLoginProgressDialog();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
                 Toast.makeText(LogInActivity.this, "Google sign in failed", Toast.LENGTH_LONG).show();
                 hideLoginProgressDialog();
-                // ...
             }
         }
 
@@ -210,9 +194,7 @@ public class LogInActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
-
                 startActivity(intent);
             } else {
 
@@ -239,10 +221,10 @@ public class LogInActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static boolean hasPermissions(Context context, String... permissions){
-        if(context != null && permissions != null){
-            for(String permission : permissions){
-                if(ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
             }
@@ -252,8 +234,6 @@ public class LogInActivity extends AppCompatActivity {
 
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        //Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -270,15 +250,14 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
-    private void showLoginProgressDialog(){
+    private void showLoginProgressDialog() {
         progressDialog.setTitle("Login");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
 
-    private void hideLoginProgressDialog(){
+    private void hideLoginProgressDialog() {
         progressDialog.hide();
     }
-
 }

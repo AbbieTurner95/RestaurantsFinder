@@ -9,7 +9,6 @@ public class Cuisine {
     @SerializedName("cuisine_name")
     private String cuisine_name;
 
-
     public int getCuisine_id() {
         return cuisine_id;
     }

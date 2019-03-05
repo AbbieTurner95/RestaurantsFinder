@@ -2,7 +2,6 @@ package com.example.abbieturner.restaurantsfinder.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.CalculateDistance;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
-import com.example.abbieturner.restaurantsfinder.Data.UsersLocation;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
@@ -26,7 +24,7 @@ import java.util.List;
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 
-public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.RestaurantViewHolder> implements PopularRestaurants.PopularRestaurantsListener{
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.RestaurantViewHolder> implements PopularRestaurants.PopularRestaurantsListener {
     private List<Restaurant> restaurantList;
     private final Context context;
     private final RestaurantItemClick listener;
@@ -87,16 +85,13 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
 
     @Override
     public void onRestaurantsLoaded(List<PopularRestaurant> list, boolean hasFailed) {
-        if(hasFailed){
-
-        }else{
-
+        if (hasFailed) {
+        } else {
         }
     }
 
     @Override
     public void onRestaurantUpdated() {
-
     }
 
     public class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -124,27 +119,20 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
         void onRestaurantItemClick(Restaurant cuisines);
     }
 
-    private void toggleFavoriteRestaurant(Restaurant restaurant){
+    private void toggleFavoriteRestaurant(Restaurant restaurant) {
+        DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
 
-        DatabaseRestaurant convertedRestaurant =  converter.convertToDatabaseRestaurant(restaurant);
-
-
-        if(database.restaurantsDAO().getRestaurant(restaurant.getId()) != null){
+        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
             popularRestaurantsDataAccess.removePopularRestaurant(restaurant.getId());
             database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
             restaurantList.remove(restaurant);
             notifyDataSetChanged();
-        }else{
+        } else {
             popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
         }
-
-
-
-
         List<Restaurant> favoritesRestaurants = converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
     }
-
 }

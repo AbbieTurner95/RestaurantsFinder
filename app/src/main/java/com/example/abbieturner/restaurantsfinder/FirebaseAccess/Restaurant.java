@@ -1,6 +1,5 @@
 package com.example.abbieturner.restaurantsfinder.FirebaseAccess;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -34,7 +32,7 @@ public class Restaurant {
     private DatabaseReference geofireRef;
     private GeoFire geoFire;
 
-    public Restaurant(RestaurantListener callback){
+    public Restaurant(RestaurantListener callback) {
         this.callback = callback;
         database = FirebaseDatabase.getInstance();
         restaurantsRef = database.getReference().child("restaurants");
@@ -45,7 +43,7 @@ public class Restaurant {
         geoFire = new GeoFire(geofireRef);
     }
 
-    public void getRestaurant(String restaurantId){
+    public void getRestaurant(String restaurantId) {
         final DatabaseReference rr = restaurantsRef.child(restaurantId);
 
         rr.addValueEventListener(new ValueEventListener() {
@@ -54,9 +52,9 @@ public class Restaurant {
                 com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant r =
                         dataSnapshot.getValue(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant.class);
 
-                if(r != null){
+                if (r != null) {
                     callback.onRestaurantLoaded(r, false);
-                }else{
+                } else {
                     callback.onRestaurantLoaded(null, true);
                 }
                 rr.removeEventListener(this);
@@ -69,15 +67,15 @@ public class Restaurant {
         });
     }
 
-    public void createRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
-        if(restaurant.hasPicture()){
+    public void createRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
+        if (restaurant.hasPicture()) {
             uploadPicture(restaurant);
-        }else{
+        } else {
             uploadRestaurant(restaurant);
         }
     }
 
-    private void uploadPicture(final com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+    private void uploadPicture(final com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         restaurant.getPicture().compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
@@ -99,11 +97,11 @@ public class Restaurant {
                         .addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
                             public void onComplete(@NonNull com.google.android.gms.tasks.Task task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     restaurant.setPictureUrl(task.getResult().toString());
 
                                     uploadRestaurant(restaurant);
-                                }else{
+                                } else {
                                     callback.onRestaurantCreated(true);
                                 }
                             }
@@ -112,23 +110,23 @@ public class Restaurant {
         });
     }
 
-    private void uploadRestaurant(final com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+    private void uploadRestaurant(final com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
         restaurantsRef.child(restaurant.getId()).setValue(createRestaurantHashMap(restaurant)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     addRestaurantToGeoFire(restaurant);
-                }else{
+                } else {
                     callback.onRestaurantCreated(true);
                 }
             }
         });
     }
 
-    private void addRestaurantToGeoFire(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+    private void addRestaurantToGeoFire(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
         GeoLocation location = new GeoLocation(restaurant.getLat(), restaurant.getLng());
 
-        geoFire.setLocation(restaurant.getId(), location , new GeoFire.CompletionListener() {
+        geoFire.setLocation(restaurant.getId(), location, new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -142,7 +140,7 @@ public class Restaurant {
         });
     }
 
-    private HashMap createRestaurantHashMap(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+    private HashMap createRestaurantHashMap(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
         HashMap hm = new HashMap();
 
         hm.put("id", restaurant.getId());

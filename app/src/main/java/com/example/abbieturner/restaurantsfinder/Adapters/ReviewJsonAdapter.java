@@ -15,6 +15,4 @@ public class ReviewJsonAdapter implements JsonDeserializer<Review> {
         JsonElement jsonReview = json.getAsJsonObject().get("review");
         return new Gson().fromJson(jsonReview, Review.class);
     }
-
-
 }

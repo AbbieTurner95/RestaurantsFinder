@@ -14,7 +14,7 @@ public class ModelConverter {
         if (theSingleton == null) {
             theSingleton = new ModelConverter();
         }
-        return theSingleton;    // here’s one I made earlier !!
+        return theSingleton;
     }
 
     public DatabaseRestaurant convertToDatabaseRestaurant(Restaurant restaurant) {
@@ -26,7 +26,6 @@ public class ModelConverter {
     }
 
     public List<Restaurant> convertToRestaurants(List<DatabaseRestaurant> databaseRestaurants) {
-
         List<Restaurant> convertedRestaurants = new ArrayList<>();
 
         for (final DatabaseRestaurant restaurant : databaseRestaurants) {

@@ -28,7 +28,6 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.CloseCreateRestaurantDi
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant;
 import com.example.abbieturner.restaurantsfinder.R;
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,16 +40,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CreateRestaurantActivity extends AppCompatActivity implements
-        OnMapReadyCallback, RestaurantListener{
+        OnMapReadyCallback, RestaurantListener {
+
+
+    private final float ZOOM_LEVEL = 11;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private CloseCreateRestaurantDialog closeConfirmationDialog;
     private Restaurant newRestaurant;
     private GoogleMap mMap;
     private MarkerOptions markerOptions;
-    private final float ZOOM_LEVEL = 11;
     private com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant restaurantDataAccess;
     private ProgressDialog progressDialog;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private FirebaseAuth mAuth;
 
     @BindView(R.id.toolbar)
@@ -59,7 +60,6 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     ImageView transparentImageView;
     @BindView(R.id.main_scroll_view)
     ScrollView mainScrollView;
-
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_address)
@@ -72,7 +72,6 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     TextView tvMenuUrl;
     @BindView(R.id.checkBox_delivery)
     CheckBox checkBoxDelivery;
-
     @BindView(R.id.checkBox_step_free_access)
     CheckBox checkBoxStepFreeAccess;
     @BindView(R.id.checkBox_accessible_toilets)
@@ -85,7 +84,6 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     CheckBox checkBoxGlutenFree;
     @BindView(R.id.checkBox_dairy_free)
     CheckBox checkBoxDairyFree;
-
     @BindView(R.id.btn_take_photo)
     LinearLayout btnTakePhoto;
     @BindView(R.id.image_view_photo)
@@ -111,16 +109,14 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         setUpMap();
     }
 
-    private void setUpSpinner(){
+    private void setUpSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.cuisines_list, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         cuisineSpinner.setAdapter(adapter);
     }
 
-    private void setUpListeners(){
+    private void setUpListeners() {
         checkBoxDelivery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -134,6 +130,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
                 openCamera();
             }
         });
+
         btnRemovePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +140,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
                 btnTakePhoto.setVisibility(View.VISIBLE);
             }
         });
+
         cuisineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -200,7 +198,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         });
     }
 
-    private void createNewInstances(){
+    private void createNewInstances() {
         closeConfirmationDialog = new CloseCreateRestaurantDialog(this);
         newRestaurant = new Restaurant();
         transparentImageView.setOnTouchListener(onTouchListener);
@@ -208,12 +206,12 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         progressDialog = new ProgressDialog(CreateRestaurantActivity.this);
     }
 
-    private void setUpMap(){
+    private void setUpMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(CreateRestaurantActivity.this);
     }
 
-    private void setUpToolbar(){
+    private void setUpToolbar() {
         setSupportActionBar(toolbar);
         toolbar.setTitle("Create Restaurant");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -235,12 +233,10 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_confirm) {
             handleSave();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -249,72 +245,72 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         openCloseConformationDialog();
     }
 
-    private void openCloseConformationDialog(){
+    private void openCloseConformationDialog() {
         closeConfirmationDialog.showDialog();
     }
 
-    private void handleSave(){
+    private void handleSave() {
         getDataFromUI();
-        if(requiredDataSet()){
+        if (requiredDataSet()) {
             showProgressDialog();
             restaurantDataAccess.createRestaurant(newRestaurant);
-        }else{
+        } else {
             setErrors();
         }
     }
 
-    private void setErrors(){
-        if(!isNameSet()){
+    private void setErrors() {
+        if (!isNameSet()) {
             tvName.setError("Name is required!");
         }
 
-        if(!isAddressSet()){
+        if (!isAddressSet()) {
             tvAddress.setError("Address is required!");
         }
 
-        if(!isLocationSet()){
+        if (!isLocationSet()) {
             Toast.makeText(CreateRestaurantActivity.this, "Map location is required", Toast.LENGTH_LONG).show();
         }
 
-        if(!isCuisineSet()){
+        if (!isCuisineSet()) {
             setSpinnerError(cuisineSpinner, "Cuisine is required!");
         }
     }
 
-    private void setSpinnerError(Spinner spinner, String error){
+    private void setSpinnerError(Spinner spinner, String error) {
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
             spinner.requestFocus();
             TextView selectedTextView = (TextView) selectedView;
-            selectedTextView.setError(error); // any name of the error will do
-            selectedTextView.setTextColor(Color.RED); //text color in which you want your error message to be displayed
-            selectedTextView.setText(error); // actual error message
-            spinner.performClick(); // to open the spinner list if error is found.
+            selectedTextView.setError(error);
+            selectedTextView.setTextColor(Color.RED);
+            selectedTextView.setText(error);
+            spinner.performClick();
         }
     }
 
-    private boolean requiredDataSet(){
+    private boolean requiredDataSet() {
         return isNameSet() && isLocationSet() && isAddressSet() && isCuisineSet();
     }
 
-    private boolean isCuisineSet(){
+    private boolean isCuisineSet() {
         return newRestaurant.getCuisine() != null && !newRestaurant.getCuisine().isEmpty();
     }
 
-    private boolean isLocationSet(){
+    private boolean isLocationSet() {
         return newRestaurant.getLat() != null && newRestaurant.getLng() != null;
     }
 
-    private boolean isNameSet(){
+    private boolean isNameSet() {
         return !tvName.getText().toString().isEmpty();
     }
 
-    private boolean isAddressSet(){
+    private boolean isAddressSet() {
         return !tvAddress.getText().toString().isEmpty();
     }
 
 
-    private void getDataFromUI(){
+    private void getDataFromUI() {
         newRestaurant.setName(tvName.getText().toString());
         newRestaurant.setAddress(tvAddress.getText().toString());
         newRestaurant.setPhone(tvPhone.getText().toString());
@@ -332,7 +328,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Toast.makeText(CreateRestaurantActivity.this, "Latitude and Longitude set",  Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateRestaurantActivity.this, "Latitude and Longitude set", Toast.LENGTH_SHORT).show();
 
                 mMap.clear();
 
@@ -353,14 +349,10 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-                    // Disallow ScrollView to intercept touch events.
                     mainScrollView.requestDisallowInterceptTouchEvent(true);
-
-                    // Disable touch on transparent view
                     return false;
 
                 case MotionEvent.ACTION_UP:
-                    // Allow ScrollView to intercept touch events.
                     mainScrollView.requestDisallowInterceptTouchEvent(false);
                     return true;
 
@@ -377,9 +369,9 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     @Override
     public void onRestaurantCreated(boolean hasFailed) {
         hideProgressDialog();
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(CreateRestaurantActivity.this, "Something went wrong. Please try again later.", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Toast.makeText(CreateRestaurantActivity.this, "Restaurant created.", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -390,18 +382,18 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
 
     }
 
-    private void showProgressDialog(){
+    private void showProgressDialog() {
         progressDialog.setTitle("Creating Restaurant");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
 
-    private void hideProgressDialog(){
+    private void hideProgressDialog() {
         progressDialog.hide();
     }
 
-    public void openCamera(){
+    public void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
