@@ -131,7 +131,6 @@
     <string name="food_image">Food Image</string>
     <string name="settings_page">Settings Page</string>
     <string name="default_location">Default Location:</string>
-    <string name="manage">Manage</string>
     <string name="close_confirmation">Close Confirmation</string>
     <string name="close_dialog">Are you sure you want to close this activity?</string>
     <string name="unsaved_changes">All unsaved changes will be lost!</string>

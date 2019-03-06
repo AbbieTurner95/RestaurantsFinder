@@ -14,7 +14,8 @@ public class DatabaseRestaurant {
     /////////////////////////////////////////////////////
     @PrimaryKey
     @NonNull
-    private String id, name, url, cuisines, currency, photos_url, menu_url, featured_image;
+    private String id;
+    private String name, url, cuisines, currency, photos_url, menu_url, featured_image;
     private int average_cost_for_two, price_range, has_online_delivery;
 
     /////////////////////////////////////////////////////

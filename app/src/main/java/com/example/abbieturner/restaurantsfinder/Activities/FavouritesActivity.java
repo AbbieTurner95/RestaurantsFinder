@@ -41,7 +41,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouriteAd
     NavigationView navigationView;
     @BindView(R.id.toolbar)
 
-    private Toolbar toolbar;
+    Toolbar toolbar;
     private FirebaseAuth mAuth;
 
     @Override

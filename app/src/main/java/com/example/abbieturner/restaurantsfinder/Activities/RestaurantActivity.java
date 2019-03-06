@@ -57,7 +57,8 @@ public class RestaurantActivity extends AppCompatActivity
         implements ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
         Reviews.ReviewsListener, RestaurantListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private String TAG_RESTAURANT_ID, jsonRestaurant, restaurantId, TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
+    private String TAG_RESTAURANT_ID, jsonRestaurant, restaurantId,
+            TAG_RESTAURANT, ZOOMATO_BASE_URL, TAG_IS_FIREBASE_RESTAURANT;
     private RestaurantModel restaurant;
     private Gson gson;
     private API.ZomatoApiCalls service;
@@ -112,7 +113,7 @@ public class RestaurantActivity extends AppCompatActivity
         if (isRestaurantId()) {
             getRestaurantById();
         } else if (isRestaurantJson()) {
-            restaurant = new RestaurantModel(gson.fromJson(jsonRestaurant, Restaurant.class)); // Converts the JSON String to an Object
+            restaurant = new RestaurantModel(gson.fromJson(jsonRestaurant, Restaurant.class));
             displayRestaurantData();
         } else {
             Toast.makeText(this, "Error: Restaurant info not loaded.", Toast.LENGTH_SHORT).show();

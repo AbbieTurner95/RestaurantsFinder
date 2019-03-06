@@ -58,9 +58,6 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.skip_login__btn)
     TextView skipLoginBtn;
 
-    @BindView(R.id.btn_google)
-    SignInButton btnGoogle;
-
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 109;
     private int PERMISSION_ALL = 1;
@@ -107,16 +104,6 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent myIntent = new Intent(LogInActivity.this, HomeActivity.class);
                 LogInActivity.this.startActivity(myIntent);
-            }
-        });
-
-        btnGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGoogleSignInClient.signOut();
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, 101);
-
             }
         });
     }
