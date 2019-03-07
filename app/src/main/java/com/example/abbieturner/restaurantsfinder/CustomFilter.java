@@ -33,19 +33,19 @@ public class CustomFilter extends Filter {
         if (isAnySearchSet(constraint)) {
             constraint = constraint.toString().toUpperCase();
 
-            List<RestaurantModel> filteredRestaurans = new ArrayList<>();
+            List<RestaurantModel> filteredRestaurants = new ArrayList<>();
 
             for (int i = 0; i < filterList.size(); i++) {
                 RestaurantModel currentRestaurant = filterList.get(i);
 
                 if (mathesSearch(currentRestaurant, constraint)) {
                     //ADD RESTAURANT TO FILTERED
-                    filteredRestaurans.add(filterList.get(i));
+                    filteredRestaurants.add(filterList.get(i));
                 }
             }
 
-            results.count = filteredRestaurans.size();
-            results.values = filteredRestaurans;
+            results.count = filteredRestaurants.size();
+            results.values = filteredRestaurants;
         } else {
             results.count = filterList.size();
             results.values = filterList;

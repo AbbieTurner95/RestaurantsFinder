@@ -1,5 +1,7 @@
 package com.example.abbieturner.restaurantsfinder.Data;
 
+import java.util.Objects;
+
 public class UsersLocation {
     private static double lat = 53.479207; //TODO change for real lat
     private static double lng = -1.186169; //TODO change for real lng
@@ -32,9 +34,9 @@ public class UsersLocation {
             dist = Math.acos(dist);
             dist = Math.toDegrees(dist);
             dist = dist * 60 * 1.1515;
-            if (unit == "K") {
+            if (Objects.equals(unit, "K")) {
                 dist = dist * 1.609344;
-            } else if (unit == "N") {
+            } else if (Objects.equals(unit, "N")) {
                 dist = dist * 0.8684;
             }
             return (dist);

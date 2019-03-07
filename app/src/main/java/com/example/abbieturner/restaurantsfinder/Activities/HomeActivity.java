@@ -234,7 +234,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void setUpAutocomplete(List<Cuisine> cuisineList) {
         ArrayAdapter<Cuisine> adapter =
-                new ArrayAdapter<Cuisine>(this, android.R.layout.simple_list_item_1, cuisineList);
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cuisineList);
         autoCompleteTextView.setAdapter(adapter);
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -378,6 +378,7 @@ public class HomeActivity extends AppCompatActivity
                     .setIcon(R.drawable.phone_black_24dp)
                     .setTitle("Select a contact method.")
                     .setMessage("How do you wish to contact us?")
+                    .setButtonsColor(getResources().getColor(R.color.colorPrimary))
                     .setPositiveButton("Email", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -27,7 +27,6 @@ public class ReviewDialog {
 
     private EditText reviewMsg;
     private ImageView picture, closeDialog, star1, star2, star3, star4, star5;
-    ;
     private ImageView[] stars = new ImageView[5];
     private LinearLayout cameraPlaceHolder;
 

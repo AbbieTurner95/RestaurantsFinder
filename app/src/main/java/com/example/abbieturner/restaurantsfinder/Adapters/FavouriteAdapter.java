@@ -74,8 +74,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
             }
         });
 
-        holder.imageLoader = new PicassoLoader();
-        holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
+      //  holder.imageLoader = new PicassoLoader();
+       // holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
     }
 
     @Override
