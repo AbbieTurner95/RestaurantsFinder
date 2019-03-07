@@ -33,7 +33,7 @@ public class RestaurantModel {
         if (isFirebaseRestaurant) {
             return restaurantF.getDelivery();
         } else {
-            return restaurantZ.getHas_online_delivery() == 1 ? true : false;
+            return restaurantZ.getHas_online_delivery() == 1;
         }
     }
 

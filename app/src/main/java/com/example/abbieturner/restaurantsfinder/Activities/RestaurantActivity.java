@@ -388,6 +388,7 @@ public class RestaurantActivity extends AppCompatActivity
                     .setIcon(R.drawable.phone_black_24dp)
                     .setTitle("Select a contact method.")
                     .setMessage("How do you wish to contact us?")
+                    .setButtonsColor(getResources().getColor(R.color.colorPrimary))
                     .setPositiveButton("Email", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

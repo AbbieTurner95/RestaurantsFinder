@@ -51,16 +51,16 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_restaurant_info, container, false);
 
-        tvAddress = (TextView) view.findViewById(R.id.tv_address);
-        tvRating = (TextView) view.findViewById(R.id.tv_rating);
-        tvHasOnlineDelivery = (TextView) view.findViewById(R.id.tv_has_online_delivery);
-        tvPhone = (TextView) view.findViewById(R.id.tv_phone);
-        btnDirection = (ImageView) view.findViewById(R.id.btn_direction);
-        btnPhone = (ImageView) view.findViewById(R.id.btn_phone);
-        btnShare = (ImageView) view.findViewById(R.id.btn_share);
-        btnFavourites = (ImageView) view.findViewById(R.id.btn_favourites);
-        btnMenu = (ImageView) view.findViewById(R.id.btn_menu);
-        btnWeb = (ImageView) view.findViewById(R.id.btn_web);
+        tvAddress = view.findViewById(R.id.tv_address);
+        tvRating = view.findViewById(R.id.tv_rating);
+        tvHasOnlineDelivery = view.findViewById(R.id.tv_has_online_delivery);
+        tvPhone = view.findViewById(R.id.tv_phone);
+        btnDirection = view.findViewById(R.id.btn_direction);
+        btnPhone = view.findViewById(R.id.btn_phone);
+        btnShare = view.findViewById(R.id.btn_share);
+        btnFavourites = view.findViewById(R.id.btn_favourites);
+        btnMenu = view.findViewById(R.id.btn_menu);
+        btnWeb = view.findViewById(R.id.btn_web);
         tvStepFreeAccess = view.findViewById(R.id.tv_step_free_access);
         tvAccessibleToilets = view.findViewById(R.id.tv_accessible_toilets);
         tvVegan = view.findViewById(R.id.tv_vegan);
@@ -149,7 +149,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
             tvRating.setText(restaurant.getFirebaseRestaurant().getRating().toString());
             tvAddress.setText(restaurant.getFirebaseRestaurant().getAddress());
             tvPhone.setText("No number");
-            String onlineDelivery = restaurant.getFirebaseRestaurant().getDelivery() == false ? "Delivery not available" : "Delivery available";
+            String onlineDelivery = !restaurant.getFirebaseRestaurant().getDelivery() ? "Delivery not available" : "Delivery available";
             tvHasOnlineDelivery.setText(onlineDelivery);
 
             if (database.restaurantsDAO().getRestaurant(restaurant.getFirebaseRestaurant().getId()) != null) {

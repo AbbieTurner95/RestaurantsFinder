@@ -42,8 +42,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-
-
         ActionBar actionBar = this.getSupportActionBar();
 
         if (actionBar != null) {
@@ -58,7 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         if (locationSharedPreferences.userHasLocationsSet()) {
             defaultLocationStatus.setText("location set");
         } else {

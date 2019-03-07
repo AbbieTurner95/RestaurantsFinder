@@ -43,7 +43,7 @@ public class RestaurantMap extends Fragment implements ISendRestaurant {
         View rootView = inflater.inflate(R.layout.fragment_restaurant_map, container, false);
 
 
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView = rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately

@@ -142,7 +142,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
 
     private void fetchRestaurants() {
 
-        service.getRestaurants("5000", "1", "20",
+        service.getRestaurants("500", "1", "20",
                 String.valueOf(locationSingleton.getLocation().latitude),
                 String.valueOf(locationSingleton.getLocation().longitude),
                 cuisineID, "rating", "asc")
@@ -158,7 +158,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
                     public void onFailure(Call<Restaurants> call, Throwable t) {
                         t.printStackTrace();
                         zoomatoRestaurantsLoaded = true;
-                        Toast.makeText(RestaurantsActivity.this, "Failed to load Zoomato restaurants!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RestaurantsActivity.this, "Failed to load Zomato restaurants!", Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -250,6 +250,7 @@ public class RestaurantsActivity extends AppCompatActivity implements
                     .setIcon(R.drawable.phone_black_24dp)
                     .setTitle("Select a contact method.")
                     .setMessage("How do you wish to contact us?")
+                    .setButtonsColor(getResources().getColor(R.color.colorPrimary))
                     .setPositiveButton("Email", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
