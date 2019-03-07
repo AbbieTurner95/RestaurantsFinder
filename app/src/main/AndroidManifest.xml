@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <receiver android:name=".Widget.RestaurantWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -28,7 +27,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/restaurant_widget_info" />
         </receiver>
-
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -93,6 +91,8 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".Services.LocationService" />
+
+        <activity android:name=".Activities.Profile"></activity>
     </application>
 
 </manifest>

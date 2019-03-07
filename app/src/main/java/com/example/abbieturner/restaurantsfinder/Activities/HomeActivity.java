@@ -45,7 +45,9 @@ import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
@@ -54,6 +56,7 @@ import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -75,7 +78,9 @@ public class HomeActivity extends AppCompatActivity
         FavouriteAdapter.RestaurantItemClick,
         NavigationView.OnNavigationItemSelectedListener,
         PopularRestaurants.PopularRestaurantsListener,
-        PopularRestaurantsAdapter.RestaurantItemClick, SharedPreferences.OnSharedPreferenceChangeListener {
+        PopularRestaurantsAdapter.RestaurantItemClick,
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        UserListener {
 
     @BindView(R.id.home_popular_recycler_view)
     EmptyRecyclerView popularRecyclerView;
@@ -117,6 +122,8 @@ public class HomeActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private LocationSharedPreferences locationSharedPreferences;
     private SharedPreferences mPrefs;
+    private FirebaseUser currentUser;
+    private User userDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +131,13 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        mAuth = FirebaseAuth.getInstance();
+
 
         createNewInstances();
         setUpNavigationDrawer();
         favoritesRestaurants = getFavouriteRestaurants();
 
+        setUpProfile();
         setUpPopularRecyclerView();
         setUpFavouritesRecyclerView();
         setUpOnClickListeners();
@@ -137,6 +145,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void createNewInstances() {
+        userDataAccess = new User(this);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         database = AppDatabase.getInstance(this);
         converter = ModelConverter.getInstance();
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
@@ -413,6 +424,13 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.nav_profile){
+            if(currentUser != null){
+                Intent intent = new Intent(HomeActivity.this, Profile.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
         }
 
 
@@ -510,5 +528,11 @@ public class HomeActivity extends AppCompatActivity
     private void clearSharedPreferences() {
         locationSharedPreferences.setLocation(null);
         locationSingleton.setLocation(null);
+    }
+
+    private void setUpProfile(){
+        if(currentUser != null){
+            userDataAccess.createProfileIfDoesNotExist(currentUser.getUid());
+        }
     }
 }

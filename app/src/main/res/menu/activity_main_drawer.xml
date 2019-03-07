@@ -11,6 +11,11 @@
             android:title="@string/home" />
 
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/profile" />
+
+        <item
             android:id="@+id/nav_fave"
             android:icon="@drawable/ic_favorite_black_24dp"
             android:title="@string/favorites" />
