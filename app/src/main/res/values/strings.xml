@@ -27,6 +27,8 @@
     <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_add_friend">Add Friend</string>
     <string name="TAG_RESTAURANT" translatable="false">restaurant_tag</string>
     <string name="google_maps_key" translatable="false">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
     <string name="title_activity_navig" translatable="false">NavigActivity</string>
@@ -35,6 +37,7 @@
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
     <string name="TAG_IS_FIREBASE_RESTAURANT" translatable="false">isFirebaseRestaurant</string>
+    <string name="TAG_USER_ID">TAG_USER_ID</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="favorites">Favorites</string>
@@ -42,6 +45,7 @@
     <string name="contact_us">Contact Us</string>
     <string name="log_in_out">Log in/out</string>
     <string name="settings">Settings</string>
+
 
     <string-array name="cuisines_list">
         <item>American</item>
@@ -172,5 +176,7 @@
     <string name="search_hint">Search...</string>
     <string name="search">Search</string>
     <string name="no_reviews">No Reviews</string>
+
+    <string name="error_message">Something went wrong. Please try again later.</string>
 
 </resources>

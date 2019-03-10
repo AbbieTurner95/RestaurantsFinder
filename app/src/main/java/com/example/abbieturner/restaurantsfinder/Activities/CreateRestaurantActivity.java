@@ -24,7 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.abbieturner.restaurantsfinder.Dialogs.CloseCreateRestaurantDialog;
+import com.example.abbieturner.restaurantsfinder.Dialogs.CloseActivityConfirmationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -46,7 +46,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     private final float ZOOM_LEVEL = 11;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private CloseCreateRestaurantDialog closeConfirmationDialog;
+    private CloseActivityConfirmationDialog closeConfirmationDialog;
     private Restaurant newRestaurant;
     private GoogleMap mMap;
     private MarkerOptions markerOptions;
@@ -199,7 +199,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
     }
 
     private void createNewInstances() {
-        closeConfirmationDialog = new CloseCreateRestaurantDialog(this);
+        closeConfirmationDialog = new CloseActivityConfirmationDialog(this);
         newRestaurant = new Restaurant();
         transparentImageView.setOnTouchListener(onTouchListener);
         restaurantDataAccess = new com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant(this);
@@ -247,7 +247,7 @@ public class CreateRestaurantActivity extends AppCompatActivity implements
 
     private void openCloseConformationDialog() {
         closeConfirmationDialog.showDialog();
-    }
+}
 
     private void handleSave() {
         getDataFromUI();

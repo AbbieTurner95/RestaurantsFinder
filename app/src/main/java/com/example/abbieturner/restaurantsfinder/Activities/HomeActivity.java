@@ -49,6 +49,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserLi
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserFirebaseModel;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.example.abbieturner.restaurantsfinder.Singletons.LocationSharedPreferences;
@@ -113,7 +114,7 @@ public class HomeActivity extends AppCompatActivity
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
-    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION, BASE_URL;
+    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION, BASE_URL, TAG_USER_ID;
     private DeviceLocation locationSingleton;
     private API.ZomatoApiCalls service;
     private GetLocationDialog getLocationDialog;
@@ -152,6 +153,7 @@ public class HomeActivity extends AppCompatActivity
         converter = ModelConverter.getInstance();
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
+        TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
         popularRestaurantsDataAccess = new PopularRestaurants(this);
         locationSingleton = DeviceLocation.getInstance();
         getLocationDialog = new GetLocationDialog(this, false);
@@ -428,6 +430,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile){
             if(currentUser != null){
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
                 startActivity(intent);
             }else{
                 Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
@@ -535,5 +538,15 @@ public class HomeActivity extends AppCompatActivity
         if(currentUser != null){
             userDataAccess.createProfileIfDoesNotExist(currentUser.getUid());
         }
+    }
+
+    @Override
+    public void OnUserLoaded(UserFirebaseModel user, boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUserUpdated(boolean hasFailed) {
+
     }
 }

@@ -30,6 +30,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewPictureDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Review;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Reviews;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserReview;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantInfo;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantMap;
 import com.example.abbieturner.restaurantsfinder.Fragments.RestaurantReviews;
@@ -284,11 +285,7 @@ public class RestaurantActivity extends AppCompatActivity
     }
 
     public void createReview() {
-        if (restaurant.isFirebaseRestaurant()) {
-            reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getFirebaseRestaurant().getId());
-        } else {
-            reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getZomatoRestaurant().getId());
-        }
+        reviewDataAccess.createReview(ReviewSingleton.getInstance().getReview(), restaurant.getId(), restaurant.getName());
 
     }
 
@@ -317,6 +314,11 @@ public class RestaurantActivity extends AppCompatActivity
             setReviews();
 
         }
+    }
+
+    @Override
+    public void onUserReviewsLoaded(List<UserReview> userReviews, boolean hasFailed) {
+
     }
 
     private void setReviews() {

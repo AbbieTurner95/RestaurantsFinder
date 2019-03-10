@@ -2,13 +2,27 @@ package com.example.abbieturner.restaurantsfinder.FirebaseModels;
 
 import android.graphics.Bitmap;
 
-public class User {
+import com.example.abbieturner.restaurantsfinder.Singletons.DateCreated;
+
+public class UserFirebaseModel {
     private String id;
     private String name;
     private String memberSince;
     private int numberOfReviews;
     private Bitmap picture;
     private String pictureUrl;
+
+    public UserFirebaseModel(){
+
+    }
+
+    public UserFirebaseModel(String id){
+        this.id = id;
+        this.name = "";
+        this.memberSince = DateCreated.getInstance().GetDateCreated();
+        this.numberOfReviews = 0;
+        this.pictureUrl = "";
+    }
 
     public String getId() {
         return id;
@@ -19,6 +33,9 @@ public class User {
     }
 
     public String getName() {
+        if(name == null || name.isEmpty()){
+            return "Name not set";
+        }
         return name;
     }
 
@@ -51,6 +68,9 @@ public class User {
     }
 
     public String getPictureUrl() {
+        if(pictureUrl == null || pictureUrl.isEmpty()){
+            return "url not set";
+        }
         return pictureUrl;
     }
 
@@ -66,5 +86,9 @@ public class User {
         }else{
             return "Gold";
         }
+    }
+
+    public boolean hasPicture(){
+        return picture != null;
     }
 }

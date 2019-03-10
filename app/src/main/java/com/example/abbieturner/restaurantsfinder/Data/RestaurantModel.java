@@ -29,6 +29,22 @@ public class RestaurantModel {
         return isFirebaseRestaurant;
     }
 
+    public String getId(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getId();
+        }else{
+            return restaurantZ.getId();
+        }
+    }
+
+    public String getName(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getName();
+        }else{
+            return restaurantZ.getName();
+        }
+    }
+
     public boolean hasDelivery() {
         if (isFirebaseRestaurant) {
             return restaurantF.getDelivery();
