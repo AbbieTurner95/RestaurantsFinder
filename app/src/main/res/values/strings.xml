@@ -28,7 +28,7 @@
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="action_edit">Edit</string>
-    <string name="action_add_friend">Add Friend</string>
+    <string name="action_manage_friends">Manage Friends</string>
     <string name="TAG_RESTAURANT" translatable="false">restaurant_tag</string>
     <string name="google_maps_key" translatable="false">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
     <string name="title_activity_navig" translatable="false">NavigActivity</string>

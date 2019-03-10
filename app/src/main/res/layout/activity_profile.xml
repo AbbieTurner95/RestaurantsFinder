@@ -96,57 +96,57 @@
                 android:text="Gold"/>
         </LinearLayout>
 
-    <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_marginTop="15dp"-->
-            <!--android:layout_marginBottom="15dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="vertical">-->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Friends"-->
-                <!--android:textColor="#000000"-->
-                <!--android:textSize="24sp"-->
-                <!--android:textStyle="bold" />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Friends"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@drawable/my_border">
 
-                <!--<com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView-->
-                    <!--android:id="@+id/home_popular_recycler_view"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent" />-->
+                <com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView
+                    android:id="@+id/friends_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/popular_empty_view"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:textAlignment="center">-->
+                <LinearLayout
+                    android:id="@+id/friends_rv_empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:textAlignment="center">
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:padding="16dp"-->
-                        <!--android:text="You dont have any friends" />-->
-                <!--</LinearLayout>-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="You dont have any friends" />
+                </LinearLayout>
 
-                <!--<ProgressBar-->
-                    <!--android:id="@+id/pb_popular_restaurants"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:background="@color/activity_background"-->
-                    <!--android:padding="70dp"-->
-                    <!--android:visibility="gone" />-->
+                <ProgressBar
+                    android:id="@+id/pb_popular_restaurants"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:padding="50dp" />
 
-            <!--</RelativeLayout>-->
+            </RelativeLayout>
 
-        <!--</LinearLayout>-->
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -164,7 +164,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#d9d9d9">
+                android:background="@drawable/my_border">
 
                 <com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView
                     android:id="@+id/reviews_recycler_view"

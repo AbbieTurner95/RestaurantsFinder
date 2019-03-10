@@ -9,7 +9,7 @@
     <item
         android:id="@+id/action_add_friend"
         android:icon="@drawable/ic_add_black_24dp"
-        android:title="@string/action_add_friend"
+        android:title="@string/action_manage_friends"
         app:showAsAction="never" />
 
 

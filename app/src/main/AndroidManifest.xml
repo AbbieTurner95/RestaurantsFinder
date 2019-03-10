@@ -93,7 +93,8 @@
         <service android:name=".Services.LocationService" />
 
         <activity android:name=".Activities.Profile" />
-        <activity android:name=".Activities.EditProfile"></activity>
+        <activity android:name=".Activities.EditProfile" />
+        <activity android:name=".Activities.ManageFriends"></activity>
     </application>
 
 </manifest>

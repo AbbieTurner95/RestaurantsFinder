@@ -111,8 +111,8 @@ public class EditProfile extends AppCompatActivity implements UserListener {
     }
 
     private void setUpToolBar(){
-        setSupportActionBar(toolbar);
         toolbar.setTitle("Edit Profile");
+        setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

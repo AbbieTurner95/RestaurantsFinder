@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SnapHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,19 +16,24 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
+import com.example.abbieturner.restaurantsfinder.Adapters.FriendsAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.UserReviewsAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewModel;
 import com.example.abbieturner.restaurantsfinder.Dialogs.UserReviewPictureDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Friends;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.FriendsListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Reviews;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.Friend;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserFirebaseModel;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserReview;
 import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.UserInstance;
+import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -37,7 +43,10 @@ import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Profile extends AppCompatActivity implements UserListener, UserReviewsAdapter.UserReviewItemClick, Reviews.ReviewsListener {
+public class Profile extends AppCompatActivity
+        implements UserListener, UserReviewsAdapter.UserReviewItemClick,
+        Reviews.ReviewsListener, FriendsAdapter.FriendItemClick,
+        FriendsListener {
 
     @BindView(R.id.avatar_personal_photo)
     AvatarView avatarPersonalPhoto;
@@ -56,17 +65,26 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
     @BindView(R.id.pb_reviews)
     ProgressBar reviewsProgressBar;
 
+    @BindView(R.id.friends_recycler_view)
+    EmptyRecyclerView friendsRV;
+    @BindView(R.id.friends_rv_empty_view)
+    LinearLayout friendsEmptyView;
+    @BindView(R.id.pb_popular_restaurants)
+    ProgressBar friendsProgressBar;
+
 
 
     private IImageLoader imageLoader;
     private String userId, TAG_USER_ID, loadingDialogTitle;
     private User userDataAccess;
     private ProgressDialog loadingDialog;
-    private LinearLayoutManager reviewsLayoutManager;
+    private LinearLayoutManager reviewsLayoutManager, friendsLayoutManager;
     private UserReviewsAdapter reviewsAdapter;
+    private FriendsAdapter friendsAdapter;
     private Reviews reviewsDataAccess;
     private FirebaseAuth mAuth;
     private UserReviewPictureDialog pictureDialog;
+    private Friends friendsDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +98,9 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
         setUpToolbar();
         getUser();
         setUpReviewsRecyclerView();
+        setUpFriendsRecyclerView();
         loadReviews();
+        loadFriends();
     }
 
     @Override
@@ -101,11 +121,12 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
 
         switch(id){
             case R.id.action_edit:
-                Intent intent = new Intent(Profile.this, EditProfile.class);
-                startActivity(intent);
+                Intent editIntent = new Intent(Profile.this, EditProfile.class);
+                startActivity(editIntent);
                 break;
             case R.id.action_add_friend:
-                Toast.makeText(this, "Add Friend", Toast.LENGTH_LONG).show();
+                Intent friendsIntent = new Intent(Profile.this, ManageFriends.class);
+                startActivity(friendsIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -121,10 +142,13 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
         reviewsDataAccess = new Reviews(this);
         mAuth = FirebaseAuth.getInstance();
         pictureDialog = new UserReviewPictureDialog(this);
+        friendsDataAccess = new Friends(this);
     }
 
     private void setUpToolbar(){
+        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
+
     }
 
     private void getUser(){
@@ -166,6 +190,19 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
         }
     }
 
+    private void setUpFriendsRecyclerView(){
+        friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        friendsAdapter = new FriendsAdapter(this);
+        friendsAdapter.setList(null);
+        friendsRV.setLayoutManager(friendsLayoutManager);
+
+        friendsRV.setEmptyView(friendsEmptyView);
+        friendsRV.setAdapter(friendsAdapter);
+
+        SnapHelper popularSnapHelper = new StartSnapHelper();
+        popularSnapHelper.attachToRecyclerView(friendsRV);
+    }
+
     private void setUpReviewsRecyclerView(){
         reviewsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         reviewsAdapter = new UserReviewsAdapter(this, this);
@@ -183,9 +220,17 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
                 reviewsProgressBar.setVisibility(View.VISIBLE);
                 reviewsDataAccess.getUserReviews(userId);
             }
-
         }
+    }
 
+    private void loadFriends(){
+        if(mAuth != null){
+            String userId = mAuth.getUid();
+            if(userId != null || !userId.isEmpty()){
+                friendsProgressBar.setVisibility(View.VISIBLE);
+                friendsDataAccess.getFriends(userId);
+            }
+        }
     }
 
     @Override
@@ -209,6 +254,23 @@ public class Profile extends AppCompatActivity implements UserListener, UserRevi
             pictureDialog.showDialog(review);
         } else {
             Toast.makeText(this, "This review does not have any picture.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onFriendItemClick(Friend friend) {
+        Toast.makeText(this, "Friend clicked.", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
+        friendsProgressBar.setVisibility(View.GONE);
+        if(hasFailed){
+            Toast.makeText(this, "Failed to load friend", Toast.LENGTH_LONG).show();
+        }else{
+            if(friends != null){
+                friendsAdapter.setList(friends);
+            }
         }
     }
 }
