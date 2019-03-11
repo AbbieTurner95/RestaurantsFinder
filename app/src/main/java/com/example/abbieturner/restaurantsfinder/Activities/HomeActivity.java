@@ -126,6 +126,7 @@ public class HomeActivity extends AppCompatActivity
     private SharedPreferences mPrefs;
     private FirebaseUser currentUser;
     private User userDataAccess;
+    private String location_shared_preferences_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.nav_bar_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
 
         createNewInstances();
         setUpNavigationDrawer();
@@ -147,6 +147,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void createNewInstances() {
+        location_shared_preferences_name = getResources().getString(R.string.location_shared_preferences_name);
         userDataAccess = new User(this);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -167,7 +168,7 @@ public class HomeActivity extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         service = retrofit.create(API.ZomatoApiCalls.class);
-        mPrefs = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        mPrefs = this.getSharedPreferences(location_shared_preferences_name, Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
     }
 
@@ -496,10 +497,24 @@ public class HomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void locationSetFromUser() {
+    public void locationSetFromUser(LatLng location) {
+
+        saveLocationToSharedPreferences(location);
+
         if (isDeviceLocationSet()) {
             pbLoadCuisines.setVisibility(View.VISIBLE);
             fetchCuisines();
+        }
+    }
+
+    private void saveLocationToSharedPreferences(LatLng location){
+        locationSharedPreferences.setLocation(location);
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        if (locationSharedPreferences.userHasLocationsSet()) {
+            String json = gson.toJson(locationSharedPreferences.getUsersLocation());
+            prefsEditor.putString(getLocationPreferencesKey(), json);
+            prefsEditor.commit();
         }
     }
 
@@ -513,10 +528,10 @@ public class HomeActivity extends AppCompatActivity
         String json = mPrefs.getString(key, "");
         Gson localGson = new Gson();
         LatLng defaultLocation = localGson.fromJson(json, LatLng.class);
+
         if (defaultLocation != null) {
             locationSharedPreferences.setLocation(defaultLocation);
         }
-
     }
 
     private boolean isNetworkAvailable() {

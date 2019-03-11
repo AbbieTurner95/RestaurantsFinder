@@ -1,5 +1,6 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
@@ -79,6 +81,8 @@ public class RestaurantActivity extends AppCompatActivity
     private List<UserReviews.UserReviewsData> zomatoReviews;
     private boolean isFirebaseReviewLoaded, isZomatoReviewLoaded, isFirebaseRestaurant;
 
+    private ProgressDialog loadingDialog;
+
     @BindView(R.id.viewpager)
     ViewPager viewPager;
     @BindView(R.id.tabs)
@@ -89,6 +93,9 @@ public class RestaurantActivity extends AppCompatActivity
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    @BindView(R.id.iv_photo)
+    ImageView mainPhoto;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,9 +226,13 @@ public class RestaurantActivity extends AppCompatActivity
         service = retrofit.create(API.ZomatoApiCalls.class);
 
         restaurantDataAccess = new com.example.abbieturner.restaurantsfinder.FirebaseAccess.Restaurant(this);
+
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setTitle("Loading restaurant...");
     }
 
     private void getRestaurantById() {
+        loadingDialog.show();
         if (isFirebaseRestaurant) {
             restaurantDataAccess.getRestaurant(restaurantId);
         } else {
@@ -234,13 +245,21 @@ public class RestaurantActivity extends AppCompatActivity
                             if (restaurant != null) {
                                 displayRestaurantData();
                             }
+                            hideLoadingDialog();
                         }
 
                         @Override
                         public void onFailure(Call<Restaurant> call, Throwable t) {
                             t.printStackTrace();
+                            hideLoadingDialog();
                         }
                     });
+        }
+    }
+
+    private void hideLoadingDialog(){
+        if(loadingDialog.isShowing()){
+            loadingDialog.dismiss();
         }
     }
 
@@ -251,6 +270,7 @@ public class RestaurantActivity extends AppCompatActivity
             toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
         }
         restaurantInfoInterface.sendRestaurant(restaurant);
+        restaurantMapInterface.sendRestaurant(restaurant);
     }
 
     @Override
@@ -334,6 +354,7 @@ public class RestaurantActivity extends AppCompatActivity
 
     @Override
     public void onRestaurantLoaded(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant, boolean hasFailed) {
+        hideLoadingDialog();
         if (hasFailed || restaurant == null) {
             Toast.makeText(this, "Failed to get restaurant", Toast.LENGTH_LONG).show();
             finish();

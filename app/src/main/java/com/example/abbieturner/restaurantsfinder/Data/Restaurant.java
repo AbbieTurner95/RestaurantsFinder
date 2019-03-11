@@ -117,7 +117,11 @@ public class Restaurant {
     }
 
     public String getPhotos_url() {
-        return photos_url;
+        if(photos_url == null || photos_url.isEmpty()){
+            return "url not set";
+        }else{
+            return photos_url;
+        }
     }
 
     public void setPhotos_url(String photos_url) {

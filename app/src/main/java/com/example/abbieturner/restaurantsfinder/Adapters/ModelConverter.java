@@ -21,6 +21,10 @@ public class ModelConverter {
         return new DatabaseRestaurant(restaurant);
     }
 
+    public DatabaseRestaurant convertToDatabaseRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
+        return new DatabaseRestaurant(restaurant);
+    }
+
     private Restaurant convertToRestaurant(DatabaseRestaurant databaseRestaurant) {
         return new Restaurant(databaseRestaurant);
     }

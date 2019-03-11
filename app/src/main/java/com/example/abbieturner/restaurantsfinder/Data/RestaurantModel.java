@@ -29,6 +29,38 @@ public class RestaurantModel {
         return isFirebaseRestaurant;
     }
 
+    public boolean isMenuSet(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getMenu() != null && !restaurantF.getMenu().isEmpty();
+        }else{
+            return  restaurantZ.getMenu_url() != null && !restaurantZ.getMenu_url().isEmpty();
+        }
+    }
+
+    public String getMenuUrl(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getMenu();
+        }else{
+            return restaurantZ.getMenu_url();
+        }
+    }
+
+    public boolean isWebUrlSet(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getWeb() != null && !restaurantF.getWeb().isEmpty();
+        }else{
+            return restaurantZ.getUrl() != null && !restaurantZ.getUrl().isEmpty();
+        }
+    }
+
+    public String getWebUrl(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getWeb();
+        }else{
+            return restaurantZ.getUrl();
+        }
+    }
+
     public String getId(){
         if(isFirebaseRestaurant){
             return restaurantF.getId();

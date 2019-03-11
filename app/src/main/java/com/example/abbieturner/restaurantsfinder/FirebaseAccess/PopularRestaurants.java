@@ -81,7 +81,7 @@ public class PopularRestaurants {
         });
     }
 
-    public void upsertPopularRestaurant(final String restaurantId, final String restaurantName) {
+    public void upsertPopularRestaurant(final String restaurantId, final String restaurantName, final String pictureUrl) {
         final DatabaseReference df = popularRestaurantsRef.child(restaurantId);
         df.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,7 +92,7 @@ public class PopularRestaurants {
                     restaurant.increateCountByOne();
                     updateRestaurant(restaurant);
                 } else {
-                    createRestaurant(restaurantId, restaurantName);
+                    createRestaurant(restaurantId, restaurantName, pictureUrl);
                 }
 
                 df.removeEventListener(this);
@@ -106,10 +106,10 @@ public class PopularRestaurants {
         });
     }
 
-    private void createRestaurant(String restaurantId, String restaurantName) {
+    private void createRestaurant(String restaurantId, String restaurantName, String pictureUrl) {
         popularRestaurantsRef
                 .child(restaurantId)
-                .setValue(createHashMap(restaurantId, restaurantName))
+                .setValue(createHashMap(restaurantId, restaurantName, pictureUrl))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -153,12 +153,13 @@ public class PopularRestaurants {
         }
     }
 
-    private HashMap createHashMap(String id, String name) {
+    private HashMap createHashMap(String id, String name, String pictureUrl) {
         HashMap hm = new HashMap();
 
         hm.put("restaurantId", id);
         hm.put("count", 1);
         hm.put("name", name);
+        hm.put("pictureUrl", pictureUrl);
 
         return hm;
     }

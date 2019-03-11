@@ -72,7 +72,7 @@ public class GetLocationDialog implements OnMapReadyCallback {
                     ((SettingsActivity)context).locationSetFromUser(location);
                     hideDialog();
                 }else{
-                    ((HomeActivity)context).locationSetFromUser();
+                    ((HomeActivity)context).locationSetFromUser(location);
                     hideDialog();
                 }
             }

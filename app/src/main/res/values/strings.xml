@@ -178,5 +178,6 @@
     <string name="no_reviews">No Reviews</string>
 
     <string name="error_message">Something went wrong. Please try again later.</string>
+    <string name="location_shared_preferences_name">Settings</string>
 
 </resources>

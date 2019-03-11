@@ -112,33 +112,34 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (restaurant.isFirebaseRestaurant()) {
-                    if (restaurant.getFirebaseRestaurant().getMenu() != null && !restaurant.getFirebaseRestaurant().getMenu().isEmpty()) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getMenu()));
-                        startActivity(browserIntent);
-                    } else {
-                        Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getMenu_url()));
-                    startActivity(browserIntent);
+//                if (restaurant.isFirebaseRestaurant()) {
+//                    if (restaurant.getFirebaseRestaurant().getMenu() != null && !restaurant.getFirebaseRestaurant().getMenu().isEmpty()) {
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getMenu()));
+//                        startActivity(browserIntent);
+//                    } else {
+//                        Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
+//                    }
+//                } else {
+//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getMenu_url()));
+//                    startActivity(browserIntent);
+//                }
+
+                if(restaurant.isMenuSet()){
+                    Intent menuIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenuUrl()));
+                    startActivity(menuIntent);
+                }else{
+                    Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
                 }
             }
         });
         btnWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (restaurant.isFirebaseRestaurant()) {
-                    if (restaurant.getFirebaseRestaurant().getWeb() != null && !restaurant.getFirebaseRestaurant().getWeb().isEmpty()) {
-                        Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getWeb()));
-                        startActivity(browserIntent2);
-                    } else {
-                        Toast.makeText(getActivity(), "Web address not set", Toast.LENGTH_LONG).show();
-                    }
-
-                } else {
-                    Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getUrl()));
-                    startActivity(browserIntent2);
+                if(restaurant.isWebUrlSet()){
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getWebUrl()));
+                    startActivity(webIntent);
+                }else{
+                    Toast.makeText(getActivity(), "Web address not set", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -170,6 +171,8 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
         }
+
+
 
         tvStepFreeAccess.setText(restaurant.getStepFreeAccess());
         tvAccessibleToilets.setText(restaurant.getAccessibleToilets());
@@ -225,7 +228,19 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
 
     private void toggleFavouriteRestaurant() {
         if (restaurant.isFirebaseRestaurant()) {
-            //TODO:
+            DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getFirebaseRestaurant());
+
+            if (database.restaurantsDAO().getRestaurant(restaurant.getFirebaseRestaurant().getId()) != null) {
+                popularRestaurantDataAccess.removePopularRestaurant(convertedRestaurant.getId());
+                database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+                Toast.makeText(getActivity(), "Restaurant " + restaurant.getFirebaseRestaurant().getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+                btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
+                database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+                Toast.makeText(getActivity(), "Restaurant " + restaurant.getFirebaseRestaurant().getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+                btnFavourites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
         } else {
             DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getZomatoRestaurant());
 
@@ -235,7 +250,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 Toast.makeText(getActivity(), "Restaurant " + restaurant.getZomatoRestaurant().getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             } else {
-                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName());
+                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
                 database.restaurantsDAO().insertRestaurant(convertedRestaurant);
                 Toast.makeText(getActivity(), "Restaurant " + restaurant.getZomatoRestaurant().getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
                 btnFavourites.setImageResource(R.drawable.ic_favorite_black_24dp);

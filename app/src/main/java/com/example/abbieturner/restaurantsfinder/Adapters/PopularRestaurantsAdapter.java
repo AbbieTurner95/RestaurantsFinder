@@ -43,7 +43,7 @@ public class PopularRestaurantsAdapter extends RecyclerView.Adapter<PopularResta
 
         holder.name.setText(restaurant.getName());
         holder.imageLoader = new PicassoLoader();
-        holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
+        holder.imageLoader.loadImage(holder.avatarView, restaurant.getPictureUrl(), restaurant.getName());
     }
 
     @Override
