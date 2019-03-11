@@ -20,11 +20,13 @@ import android.widget.Toast;
 import com.example.abbieturner.restaurantsfinder.Dialogs.CloseActivityConfirmationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.Friend;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserFirebaseModel;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.UserInstance;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -182,6 +184,11 @@ public class EditProfile extends AppCompatActivity implements UserListener {
             UserInstance.getInstance().setUser(user);
         }
         finish();
+    }
+
+    @Override
+    public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
+
     }
 
     @Override

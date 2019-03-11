@@ -48,6 +48,7 @@ import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.Friend;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserFirebaseModel;
 import com.example.abbieturner.restaurantsfinder.R;
@@ -547,6 +548,11 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void OnUserUpdated(boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
 
     }
 }

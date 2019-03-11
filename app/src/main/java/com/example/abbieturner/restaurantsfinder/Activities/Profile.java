@@ -36,6 +36,7 @@ import com.example.abbieturner.restaurantsfinder.Singletons.UserInstance;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import agency.tango.android.avatarview.IImageLoader;
@@ -54,6 +55,10 @@ public class Profile extends AppCompatActivity
     android.support.v7.widget.Toolbar toolbar;
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    @BindView(R.id.tv_friends)
+    TextView tvFriends;
+    @BindView(R.id.tv_reviews)
+    TextView tvReviews;
     @BindView(R.id.tv_since_date)
     TextView tvSinceDate;
     @BindView(R.id.tv_status)
@@ -96,17 +101,18 @@ public class Profile extends AppCompatActivity
 
         setNewInstances();
         setUpToolbar();
-        getUser();
         setUpReviewsRecyclerView();
         setUpFriendsRecyclerView();
-        loadReviews();
-        loadFriends();
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        displayUserData();
+        getUser();
+        loadFriends();
+        loadReviews();
     }
 
     @Override
@@ -171,11 +177,27 @@ public class Profile extends AppCompatActivity
         }else{
             UserInstance.getInstance().setUser(user);
             displayUserData();
+            if(!isLoggedInProfile()){
+                MenuItem item = toolbar.getMenu().findItem(R.id.action_edit);
+                MenuItem item2 = toolbar.getMenu().findItem(R.id.action_add_friend);
+                item.setVisible(false);
+                item2.setVisible(false);
+            }else{
+                MenuItem item = toolbar.getMenu().findItem(R.id.action_edit);
+                MenuItem item2 = toolbar.getMenu().findItem(R.id.action_add_friend);
+                item.setVisible(true);
+                item2.setVisible(true);
+            }
         }
     }
 
     @Override
     public void OnUserUpdated(boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
 
     }
 
@@ -187,7 +209,13 @@ public class Profile extends AppCompatActivity
             tvStatus.setText(user.getMemberStatus());
 
             imageLoader.loadImage(avatarPersonalPhoto, user.getPictureUrl(), user.getName());
+
+
         }
+    }
+
+    private boolean isLoggedInProfile(){
+        return UserInstance.getInstance().getUser().getId().equals(mAuth.getUid());
     }
 
     private void setUpFriendsRecyclerView(){
@@ -214,22 +242,36 @@ public class Profile extends AppCompatActivity
     }
 
     private void loadReviews(){
-        if(mAuth != null){
-            String userId = mAuth.getUid();
-            if(userId != null || !userId.isEmpty()){
-                reviewsProgressBar.setVisibility(View.VISIBLE);
-                reviewsDataAccess.getUserReviews(userId);
-            }
+//        if(mAuth != null){
+//            String userId = mAuth.getUid();
+//            if(userId != null || !userId.isEmpty()){
+//                reviewsProgressBar.setVisibility(View.VISIBLE);
+//                reviewsDataAccess.getUserReviews(userId);
+//            }
+//        }
+
+        reviewsAdapter.setReviews(new ArrayList<UserReview>());
+        userId = getIntent().getStringExtra(TAG_USER_ID);
+        if(userId != null || !userId.isEmpty()){
+            reviewsProgressBar.setVisibility(View.VISIBLE);
+            reviewsDataAccess.getUserReviews(userId);
         }
     }
 
     private void loadFriends(){
-        if(mAuth != null){
-            String userId = mAuth.getUid();
-            if(userId != null || !userId.isEmpty()){
-                friendsProgressBar.setVisibility(View.VISIBLE);
-                friendsDataAccess.getFriends(userId);
-            }
+//        if(mAuth != null){
+//            String userId = mAuth.getUid();
+//            if(userId != null || !userId.isEmpty()){
+//                friendsProgressBar.setVisibility(View.VISIBLE);
+//                friendsDataAccess.getFriends(userId);
+//            }
+//        }
+
+        friendsAdapter.setList(new ArrayList<Friend>());
+        userId = getIntent().getStringExtra(TAG_USER_ID);
+        if(userId != null || !userId.isEmpty()){
+            friendsProgressBar.setVisibility(View.VISIBLE);
+            friendsDataAccess.getFriends(userId);
         }
     }
 
@@ -245,6 +287,8 @@ public class Profile extends AppCompatActivity
             Toast.makeText(this, "Failed to load reviews.", Toast.LENGTH_LONG).show();
         }else{
             reviewsAdapter.setReviews(userReviews);
+            String r = "Reviews Left - " + userReviews.size();
+            tvReviews.setText(r);
         }
     }
 
@@ -259,7 +303,9 @@ public class Profile extends AppCompatActivity
 
     @Override
     public void onFriendItemClick(Friend friend) {
-        Toast.makeText(this, "Friend clicked.", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Profile.this, Profile.class);
+        intent.putExtra(TAG_USER_ID, friend.getUserId());
+        startActivity(intent);
     }
 
     @Override
@@ -269,8 +315,20 @@ public class Profile extends AppCompatActivity
             Toast.makeText(this, "Failed to load friend", Toast.LENGTH_LONG).show();
         }else{
             if(friends != null){
+                UserInstance.getInstance().setFriends(friends);
                 friendsAdapter.setList(friends);
+                String s = "Friends - " + friends.size();
+                tvFriends.setText(s);
             }
         }
+    }
+
+    @Override
+    public void onCreateFriendCompletes(boolean hasFailed) {
+    }
+
+    @Override
+    public void onRemoveFriendCompleted(String friendId, boolean hasFailed) {
+
     }
 }

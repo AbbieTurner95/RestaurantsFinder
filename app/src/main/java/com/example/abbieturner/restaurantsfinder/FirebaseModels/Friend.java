@@ -1,20 +1,21 @@
 package com.example.abbieturner.restaurantsfinder.FirebaseModels;
 
 public class Friend {
-    private String userId;
+    private String id;
     private String name;
     private String pictureUrl;
+    private String email;
 
     public Friend(){
 
     }
 
     public String getUserId() {
-        return userId;
+        return id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getName() {
@@ -35,5 +36,13 @@ public class Friend {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
