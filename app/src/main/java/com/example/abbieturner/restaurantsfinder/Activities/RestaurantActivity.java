@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.API.API;
@@ -29,6 +30,7 @@ import com.example.abbieturner.restaurantsfinder.Data.ReviewModel;
 import com.example.abbieturner.restaurantsfinder.Data.ReviewSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewPictureDialog;
+import com.example.abbieturner.restaurantsfinder.DownloadImageTask;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RestaurantListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Review;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Reviews;
@@ -95,6 +97,9 @@ public class RestaurantActivity extends AppCompatActivity
     NavigationView navigationView;
     @BindView(R.id.iv_photo)
     ImageView mainPhoto;
+    @BindView(R.id.image_progress_bar)
+    ProgressBar imageProgressBar;
+
 
 
     @Override
@@ -266,6 +271,11 @@ public class RestaurantActivity extends AppCompatActivity
     private void displayRestaurantData() {
         if (restaurant.isFirebaseRestaurant()) {
             toolbar.setTitle(restaurant.getFirebaseRestaurant().getName());
+            if(restaurant.getFirebaseRestaurant().hasPictureUrl()){
+                imageProgressBar.setVisibility(View.VISIBLE);
+                new DownloadImageTask(mainPhoto, imageProgressBar)
+                        .execute(restaurant.getFirebaseRestaurant().getPictureUrl());
+            }
         } else {
             toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
         }

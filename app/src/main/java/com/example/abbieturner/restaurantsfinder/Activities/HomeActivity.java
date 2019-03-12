@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
-    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION, BASE_URL, TAG_USER_ID;
+    private String TAG_RESTAURANT_ID, SHARED_PREFERENCES_DEFAULT_LOCATION, BASE_URL, TAG_USER_ID, TAG_IS_FIREBASE_RESTAURANT;
     private DeviceLocation locationSingleton;
     private API.ZomatoApiCalls service;
     private GetLocationDialog getLocationDialog;
@@ -155,6 +155,7 @@ public class HomeActivity extends AppCompatActivity
         converter = ModelConverter.getInstance();
         TAG_RESTAURANT_ID = getResources().getString(R.string.TAG_RESTAURANT_ID);
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
+        TAG_IS_FIREBASE_RESTAURANT = getResources().getString(R.string.TAG_IS_FIREBASE_RESTAURANT);
         TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
         popularRestaurantsDataAccess = new PopularRestaurants(this);
         locationSingleton = DeviceLocation.getInstance();
@@ -494,7 +495,13 @@ public class HomeActivity extends AppCompatActivity
     public void onRestaurantItemClick(PopularRestaurant restaurant) {
         Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
         intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
+        intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, isFirebaseRestaurantId(restaurant.getRestaurantId()));
         startActivity(intent);
+    }
+
+    private boolean isFirebaseRestaurantId(String restaurantId){
+        final int uuidLength = 36;
+        return restaurantId.length() == uuidLength;
     }
 
     public void locationSetFromUser(LatLng location) {

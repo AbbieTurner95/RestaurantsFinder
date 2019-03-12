@@ -37,6 +37,14 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/food" />
 
+                <ProgressBar
+                    android:id="@+id/image_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:background="@color/progress_bar_background"
+                    android:padding="30dp"/>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

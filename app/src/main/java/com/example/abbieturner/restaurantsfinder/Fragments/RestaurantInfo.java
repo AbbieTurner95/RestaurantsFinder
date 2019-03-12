@@ -1,11 +1,15 @@
 package com.example.abbieturner.restaurantsfinder.Fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +38,9 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     private AppDatabase database;
     private ModelConverter converter;
     private PopularRestaurants popularRestaurantDataAccess;
+    private String[] PERMISSION = {
+            Manifest.permission.CALL_PHONE
+    };
 
     public RestaurantInfo() {
 
@@ -112,18 +119,6 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (restaurant.isFirebaseRestaurant()) {
-//                    if (restaurant.getFirebaseRestaurant().getMenu() != null && !restaurant.getFirebaseRestaurant().getMenu().isEmpty()) {
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getMenu()));
-//                        startActivity(browserIntent);
-//                    } else {
-//                        Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
-//                    }
-//                } else {
-//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getMenu_url()));
-//                    startActivity(browserIntent);
-//                }
-
                 if(restaurant.isMenuSet()){
                     Intent menuIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenuUrl()));
                     startActivity(menuIntent);
@@ -221,9 +216,26 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     }
 
     private void callButtonClicked() {
-//        if (isPermissionGranted()) {
-//            call_action();
-//        }
+        String phoneNumber = restaurant.getPhoneNumber();
+
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            if (checkPermission(Manifest.permission.CALL_PHONE)) {
+                String dial = "tel:" + phoneNumber;
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            } else {
+                requestCallPermission();
+            }
+        } else {
+            Toast.makeText(getContext(), "Phone number not set", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean checkPermission(String permission) {
+        return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCallPermission(){
+        ActivityCompat.requestPermissions(getActivity(), PERMISSION , 1);
     }
 
     private void toggleFavouriteRestaurant() {

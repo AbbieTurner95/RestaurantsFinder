@@ -116,12 +116,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             holder.imageLoader = new PicassoLoader();
             holder.imageLoader.loadImage(holder.avatarView, restaurant.getFirebaseRestaurant().getPictureUrl(), restaurant.getFirebaseRestaurant().getName());
 
-//            holder.favorites.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    toggleFavoriteRestaurant(fr, holder);
-//                }
-//            }); // TODO:
+            holder.favorites.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleFavoriteRestaurant(restaurant, holder);
+                }
+            });
         } else {
             final Restaurant zr = restaurant.getZomatoRestaurant();
 
@@ -146,7 +146,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             holder.favorites.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleFavoriteRestaurant(zr, holder);
+                    toggleFavoriteRestaurant(restaurant, holder);
                 }
             });
         }
@@ -203,20 +203,36 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         void onRestaurantItemClick(RestaurantModel restaurant);
     }
 
-    private void toggleFavoriteRestaurant(Restaurant restaurant, RestaurantsViewHolder holder) {
+    private void toggleFavoriteRestaurant(RestaurantModel restaurant, RestaurantsViewHolder holder) {
 
-        DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant);
+        if(restaurant.isFirebaseRestaurant()){
+            DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getFirebaseRestaurant());
 
-        if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
-            popularRestaurantsDataAccess.removePopularRestaurant(restaurant.getId());
-            database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
-            Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
-            holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-        } else {
-            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName(), restaurant.getPhotos_url());
-            database.restaurantsDAO().insertRestaurant(convertedRestaurant);
-            Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
-            holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
+                popularRestaurantsDataAccess.removePopularRestaurant(convertedRestaurant.getId());
+                database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+                Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+                holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                popularRestaurantsDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
+                database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+                Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
+        }else{
+            DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getZomatoRestaurant());
+
+            if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
+                popularRestaurantsDataAccess.removePopularRestaurant(restaurant.getId());
+                database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+                Toast.makeText(context, "Restaurant " + restaurant.getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+                holder.favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                popularRestaurantsDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
+                database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+                Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+                holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
         }
     }
 }

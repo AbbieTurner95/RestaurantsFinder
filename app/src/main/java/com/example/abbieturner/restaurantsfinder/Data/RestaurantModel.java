@@ -29,6 +29,14 @@ public class RestaurantModel {
         return isFirebaseRestaurant;
     }
 
+    public String getPhoneNumber(){
+        if(isFirebaseRestaurant){
+            return restaurantF.getPhone();
+        }else{
+            return null;
+        }
+    }
+
     public boolean isMenuSet(){
         if(isFirebaseRestaurant){
             return restaurantF.getMenu() != null && !restaurantF.getMenu().isEmpty();
