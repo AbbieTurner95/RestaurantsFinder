@@ -22,10 +22,12 @@ import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
+import com.example.abbieturner.restaurantsfinder.Dialogs.RecommendRestaurantDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -34,13 +36,15 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     private RestaurantModel restaurant;
     private TextView tvAddress, tvRating, tvHasOnlineDelivery, tvPhone, tvStepFreeAccess, tvAccessibleToilets, tvVegan, tvVegetarian, tvGlutenFree, tvDairyFree;
     private View view;
-    private ImageView btnDirection, btnPhone, btnShare, btnFavourites, btnMenu, btnWeb;
+    private ImageView btnDirection, btnPhone, btnShare, btnFavourites, btnMenu, btnWeb, btnRecommend;
     private AppDatabase database;
     private ModelConverter converter;
     private PopularRestaurants popularRestaurantDataAccess;
     private String[] PERMISSION = {
             Manifest.permission.CALL_PHONE
     };
+    private RecommendRestaurantDialog recommendedDialog;
+    private FirebaseAuth mAuth;
 
     public RestaurantInfo() {
 
@@ -68,6 +72,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnFavourites = view.findViewById(R.id.btn_favourites);
         btnMenu = view.findViewById(R.id.btn_menu);
         btnWeb = view.findViewById(R.id.btn_web);
+        btnRecommend = view.findViewById(R.id.btn_recommend);
         tvStepFreeAccess = view.findViewById(R.id.tv_step_free_access);
         tvAccessibleToilets = view.findViewById(R.id.tv_accessible_toilets);
         tvVegan = view.findViewById(R.id.tv_vegan);
@@ -77,6 +82,9 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         database = AppDatabase.getInstance(getActivity());
         converter = ModelConverter.getInstance();
         popularRestaurantDataAccess = new PopularRestaurants(this);
+        mAuth = FirebaseAuth.getInstance();
+        recommendedDialog = new RecommendRestaurantDialog(getContext(), mAuth.getUid());
+
 
         setListeners();
 
@@ -116,6 +124,16 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 toggleFavouriteRestaurant();
             }
         });
+        btnRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isUserLoggedIn()){
+                    openRecommendDialog();
+                }else{
+                    Toast.makeText(getActivity(), "Login reqired", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +156,10 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 }
             }
         });
+    }
+
+    private boolean isUserLoggedIn(){
+        return mAuth.getCurrentUser() != null;
     }
 
     private void displayRestaurantData() {
@@ -285,5 +307,12 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     public void sendRestaurant(RestaurantModel restaurant) {
         this.restaurant = restaurant;
         displayRestaurantData();
+    }
+
+    private void openRecommendDialog(){
+        recommendedDialog.showDialog(restaurant);
+    }
+    private void hideRecommendDialog(){
+        recommendedDialog.hideDialog();
     }
 }

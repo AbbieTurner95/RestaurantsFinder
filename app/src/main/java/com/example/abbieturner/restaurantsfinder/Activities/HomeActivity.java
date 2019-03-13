@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,17 +40,21 @@ import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.FavouriteAdapter;
 import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Adapters.PopularRestaurantsAdapter;
+import com.example.abbieturner.restaurantsfinder.Adapters.RecommendedAdapter;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisine;
 import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RecommendedRestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
+import com.example.abbieturner.restaurantsfinder.FirebaseAccess.RecommendedRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.User;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.Friend;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
+import com.example.abbieturner.restaurantsfinder.FirebaseModels.RecommendedRestaurant;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserFirebaseModel;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
@@ -82,7 +87,9 @@ public class HomeActivity extends AppCompatActivity
         PopularRestaurants.PopularRestaurantsListener,
         PopularRestaurantsAdapter.RestaurantItemClick,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        UserListener {
+        UserListener,
+        RecommendedRestaurantsListener,
+        RecommendedAdapter.RecommendRestaurantClick {
 
     @BindView(R.id.home_popular_recycler_view)
     EmptyRecyclerView popularRecyclerView;
@@ -108,10 +115,18 @@ public class HomeActivity extends AppCompatActivity
     ProgressBar pbLoadCuisines;
 
 
+    @BindView(R.id.home_recommended_recycler_view)
+    EmptyRecyclerView recommendedRecyclerView;
+    @BindView(R.id.recommended_empty_view)
+    LinearLayout recommendedEmptyView;
+    @BindView(R.id.pb_recommended_restaurants)
+    ProgressBar pbRecommendedRestaurants;
+
+
     private List<Restaurant> favoritesRestaurants;
     private FavouriteAdapter favouriteAdapter;
     private PopularRestaurantsAdapter popularAdapter;
-    private LinearLayoutManager favouriteLayoutManager, popularLayoutManager;
+    private LinearLayoutManager favouriteLayoutManager, popularLayoutManager, recommendedLayoutManager;
     private ModelConverter converter;
     private AppDatabase database;
     private PopularRestaurants popularRestaurantsDataAccess;
@@ -127,6 +142,8 @@ public class HomeActivity extends AppCompatActivity
     private FirebaseUser currentUser;
     private User userDataAccess;
     private String location_shared_preferences_name;
+    private RecommendedRestaurants recommendedRestaurantsDataAccess;
+    private RecommendedAdapter recommendedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +159,7 @@ public class HomeActivity extends AppCompatActivity
         setUpProfile();
         setUpPopularRecyclerView();
         setUpFavouritesRecyclerView();
+        setUpRecommendedRecyclerView();
         setUpOnClickListeners();
         getLocationsFromSharedPreferences();
     }
@@ -171,6 +189,7 @@ public class HomeActivity extends AppCompatActivity
         service = retrofit.create(API.ZomatoApiCalls.class);
         mPrefs = this.getSharedPreferences(location_shared_preferences_name, Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
+        recommendedRestaurantsDataAccess = new RecommendedRestaurants(this);
     }
 
 
@@ -191,6 +210,19 @@ public class HomeActivity extends AppCompatActivity
 
     private List<Restaurant> getFavouriteRestaurants() {
         return converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
+    }
+
+    private void setUpRecommendedRecyclerView(){
+        recommendedLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recommendedAdapter = new RecommendedAdapter(this);
+        recommendedAdapter.setList(null);
+        recommendedRecyclerView.setLayoutManager(recommendedLayoutManager);
+
+        recommendedRecyclerView.setEmptyView(recommendedEmptyView);
+        recommendedRecyclerView.setAdapter(recommendedAdapter);
+
+        SnapHelper favouriteSnapHelper = new StartSnapHelper();
+        favouriteSnapHelper.attachToRecyclerView(recommendedRecyclerView);
     }
 
     private void setUpFavouritesRecyclerView() {
@@ -291,6 +323,7 @@ public class HomeActivity extends AppCompatActivity
         favoritesRestaurants = getFavouriteRestaurants();
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         getPopularRestaurants();
+        getRecommendedRestaurants();
 
         if (isDeviceLocationSet()) {
             pbLoadCuisines.setVisibility(View.VISIBLE);
@@ -350,6 +383,13 @@ public class HomeActivity extends AppCompatActivity
         if (isNetworkAvailable()) {
             pbPopularRestaurants.setVisibility(View.VISIBLE);
             popularRestaurantsDataAccess.getPopularRestaurants();
+        }
+    }
+
+    private void getRecommendedRestaurants(){
+        if(isNetworkAvailable() && isUserLoggedIn()){
+            pbRecommendedRestaurants.setVisibility(View.VISIBLE);
+            recommendedRestaurantsDataAccess.getRecommendedRestaurants(mAuth.getUid());
         }
     }
 
@@ -576,5 +616,28 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
 
+    }
+
+    @Override
+    public void OnAddRecommendedRestaurantCompleted(boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnGetRecommendedRestaurantsCompleted(List<RecommendedRestaurant> restaurants, boolean hasFailed) {
+        pbRecommendedRestaurants.setVisibility(View.GONE);
+        if(hasFailed){
+            Toast.makeText(this, "Failed to load recommended restaurants", Toast.LENGTH_LONG).show();
+        }else{
+            recommendedAdapter.setList(restaurants);
+        }
+    }
+
+    @Override
+    public void onRecommendRestaurantClick(RecommendedRestaurant restaurant) {
+        Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
+        intent.putExtra(TAG_RESTAURANT_ID, restaurant.getRestaurantId());
+        intent.putExtra(TAG_IS_FIREBASE_RESTAURANT, isFirebaseRestaurantId(restaurant.getRestaurantId()));
+        startActivity(intent);
     }
 }
