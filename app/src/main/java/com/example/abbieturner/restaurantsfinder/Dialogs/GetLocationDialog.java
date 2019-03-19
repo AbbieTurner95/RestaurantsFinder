@@ -63,6 +63,21 @@ public class GetLocationDialog implements OnMapReadyCallback {
             }
         });
 
+        TextView btnSet = mView.findViewById(R.id.btn_set);
+        btnSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationSingleton.setLocation(location);
+                if(isSettingActivity){
+                    ((SettingsActivity)context).locationSetFromUser(location);
+                    hideDialog();
+                }else{
+                    ((HomeActivity)context).locationSetFromUser(location);
+                    hideDialog();
+                }
+            }
+        });
+
         mBuilder.setView(mView);
         dialog = mBuilder.create();
 

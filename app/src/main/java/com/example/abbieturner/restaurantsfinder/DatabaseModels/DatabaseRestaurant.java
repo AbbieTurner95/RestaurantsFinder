@@ -17,6 +17,7 @@ public class DatabaseRestaurant {
     private String id;
     private String name, url, cuisines, currency, photos_url, menu_url, featured_image;
     private int average_cost_for_two, price_range, has_online_delivery;
+    private boolean stepsFreeAccess, accessibleToilets, vegan, vegetarian, glutenFree, dairyFree;
 
     /////////////////////////////////////////////////////
     ////////// --- LOCATION PARAMETERS --- //////////////
@@ -31,6 +32,43 @@ public class DatabaseRestaurant {
     private String aggregate_rating, rating_text, rating_color, votes;
 
     public DatabaseRestaurant() {
+
+    }
+
+    public DatabaseRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+        this.id = restaurant.getId();
+        this.name = restaurant.getName();
+        this.url = restaurant.getWeb();
+        this.cuisines = restaurant.getCuisine();
+        this.average_cost_for_two = 0;
+        this.price_range = 0;
+        this.currency = "";
+        this.photos_url = restaurant.getPictureUrl();
+        this.menu_url = restaurant.getMenu();
+        this.featured_image = "";
+        this.has_online_delivery = (restaurant.getDelivery() == true ? 1 : 0);
+
+        this.address = restaurant.getAddress();
+        this.locality = "";
+        this.city = "";
+        this.city_id = 0;
+        this.latitude = restaurant.getLat().toString();
+        this.longitude = restaurant.getLng().toString();
+        this.zipcode = "";
+        this.country_id = 0;
+        this.locality_verbose = "";
+
+        this.aggregate_rating = restaurant.getRating().toString();
+        this.rating_text = "";
+        this.rating_color = "";
+        this.votes = "";
+
+        this.stepsFreeAccess = restaurant.getStepsFreeAccess();
+        this.accessibleToilets = restaurant.getAccessibleToilets();
+        this.vegan = restaurant.getVegan();
+        this.vegetarian = restaurant.getVegetarian();
+        this.glutenFree = restaurant.getGlutenFree();
+        this.dairyFree = restaurant.getDairyFree();
 
     }
 
@@ -61,6 +99,7 @@ public class DatabaseRestaurant {
         this.rating_text = restaurant.getUser_rating().getRating_text();
         this.rating_color = restaurant.getUser_rating().getRating_color();
         this.votes = restaurant.getUser_rating().getVotes();
+
     }
 
 
@@ -267,5 +306,53 @@ public class DatabaseRestaurant {
 
     public void setVotes(String votes) {
         this.votes = votes;
+    }
+
+    public boolean isStepsFreeAccess() {
+        return stepsFreeAccess;
+    }
+
+    public void setStepsFreeAccess(boolean stepsFreeAccess) {
+        this.stepsFreeAccess = stepsFreeAccess;
+    }
+
+    public boolean isAccessibleToilets() {
+        return accessibleToilets;
+    }
+
+    public void setAccessibleToilets(boolean accessibleToilets) {
+        this.accessibleToilets = accessibleToilets;
+    }
+
+    public boolean isVegan() {
+        return vegan;
+    }
+
+    public void setVegan(boolean vegan) {
+        this.vegan = vegan;
+    }
+
+    public boolean isVegetarian() {
+        return vegetarian;
+    }
+
+    public void setVegetarian(boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
+
+    public boolean isGlutenFree() {
+        return glutenFree;
+    }
+
+    public void setGlutenFree(boolean glutenFree) {
+        this.glutenFree = glutenFree;
+    }
+
+    public boolean isDairyFree() {
+        return dairyFree;
+    }
+
+    public void setDairyFree(boolean dairyFree) {
+        this.dairyFree = dairyFree;
     }
 }

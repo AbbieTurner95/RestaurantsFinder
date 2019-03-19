@@ -183,4 +183,8 @@ public class Restaurant {
     public void setDairyFree(Boolean dairyFree) {
         this.dairyFree = dairyFree;
     }
+
+    public boolean hasPictureUrl(){
+        return pictureUrl != null && !pictureUrl.isEmpty();
+    }
 }

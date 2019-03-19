@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private LocationSharedPreferences locationSharedPreferences;
     private String SHARED_PREFERENCES_DEFAULT_LOCATION;
+    private String location_shared_preferences_name;
 
     @BindView(R.id.btn_manage_default_location)
     TextView btnManageDefaultLocation;
@@ -120,12 +121,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setNewInstances() {
+        location_shared_preferences_name = getResources().getString(R.string.location_shared_preferences_name);
         mAuth = FirebaseAuth.getInstance();
         locationDialog = new GetLocationDialog(this, true);
         DeviceLocation locationSingleton = DeviceLocation.getInstance();
         gson = new Gson();
         //sharedPreferences = getPreferences(MODE_PRIVATE);
-        sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(location_shared_preferences_name, Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
     }
@@ -138,11 +140,6 @@ public class SettingsActivity extends AppCompatActivity {
             String json = gson.toJson(locationSharedPreferences.getUsersLocation());
             prefsEditor.putString(getLocationPreferencesKey(), json);
             prefsEditor.commit();
-
-            String key = getLocationPreferencesKey();
-            String jsonn = sharedPreferences.getString(key, "");
-            Gson localGson = new Gson();
-            LatLng defaultLocation = localGson.fromJson(jsonn, LatLng.class);
         }
     }
 

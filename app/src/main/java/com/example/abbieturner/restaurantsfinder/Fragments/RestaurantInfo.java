@@ -1,11 +1,15 @@
 package com.example.abbieturner.restaurantsfinder.Fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +22,12 @@ import com.example.abbieturner.restaurantsfinder.Adapters.ModelConverter;
 import com.example.abbieturner.restaurantsfinder.Data.RestaurantModel;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
+import com.example.abbieturner.restaurantsfinder.Dialogs.RecommendRestaurantDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.PopularRestaurants;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.PopularRestaurant;
 import com.example.abbieturner.restaurantsfinder.Interfaces.ISendRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -30,10 +36,15 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     private RestaurantModel restaurant;
     private TextView tvAddress, tvRating, tvHasOnlineDelivery, tvPhone, tvStepFreeAccess, tvAccessibleToilets, tvVegan, tvVegetarian, tvGlutenFree, tvDairyFree;
     private View view;
-    private ImageView btnDirection, btnPhone, btnShare, btnFavourites, btnMenu, btnWeb;
+    private ImageView btnDirection, btnPhone, btnShare, btnFavourites, btnMenu, btnWeb, btnRecommend;
     private AppDatabase database;
     private ModelConverter converter;
     private PopularRestaurants popularRestaurantDataAccess;
+    private String[] PERMISSION = {
+            Manifest.permission.CALL_PHONE
+    };
+    private RecommendRestaurantDialog recommendedDialog;
+    private FirebaseAuth mAuth;
 
     public RestaurantInfo() {
 
@@ -61,6 +72,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnFavourites = view.findViewById(R.id.btn_favourites);
         btnMenu = view.findViewById(R.id.btn_menu);
         btnWeb = view.findViewById(R.id.btn_web);
+        btnRecommend = view.findViewById(R.id.btn_recommend);
         tvStepFreeAccess = view.findViewById(R.id.tv_step_free_access);
         tvAccessibleToilets = view.findViewById(R.id.tv_accessible_toilets);
         tvVegan = view.findViewById(R.id.tv_vegan);
@@ -70,6 +82,9 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         database = AppDatabase.getInstance(getActivity());
         converter = ModelConverter.getInstance();
         popularRestaurantDataAccess = new PopularRestaurants(this);
+        mAuth = FirebaseAuth.getInstance();
+        recommendedDialog = new RecommendRestaurantDialog(getContext(), mAuth.getUid());
+
 
         setListeners();
 
@@ -109,39 +124,42 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 toggleFavouriteRestaurant();
             }
         });
+        btnRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isUserLoggedIn()){
+                    openRecommendDialog();
+                }else{
+                    Toast.makeText(getActivity(), "Login reqired", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (restaurant.isFirebaseRestaurant()) {
-                    if (restaurant.getFirebaseRestaurant().getMenu() != null && !restaurant.getFirebaseRestaurant().getMenu().isEmpty()) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getMenu()));
-                        startActivity(browserIntent);
-                    } else {
-                        Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getMenu_url()));
-                    startActivity(browserIntent);
+                if(restaurant.isMenuSet()){
+                    Intent menuIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenuUrl()));
+                    startActivity(menuIntent);
+                }else{
+                    Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
                 }
             }
         });
         btnWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (restaurant.isFirebaseRestaurant()) {
-                    if (restaurant.getFirebaseRestaurant().getWeb() != null && !restaurant.getFirebaseRestaurant().getWeb().isEmpty()) {
-                        Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getFirebaseRestaurant().getWeb()));
-                        startActivity(browserIntent2);
-                    } else {
-                        Toast.makeText(getActivity(), "Web address not set", Toast.LENGTH_LONG).show();
-                    }
-
-                } else {
-                    Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getZomatoRestaurant().getUrl()));
-                    startActivity(browserIntent2);
+                if(restaurant.isWebUrlSet()){
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getWebUrl()));
+                    startActivity(webIntent);
+                }else{
+                    Toast.makeText(getActivity(), "Web address not set", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private boolean isUserLoggedIn(){
+        return mAuth.getCurrentUser() != null;
     }
 
     private void displayRestaurantData() {
@@ -170,6 +188,8 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
         }
+
+
 
         tvStepFreeAccess.setText(restaurant.getStepFreeAccess());
         tvAccessibleToilets.setText(restaurant.getAccessibleToilets());
@@ -218,14 +238,43 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     }
 
     private void callButtonClicked() {
-//        if (isPermissionGranted()) {
-//            call_action();
-//        }
+        String phoneNumber = restaurant.getPhoneNumber();
+
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            if (checkPermission(Manifest.permission.CALL_PHONE)) {
+                String dial = "tel:" + phoneNumber;
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            } else {
+                requestCallPermission();
+            }
+        } else {
+            Toast.makeText(getContext(), "Phone number not set", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean checkPermission(String permission) {
+        return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCallPermission(){
+        ActivityCompat.requestPermissions(getActivity(), PERMISSION , 1);
     }
 
     private void toggleFavouriteRestaurant() {
         if (restaurant.isFirebaseRestaurant()) {
-            //TODO:
+            DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getFirebaseRestaurant());
+
+            if (database.restaurantsDAO().getRestaurant(restaurant.getFirebaseRestaurant().getId()) != null) {
+                popularRestaurantDataAccess.removePopularRestaurant(convertedRestaurant.getId());
+                database.restaurantsDAO().deleteRestaurant(convertedRestaurant);
+                Toast.makeText(getActivity(), "Restaurant " + restaurant.getFirebaseRestaurant().getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
+                btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
+                database.restaurantsDAO().insertRestaurant(convertedRestaurant);
+                Toast.makeText(getActivity(), "Restaurant " + restaurant.getFirebaseRestaurant().getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
+                btnFavourites.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
         } else {
             DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getZomatoRestaurant());
 
@@ -235,7 +284,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 Toast.makeText(getActivity(), "Restaurant " + restaurant.getZomatoRestaurant().getName() + " removed from favorite list.", Toast.LENGTH_LONG).show();
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             } else {
-                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName());
+                popularRestaurantDataAccess.upsertPopularRestaurant(convertedRestaurant.getId(), convertedRestaurant.getName(), convertedRestaurant.getPhotos_url());
                 database.restaurantsDAO().insertRestaurant(convertedRestaurant);
                 Toast.makeText(getActivity(), "Restaurant " + restaurant.getZomatoRestaurant().getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
                 btnFavourites.setImageResource(R.drawable.ic_favorite_black_24dp);
@@ -258,5 +307,12 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     public void sendRestaurant(RestaurantModel restaurant) {
         this.restaurant = restaurant;
         displayRestaurantData();
+    }
+
+    private void openRecommendDialog(){
+        recommendedDialog.showDialog(restaurant);
+    }
+    private void hideRecommendDialog(){
+        recommendedDialog.hideDialog();
     }
 }

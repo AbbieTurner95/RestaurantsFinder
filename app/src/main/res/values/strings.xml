@@ -27,6 +27,8 @@
     <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_manage_friends">Manage Friends</string>
     <string name="TAG_RESTAURANT" translatable="false">restaurant_tag</string>
     <string name="google_maps_key" translatable="false">AIzaSyCKKPWYpQHu8ltGxd3bJ5PduRO-qZZIRJQ</string>
     <string name="title_activity_navig" translatable="false">NavigActivity</string>
@@ -35,12 +37,15 @@
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
     <string name="TAG_IS_FIREBASE_RESTAURANT" translatable="false">isFirebaseRestaurant</string>
+    <string name="TAG_USER_ID">TAG_USER_ID</string>
     <string name="home">Home</string>
+    <string name="profile">Profile</string>
     <string name="favorites">Favorites</string>
     <string name="share_app">Share App</string>
     <string name="contact_us">Contact Us</string>
     <string name="log_in_out">Log in/out</string>
     <string name="settings">Settings</string>
+
 
     <string-array name="cuisines_list">
         <item>American</item>
@@ -181,5 +186,8 @@
         <item name="Italian" value="it"/>
         <item name="Spanish" value="es"/>
     </string-array>
+    <string name="error_message">Something went wrong. Please try again later.</string>
+    <string name="restaurant_recommended_msg">Restaurant has been recommended to friend.</string>
+    <string name="location_shared_preferences_name">Settings</string>
 
 </resources>

@@ -1,7 +1,9 @@
 package com.example.abbieturner.restaurantsfinder.FirebaseModels;
 
 public class PopularRestaurant {
-    private String restaurantId, name;
+    private String restaurantId;
+    private String name;
+    private String pictureUrl;
     private int count;
 
     public PopularRestaurant() {
@@ -42,5 +44,17 @@ public class PopularRestaurant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPictureUrl() {
+        if(pictureUrl == null || pictureUrl.isEmpty()){
+            return "url not set";
+        }else{
+            return pictureUrl;
+        }
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.abbieturner.restaurantsfinder.Dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,12 +11,12 @@ import android.widget.TextView;
 import com.example.abbieturner.restaurantsfinder.Activities.CreateRestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.R;
 
-public class CloseCreateRestaurantDialog {
+public class CloseActivityConfirmationDialog {
     private AlertDialog dialog;
     private Context context;
     private LayoutInflater inflater;
 
-    public CloseCreateRestaurantDialog(Context context) {
+    public CloseActivityConfirmationDialog(Context context) {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -62,6 +63,6 @@ public class CloseCreateRestaurantDialog {
     }
 
     private void closeCreateRestaurantActivity() {
-        ((CreateRestaurantActivity) context).finish();
+        ((Activity) context).finish();
     }
 }

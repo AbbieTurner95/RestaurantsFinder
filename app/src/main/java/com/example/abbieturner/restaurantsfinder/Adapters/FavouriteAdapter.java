@@ -74,8 +74,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
             }
         });
 
-      //  holder.imageLoader = new PicassoLoader();
-       // holder.imageLoader.loadImage(holder.avatarView, "sgsd", restaurant.getName());
+        holder.imageLoader = new PicassoLoader();
+        holder.imageLoader.loadImage(holder.avatarView, restaurant.getPhotos_url(), restaurant.getName());
     }
 
     @Override
@@ -129,7 +129,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Rest
             restaurantList.remove(restaurant);
             notifyDataSetChanged();
         } else {
-            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName());
+            popularRestaurantsDataAccess.upsertPopularRestaurant(restaurant.getId(), restaurant.getName(), restaurant.getPhotos_url());
             database.restaurantsDAO().insertRestaurant(convertedRestaurant);
             Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
         }
