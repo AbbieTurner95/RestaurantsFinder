@@ -1,13 +1,17 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -26,7 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private GetLocationDialog locationDialog;
-    private DeviceLocation locationSingleton;
     private Gson gson;
     private SharedPreferences sharedPreferences;
     private LocationSharedPreferences locationSharedPreferences;
@@ -36,6 +41,8 @@ public class SettingsActivity extends AppCompatActivity {
     TextView btnManageDefaultLocation;
     @BindView(R.id.default_location_status)
     TextView defaultLocationStatus;
+    @BindView(R.id.lang_spinner)
+    Spinner lang_spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +55,30 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.languages_settings, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        lang_spinner.setAdapter(adapter);
+
         setNewInstances();
         setListeners();
+        languageSetting();
+    }
+
+    public void languageSetting() {
+        String lang = lang_spinner.getSelectedItem().toString();
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
+        SharedPreferences lang_pref = getSharedPreferences("language", MODE_PRIVATE);
+        SharedPreferences.Editor editor = lang_pref.edit();
+        editor.putString("languageToLoad", lang);
+        editor.apply();
     }
 
 
@@ -93,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
         locationDialog = new GetLocationDialog(this, true);
-        locationSingleton = DeviceLocation.getInstance();
+        DeviceLocation locationSingleton = DeviceLocation.getInstance();
         gson = new Gson();
         //sharedPreferences = getPreferences(MODE_PRIVATE);
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);

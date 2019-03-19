@@ -110,7 +110,9 @@ public class RestaurantsActivity extends AppCompatActivity implements
             cuisineID = intent.getIntExtra("cuisine_id", cuisineID);
             name = intent.getStringExtra(getResources().getString(R.string.TAG_CUISINE_NAME));
             toolbar.setTitle(name);
-        } else { Log.e("ERROR INTENT", "Intent is null!"); }
+        } else {
+            Log.e("ERROR INTENT", "Intent is null!");
+        }
 
         this.setTitle(name);
 

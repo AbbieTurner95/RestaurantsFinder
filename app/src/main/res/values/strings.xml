@@ -172,4 +172,14 @@
     <string name="search">Search</string>
     <string name="no_reviews">No Reviews</string>
 
+
+
+    <string-array name="languages_settings">
+        <item name="English" value="en"/>
+        <item name="French" value="fr"/>
+        <item name="German" value="de"/>
+        <item name="Italian" value="it"/>
+        <item name="Spanish" value="es"/>
+    </string-array>
+
 </resources>
