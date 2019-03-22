@@ -210,7 +210,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Has Delivery"
+                    android:text="@string/has_delivery"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -220,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Accessibility"
+                android:text="@string/accessibility"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -240,7 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Step free access"
+                    android:text="@string/step_free_access"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -271,7 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Restaurant type"
+                android:text="@string/restaurant_type"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -291,7 +291,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Vegan"
+                    android:text="@string/vegan"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -312,7 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Vegetarian"
+                    android:text="@string/vegetarian"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -333,7 +333,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Gluten free"
+                    android:text="@string/gluten_free"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -354,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Dairy free"
+                    android:text="@string/dairy_free"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -365,7 +365,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:paddingLeft="12dp"
                 android:paddingTop="10dp"
-                android:text="Photo"
+                android:text="@string/photo"
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 android:textColor="#000000" />
 
@@ -421,7 +421,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Click to take photo"
+                        android:text="@string/click_to_take_photo"
                         android:textColor="#000000" />
                 </LinearLayout>
 

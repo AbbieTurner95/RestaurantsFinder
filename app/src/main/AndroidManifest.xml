@@ -94,7 +94,14 @@
 
         <activity android:name=".Activities.Profile" />
         <activity android:name=".Activities.EditProfile" />
-        <activity android:name=".Activities.ManageFriends"></activity>
+        <activity android:name=".Activities.ManageFriends"/>
+
+        <service android:name=".FCM.MessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

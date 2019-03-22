@@ -37,7 +37,7 @@
     <string name="title_activity_restaurant_new">Restaurant Activity</string>
 
     <string name="TAG_IS_FIREBASE_RESTAURANT" translatable="false">isFirebaseRestaurant</string>
-    <string name="TAG_USER_ID">TAG_USER_ID</string>
+    <string name="TAG_USER_ID" translatable="false">TAG_USER_ID</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="favorites">Favorites</string>
@@ -103,16 +103,14 @@
     </string-array>
 
 
-    <string name="SHARED_PREFERENCES_DEFAULT_LOCATION">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
+    <string name="SHARED_PREFERENCES_DEFAULT_LOCATION" translatable="false">SHARED_PREFERENCES_DEFAULT_LOCATION</string>
     <string name="cuisine_list">Cuisine List</string>
-    <string name="name">Name</string>
     <string name="address">Address</string>
     <string name="phone">Phone</string>
     <string name="menu_url">Menu Url</string>
     <string name="web_url">Web Url</string>
     <string name="cuisine">Cuisine</string>
     <string name="delivery">Delivery</string>
-    <string name="click_to_take_a_photo">Click to take a photo.</string>
     <string name="photo">Photo</string>
     <string name="dairy_free">Dairy free</string>
     <string name="gluten_free">Gluten free</string>
@@ -144,12 +142,12 @@
     <string name="set_your_location">Set Your Location</string>
     <string name="set">Set</string>
     <string name="new_review">New Review</string>
-    <string name="close_button">close button</string>
+    <string name="close_button" translatable="false">close button</string>
     <string name="rating">Rating</string>
     <string name="review">Review</string>
     <string name="picture">Picture</string>
     <string name="image_taken_from_camera">Image taken from camera.</string>
-    <string name="click_to_take_photo">Click to take photo</string>
+
     <string name="clear">Clear</string>
     <string name="add">Add</string>
     <string name="review_image">Review Image</string>
@@ -186,10 +184,34 @@
         <item name="Italian" >Italian</item>
         <item name="Spanish">Spanish</item>
     </string-array>
+
     <string name="error_message">Something went wrong. Please try again later.</string>
     <string name="restaurant_recommended_msg">Restaurant has been recommended to friend.</string>
     <string name="location_shared_preferences_name">Settings</string>
     <string name="change_application_language">Change Application Language</string>
     <string name="submit_change">Submit Change</string>
+    <string name="click_to_take_photo">Click to take photo</string>
+    <string name="click_to_choose_photo">Click to choose photo</string>
+    <string name="recommended_restaurants">Recommended Restaurants</string>
+    <string name="no_recommended_restaurants">No Recommended Restaurants</string>
+    <string name="users">Users</string>
+    <string name="no_users_found">No users found</string>
+    <string name="friends">Friends</string>
+    <string name="you_don_t_have_any_friends">You don\'t have any friends...</string>
+    <string name="member_name">Member Name</string>
+    <string name="member_since">Member Since</string>
+    <string name="date">Date</string>
+    <string name="member_status">Member Status</string>
+    <string name="gold" translatable="false">Gold</string>
+    <string name="friends_list_is_empty">Friends list is empty</string>
+    <string name="reviews_left">Reviews Left</string>
+    <string name="you_have_not_wrote_any_reviews_yet">You have not wrote any reviews yet.</string>
+    <string name="my_friends">My Friends</string>
+    <string name="empty_list">Empty List</string>
+    <string name="recommend_to_a_friend">Recommend to a friend</string>
+    <string name="reviews_">Reviews:</string>
+    <string name="distance_in_miles">distance in miles</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
 
 </resources>

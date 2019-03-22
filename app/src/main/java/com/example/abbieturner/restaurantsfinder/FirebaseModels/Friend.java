@@ -5,9 +5,25 @@ public class Friend {
     private String name;
     private String pictureUrl;
     private String email;
+    private String token;
 
-    public Friend(){
+    public Friend() {
+    }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUserId() {
@@ -27,9 +43,9 @@ public class Friend {
     }
 
     public String getPictureUrl() {
-        if(pictureUrl == null || pictureUrl.isEmpty()){
+        if (pictureUrl == null || pictureUrl.isEmpty()) {
             return "empty url";
-        }else{
+        } else {
             return pictureUrl;
         }
     }

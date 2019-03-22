@@ -27,7 +27,7 @@ public class RecommendedRestaurants {
         recommendedRef = database.getReference().child("recommended");
     }
 
-    public void getRecommendedRestaurants(String userId){
+    public void getRecommendedRestaurants(String userId) {
         final DatabaseReference ref = recommendedRef.child(userId);
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -52,30 +52,30 @@ public class RecommendedRestaurants {
         });
     }
 
-    public void addRecommendedRestaurant(String userId, String restaurantId, String restaurantName, String pictureUrl){
+    public void addRecommendedRestaurant(String userId, String restaurantId, String restaurantName, String pictureUrl, String token) {
         recommendedRef
                 .child(userId)
                 .child(restaurantId)
-                .setValue(createRestaurantHashMap(restaurantId, restaurantName, pictureUrl))
+                .setValue(createRestaurantHashMap(restaurantId, restaurantName, pictureUrl, token))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    callback.OnAddRecommendedRestaurantCompleted(false);
-                }else{
-                    callback.OnAddRecommendedRestaurantCompleted(true);
-                }
-            }
-        });
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            callback.OnAddRecommendedRestaurantCompleted(false);
+                        } else {
+                            callback.OnAddRecommendedRestaurantCompleted(true);
+                        }
+                    }
+                });
     }
 
-    private HashMap createRestaurantHashMap(String restaurantId, String restaurantName, String pictureUrl){
+    private HashMap createRestaurantHashMap(String restaurantId, String restaurantName, String pictureUrl, String token) {
         HashMap hm = new HashMap();
 
         hm.put("restaurantId", restaurantId);
         hm.put("restaurantName", restaurantName);
         hm.put("pictureUrl", pictureUrl);
-
+        hm.put("token", token);
         return hm;
     }
 }

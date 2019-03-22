@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,6 +36,7 @@ public class User {
     private StorageReference sRef;
     private FirebaseStorage storage;
     private FirebaseAuth mAuth;
+    private String token;
 
     public User(UserListener callback) {
         this.callback = callback;
@@ -42,9 +45,17 @@ public class User {
         storage = FirebaseStorage.getInstance();
         sRef = storage.getReference().child("usersProfilePictures");
         mAuth = FirebaseAuth.getInstance();
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (task.isSuccessful()) {
+                    token = task.getResult().getToken();
+                }
+            }
+        });
     }
 
-    public void getUsers(final String searchTerm){
+    public void getUsers(final String searchTerm) {
         final Query query = usersRef.orderByChild("email").startAt(searchTerm);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -54,7 +65,7 @@ public class User {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Friend user = postSnapshot.getValue(Friend.class);
                     user.setUserId(postSnapshot.getKey());
-                    if(user.getEmail().startsWith(searchTerm)){
+                    if (user.getEmail().startsWith(searchTerm)) {
                         users.add(user);
                     }
                 }
@@ -69,16 +80,16 @@ public class User {
         });
     }
 
-    public void editUser(UserFirebaseModel user){
-        if(user.hasPicture()){
+    public void editUser(UserFirebaseModel user) {
+        if (user.hasPicture()) {
             uploadPicture(user);
-        }else{
+        } else {
             uploadUser(user);
         }
 
     }
 
-    private void uploadPicture(final UserFirebaseModel user){
+    private void uploadPicture(final UserFirebaseModel user) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         user.getPicture().compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
@@ -112,22 +123,23 @@ public class User {
             }
         });
     }
-    private void uploadUser(UserFirebaseModel user){
+
+    private void uploadUser(UserFirebaseModel user) {
         usersRef.child(user.getId())
                 .setValue(createUserHash(user))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             callback.OnUserUpdated(false);
-                        }else{
+                        } else {
                             callback.OnUserUpdated(true);
                         }
                     }
                 });
     }
 
-    public void getUserById(String userId){
+    public void getUserById(String userId) {
         final DatabaseReference u = usersRef.child(userId);
         u.addValueEventListener(new ValueEventListener() {
             @Override
@@ -147,14 +159,14 @@ public class User {
         });
     }
 
-    public void createProfileIfDoesNotExist(final String userId){
+    public void createProfileIfDoesNotExist(final String userId) {
         final DatabaseReference u = usersRef.child(userId);
         u.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserFirebaseModel user = dataSnapshot.getValue(UserFirebaseModel.class);
 
-                if(user == null){
+                if (user == null) {
                     createProfile(userId);
                 }
 
@@ -168,27 +180,27 @@ public class User {
         });
     }
 
-    private void createProfile(String userId){
+    private void createProfile(String userId) {
         usersRef
                 .child(userId)
                 .setValue(createUserHash(new UserFirebaseModel(userId)))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
 //                if(task.isSuccessful()){
 //
 //                }else{
 //
 //                }
-            }
-        });
+                    }
+                });
     }
 
-    private void updateProfile(UserFirebaseModel userFirebaseModel){
+    private void updateProfile(UserFirebaseModel userFirebaseModel) {
 
     }
 
-    private HashMap createUserHash(UserFirebaseModel userFirebaseModel){
+    private HashMap createUserHash(UserFirebaseModel userFirebaseModel) {
         HashMap hm = new HashMap();
 
         hm.put("id", userFirebaseModel.getId());
@@ -197,6 +209,7 @@ public class User {
         hm.put("numberOfReviews", userFirebaseModel.getNumberOfReviews());
         hm.put("pictureUrl", userFirebaseModel.getPictureUrl());
         hm.put("email", mAuth.getCurrentUser().getEmail());
+        hm.put("token", token);
 
         return hm;
     }

@@ -19,7 +19,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/roboto_medium"
             android:textSize="20sp"
-            android:text="My Friends"/>
+            android:text="@string/my_friends"/>
         <ImageView
             android:id="@+id/btn_close_dialog"
             android:layout_width="35dp"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Empty List" />
+                android:text="@string/empty_list" />
         </LinearLayout>
 
         <ProgressBar

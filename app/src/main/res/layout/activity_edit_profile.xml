@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Click to choose photo"
+                android:text="@string/click_to_choose_photo"
                 android:fontFamily="@font/roboto_medium"
                 android:textSize="18sp"/>
         </LinearLayout>

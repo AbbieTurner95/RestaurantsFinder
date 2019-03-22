@@ -24,7 +24,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 
 import java.util.List;
 
-public class RecommendRestaurantDialog implements RecommendFriendsAdapter.RecommendFriendItemClick, FriendsListener,RecommendedRestaurantsListener {
+public class RecommendRestaurantDialog implements RecommendFriendsAdapter.RecommendFriendItemClick, FriendsListener, RecommendedRestaurantsListener {
     private AlertDialog dialog;
     private Context context;
     private LayoutInflater inflater;
@@ -79,7 +79,7 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
-    private void setUpRecyclerView(){
+    private void setUpRecyclerView() {
         friendsLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         friendsAdapter = new RecommendFriendsAdapter(this);
         friendsAdapter.setList(null);
@@ -96,8 +96,8 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         loadFriends();
     }
 
-    private void loadFriends(){
-        if(userId != null && !userId.isEmpty()){
+    private void loadFriends() {
+        if (userId != null && !userId.isEmpty()) {
             progressBarFriends.setVisibility(View.VISIBLE);
             friendsDataAccess.getFriends(userId);
         }
@@ -110,19 +110,19 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     @Override
     public void onRecommendFriendItemClick(Friend friend) {
         progressBarFriends.setVisibility(View.VISIBLE);
-        if(restaurant.isFirebaseRestaurant()){
-            recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl());
-        }else{
-            recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url");
+        if (restaurant.isFirebaseRestaurant()) {
+            recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl(), friend.getToken());
+        } else {
+            recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url", friend.getToken());
         }
     }
 
     @Override
     public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
         progressBarFriends.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this.context, "Failed to load friends", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             friendsAdapter.setList(friends);
         }
 
@@ -141,9 +141,9 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     @Override
     public void OnAddRecommendedRestaurantCompleted(boolean hasFailed) {
         progressBarFriends.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this.context, errorMessage, Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Toast.makeText(this.context, restaurantRecommendedMsg, Toast.LENGTH_LONG).show();
         }
     }

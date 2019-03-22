@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:text="Member Name"/>
+                    android:text="@string/member_name"/>
                 <TextView
                     android:id="@+id/tv_user_name"
                     android:layout_width="0dp"
@@ -47,7 +47,7 @@
                     android:textColor="#000000"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:text="Name"/>
+                    android:text="@string/name"/>
             </LinearLayout>
 
             <LinearLayout
@@ -60,17 +60,17 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:text="Member Since"/>
+                    android:text="@string/member_since"/>
                 <TextView
                     android:id="@+id/tv_since_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:textColor="#000000"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:text="Date"/>
+                    android:text="@string/date"/>
             </LinearLayout>
 
             <LinearLayout
@@ -83,17 +83,17 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:text="Member Status"/>
+                    android:text="@string/member_status"/>
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="#000000"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:text="Gold"/>
+                android:text="@string/gold"/>
         </LinearLayout>
 
     <LinearLayout
@@ -108,7 +108,7 @@
                 android:id="@+id/tv_friends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Friends"
+                android:text="@string/friends"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="Friends list is empty" />
+                        android:text="@string/friends_list_is_empty" />
                 </LinearLayout>
 
                 <ProgressBar
@@ -159,7 +159,7 @@
                 android:id="@+id/tv_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reviews Left"
+                android:text="@string/reviews_left"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -186,7 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="You have not write any review yet." />
+                        android:text="@string/you_have_not_wrote_any_reviews_yet" />
                 </LinearLayout>
 
                 <ProgressBar

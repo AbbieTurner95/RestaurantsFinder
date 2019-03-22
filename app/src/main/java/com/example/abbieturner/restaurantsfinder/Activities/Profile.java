@@ -97,14 +97,10 @@ public class Profile extends BaseActivity
         setContentView(R.layout.nav_bar_profile);
         ButterKnife.bind(this);
 
-
-
         setNewInstances();
         setUpToolbar();
         setUpReviewsRecyclerView();
         setUpFriendsRecyclerView();
-
-
     }
 
     @Override
@@ -209,8 +205,6 @@ public class Profile extends BaseActivity
             tvStatus.setText(user.getMemberStatus());
 
             imageLoader.loadImage(avatarPersonalPhoto, user.getPictureUrl(), user.getName());
-
-
         }
     }
 

@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
                 android:padding="15dp"
-                android:text="Reviews: "
+                android:text="@string/reviews_"
                 android:textSize="20sp" />
 
             <TextView
