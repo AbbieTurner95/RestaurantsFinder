@@ -180,14 +180,16 @@
 
 
     <string-array name="languages_settings">
-        <item name="English" value="en"/>
-        <item name="French" value="fr"/>
-        <item name="German" value="de"/>
-        <item name="Italian" value="it"/>
-        <item name="Spanish" value="es"/>
+        <item name="English">English</item>
+        <item name="French" >French</item>
+        <item name="German" >German</item>
+        <item name="Italian" >Italian</item>
+        <item name="Spanish">Spanish</item>
     </string-array>
     <string name="error_message">Something went wrong. Please try again later.</string>
     <string name="restaurant_recommended_msg">Restaurant has been recommended to friend.</string>
     <string name="location_shared_preferences_name">Settings</string>
+    <string name="change_application_language">Change Application Language</string>
+    <string name="submit_change">Submit Change</string>
 
 </resources>

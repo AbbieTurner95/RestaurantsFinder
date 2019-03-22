@@ -80,7 +80,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HomeActivity extends AppCompatActivity
+public class HomeActivity extends BaseActivity
         implements
         FavouriteAdapter.RestaurantItemClick,
         NavigationView.OnNavigationItemSelectedListener,

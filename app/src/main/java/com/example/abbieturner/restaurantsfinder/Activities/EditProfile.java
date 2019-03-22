@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditProfile extends AppCompatActivity implements UserListener {
+public class EditProfile extends BaseActivity implements UserListener {
 
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;

@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavouritesActivity extends AppCompatActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
+public class FavouritesActivity extends BaseActivity implements FavouriteAdapter.RestaurantItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.favourites_restaurants_recycler_view)
     RecyclerView favouritesRestaurantsRecyclerView;

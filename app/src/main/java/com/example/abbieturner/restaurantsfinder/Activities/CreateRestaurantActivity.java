@@ -39,7 +39,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreateRestaurantActivity extends AppCompatActivity implements
+public class CreateRestaurantActivity extends BaseActivity implements
         OnMapReadyCallback, RestaurantListener {
 
 

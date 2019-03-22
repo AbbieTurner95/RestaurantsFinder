@@ -49,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends BaseActivity {
 
     @BindView(R.id.sign_in_btn)
     Button signin_button;

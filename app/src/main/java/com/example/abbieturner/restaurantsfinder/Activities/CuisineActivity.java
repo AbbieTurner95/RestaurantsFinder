@@ -33,7 +33,7 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CuisineActivity extends AppCompatActivity implements CuisineAdapter.CuisineItemClick, NavigationView.OnNavigationItemSelectedListener {
+public class CuisineActivity extends BaseActivity implements CuisineAdapter.CuisineItemClick, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.adView)
     AdView mAdView;

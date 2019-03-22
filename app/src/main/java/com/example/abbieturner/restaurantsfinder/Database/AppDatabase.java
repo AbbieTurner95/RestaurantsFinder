@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaurant;
 
-@Database(entities = {DatabaseRestaurant.class}, version = 1, exportSchema = false)
+@Database(entities = {DatabaseRestaurant.class}, version = 3, exportSchema = false)
 
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -21,6 +21,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
                         .allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }

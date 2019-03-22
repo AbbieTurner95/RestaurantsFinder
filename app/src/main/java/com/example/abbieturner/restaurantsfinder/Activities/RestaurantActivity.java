@@ -58,7 +58,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RestaurantActivity extends AppCompatActivity
+public class RestaurantActivity extends BaseActivity
         implements ReviewsAdapter.ReviewItemClick, Review.ReviewListener,
         Reviews.ReviewsListener, RestaurantListener, NavigationView.OnNavigationItemSelectedListener {
 

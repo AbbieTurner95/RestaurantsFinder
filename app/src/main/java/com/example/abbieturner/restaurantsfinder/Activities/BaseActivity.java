@@ -1,39 +1,44 @@
 package com.example.abbieturner.restaurantsfinder.Activities;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
+import android.os.LocaleList;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.abbieturner.restaurantsfinder.Utils.SharedPref;
 
-public class BaseActivity extends AppCompatActivity {
+import java.util.Locale;
 
-    private FirebaseAuth mAuth;
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(changeLang(new SharedPref(newBase).getLang(),newBase));
     }
 
-    @Override
-    protected void onPause() {
-        mAuth.signOut();
-        finish();
-        super.onPause();
-    }
+    public static Context changeLang(String language, Context context) {
+        Resources res = context.getResources();
+        Configuration configuration = res.getConfiguration();
+        Locale newLocale = new Locale(language);
 
-    @Override
-    protected void onStop() {
-        mAuth.signOut();
-        finish();
-        super.onStop();
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.setLocale(newLocale);
+            LocaleList localeList = new LocaleList(newLocale);
+            LocaleList.setDefault(localeList);
+            configuration.setLocales(localeList);
+            context = context.createConfigurationContext(configuration);
 
-    @Override
-    protected void onDestroy() {
-        mAuth.signOut();
-        finish();
-        super.onDestroy();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(newLocale);
+            context = context.createConfigurationContext(configuration);
+
+        } else {
+            configuration.locale = newLocale;
+            res.updateConfiguration(configuration, res.getDisplayMetrics());
+        }
+        return context;
+
     }
 }

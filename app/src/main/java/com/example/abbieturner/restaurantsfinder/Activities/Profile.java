@@ -44,7 +44,7 @@ import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Profile extends AppCompatActivity
+public class Profile extends BaseActivity
         implements UserListener, UserReviewsAdapter.UserReviewItemClick,
         Reviews.ReviewsListener, FriendsAdapter.FriendItemClick,
         FriendsListener {
@@ -242,14 +242,6 @@ public class Profile extends AppCompatActivity
     }
 
     private void loadReviews(){
-//        if(mAuth != null){
-//            String userId = mAuth.getUid();
-//            if(userId != null || !userId.isEmpty()){
-//                reviewsProgressBar.setVisibility(View.VISIBLE);
-//                reviewsDataAccess.getUserReviews(userId);
-//            }
-//        }
-
         reviewsAdapter.setReviews(new ArrayList<UserReview>());
         userId = getIntent().getStringExtra(TAG_USER_ID);
         if(userId != null || !userId.isEmpty()){
@@ -259,14 +251,6 @@ public class Profile extends AppCompatActivity
     }
 
     private void loadFriends(){
-//        if(mAuth != null){
-//            String userId = mAuth.getUid();
-//            if(userId != null || !userId.isEmpty()){
-//                friendsProgressBar.setVisibility(View.VISIBLE);
-//                friendsDataAccess.getFriends(userId);
-//            }
-//        }
-
         friendsAdapter.setList(new ArrayList<Friend>());
         userId = getIntent().getStringExtra(TAG_USER_ID);
         if(userId != null || !userId.isEmpty()){

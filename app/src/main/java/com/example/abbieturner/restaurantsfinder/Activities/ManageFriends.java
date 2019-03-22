@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ManageFriends extends AppCompatActivity implements
+public class ManageFriends extends BaseActivity implements
         ManageFriendsAdapter.FriendItemClick,
         UserListener, FriendsListener {
 
@@ -189,7 +189,6 @@ public class ManageFriends extends AppCompatActivity implements
     }
 
     private void removeFriendsAndSelf(List<Friend> users){
-        // remove self
         String email = mAuth.getCurrentUser().getEmail();
 
         Friend f = null;
@@ -199,16 +198,6 @@ public class ManageFriends extends AppCompatActivity implements
             }
         }
         users.remove(f);
-
-//        List<Friend> friends = UserInstance.getInstance().getFriends();
-//        // remove friends
-//
-//
-//        for(Friend friend : friends){
-//            if(containsUser(users, friend.getEmail())){
-//                removeUser(users, friend);
-//            }
-//        }
     }
 
     private boolean containsUser(List<Friend> users, String email){
@@ -224,7 +213,6 @@ public class ManageFriends extends AppCompatActivity implements
     private void removeUser(List<Friend> users, Friend friend){
         Iterator<Friend> itr = users.iterator();
 
-        // remove all even numbers
         while (itr.hasNext()) {
             Friend user = itr.next();
 
@@ -232,11 +220,6 @@ public class ManageFriends extends AppCompatActivity implements
                 users.remove(user);
             }
         }
-//        for(Friend user : users){
-//            if(user.getEmail().equals(friend.getEmail())){
-//                users.remove(user);
-//            }
-//        }
     }
 
     private void addUserToFriends(Friend user){
