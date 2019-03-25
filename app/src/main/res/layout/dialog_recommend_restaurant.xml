@@ -27,9 +27,24 @@
             app:srcCompat="@drawable/ic_close_white_24dp"/>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/btn_send_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Send to all Friends"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="18sp"
+            android:textColor="#ffff"
+            android:visibility="gone"
+            android:background="@color/colorPrimary"
+            android:layout_margin="10dp"
+            android:padding="10dp"/>
 
         <com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView
             android:id="@+id/friends_recycler_view"
@@ -59,6 +74,6 @@
             android:padding="70dp"
             android:visibility="gone" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

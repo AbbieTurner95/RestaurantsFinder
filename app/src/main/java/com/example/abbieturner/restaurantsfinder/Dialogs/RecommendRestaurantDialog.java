@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
@@ -22,6 +23,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseModels.Friend;
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.RecommendedRestaurant;
 import com.example.abbieturner.restaurantsfinder.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecommendRestaurantDialog implements RecommendFriendsAdapter.RecommendFriendItemClick, FriendsListener, RecommendedRestaurantsListener {
@@ -37,6 +39,8 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     private String userId, errorMessage, restaurantRecommendedMsg;
     private RecommendedRestaurants recommendedRestaurantsDataAccess;
     private RestaurantModel restaurant;
+    private TextView btnSendAll;
+    private List<Friend> friends;
 
     public RecommendRestaurantDialog(Context context, String userId) {
         this.context = context;
@@ -49,6 +53,7 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     }
 
     private void createDialog() {
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
         View mView = inflater.inflate(R.layout.dialog_recommend_restaurant, null);
 
@@ -57,7 +62,16 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         progressBarFriends = mView.findViewById(R.id.pb_friends);
         errorMessage = this.context.getResources().getString(R.string.error_message);
         restaurantRecommendedMsg = this.context.getResources().getString(R.string.restaurant_recommended_msg);
+        btnSendAll = mView.findViewById(R.id.btn_send_all);
 
+        btnSendAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRestaurantToAllFriends();
+            }
+        });
+
+        friends = new ArrayList<Friend>();
         setUpRecyclerView();
 
         ImageView close = mView.findViewById(R.id.btn_close_dialog);
@@ -93,6 +107,7 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         this.restaurant = restaurant;
         dialog.show();
 
+        btnSendAll.setVisibility(View.GONE);
         loadFriends();
     }
 
@@ -105,6 +120,17 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
 
     public void hideDialog() {
         dialog.hide();
+    }
+
+    private void sendRestaurantToAllFriends(){
+        for(Friend friend : this.friends){
+            progressBarFriends.setVisibility(View.VISIBLE);
+            if(restaurant.isFirebaseRestaurant()){
+                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl());
+            }else{
+                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url");
+            }
+        }
     }
 
     @Override
@@ -120,12 +146,16 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     @Override
     public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
         progressBarFriends.setVisibility(View.GONE);
-        if (hasFailed) {
+        if(hasFailed){
+            this.friends = new ArrayList<Friend>();
             Toast.makeText(this.context, "Failed to load friends", Toast.LENGTH_LONG).show();
         } else {
             friendsAdapter.setList(friends);
+            if(friends != null && friends.size() > 0){
+                this.friends = friends;
+                btnSendAll.setVisibility(View.VISIBLE);
+            }
         }
-
     }
 
     @Override
