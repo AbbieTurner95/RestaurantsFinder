@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.abbieturner.restaurantsfinder.Activities.HomeActivity;
 import com.example.abbieturner.restaurantsfinder.Activities.RestaurantActivity;
 import com.example.abbieturner.restaurantsfinder.Adapters.EmptyRecyclerView;
 import com.example.abbieturner.restaurantsfinder.Adapters.ReviewsAdapter;
@@ -19,6 +21,8 @@ import com.example.abbieturner.restaurantsfinder.Data.ReviewFirebase;
 import com.example.abbieturner.restaurantsfinder.Data.UserReviews;
 import com.example.abbieturner.restaurantsfinder.Dialogs.ReviewDialog;
 import com.example.abbieturner.restaurantsfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class RestaurantReviews extends Fragment {
     private ReviewsAdapter reviewsAdapter;
     private LinearLayoutManager reviewsLayoutManager;
     private ReviewDialog reviewDialog;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @BindView(R.id.pb_reviews)
     ProgressBar pbReviews;
@@ -70,11 +76,22 @@ public class RestaurantReviews extends Fragment {
         btnAddReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reviewDialog.showDialog();
+                if(isUserLoggedIn()){
+                    reviewDialog.showDialog();
+                }else{
+                    Toast.makeText(getActivity(), "Login required!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         return view;
+    }
+
+    private boolean isUserLoggedIn(){
+        return currentUser != null;
     }
 
     @Override

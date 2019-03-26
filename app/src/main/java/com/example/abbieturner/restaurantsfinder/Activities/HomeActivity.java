@@ -403,8 +403,12 @@ public class HomeActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_create_restaurant) {
-            Intent intent = new Intent(HomeActivity.this, CreateRestaurantActivity.class);
-            startActivity(intent);
+            if(currentUser != null){
+                Intent intent = new Intent(HomeActivity.this, CreateRestaurantActivity.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
