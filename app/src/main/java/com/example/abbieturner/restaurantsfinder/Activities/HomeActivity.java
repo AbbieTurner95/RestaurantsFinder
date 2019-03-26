@@ -46,6 +46,7 @@ import com.example.abbieturner.restaurantsfinder.Data.Cuisines;
 import com.example.abbieturner.restaurantsfinder.Data.CuisinesSingleton;
 import com.example.abbieturner.restaurantsfinder.Data.Restaurant;
 import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
+import com.example.abbieturner.restaurantsfinder.Dialogs.EnterNameDialog;
 import com.example.abbieturner.restaurantsfinder.Dialogs.GetLocationDialog;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.RecommendedRestaurantsListener;
 import com.example.abbieturner.restaurantsfinder.FirebaseAccess.Listeners.UserListener;
@@ -144,6 +145,7 @@ public class HomeActivity extends BaseActivity
     private String location_shared_preferences_name;
     private RecommendedRestaurants recommendedRestaurantsDataAccess;
     private RecommendedAdapter recommendedAdapter;
+    private EnterNameDialog enterNameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +192,7 @@ public class HomeActivity extends BaseActivity
         mPrefs = this.getSharedPreferences(location_shared_preferences_name, Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
         recommendedRestaurantsDataAccess = new RecommendedRestaurants(this);
+        enterNameDialog = new EnterNameDialog(this);
     }
 
 
@@ -603,7 +606,8 @@ public class HomeActivity extends BaseActivity
 
     private void setUpProfile(){
         if(currentUser != null){
-            userDataAccess.createProfileIfDoesNotExist(currentUser.getUid());
+            //userDataAccess.createProfileIfDoesNotExist(currentUser.getUid());
+            userDataAccess.doesProfileExists(currentUser.getUid());
         }
     }
 
@@ -619,6 +623,25 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUserExists(boolean exists, boolean hasFailed) {
+        if(hasFailed){
+            Toast.makeText(HomeActivity.this, "Failed to get account.", Toast.LENGTH_LONG).show();
+
+            mAuth.signOut();
+            finish();
+        }else{
+            if(!exists){
+                enterNameDialog.showDialog();
+            }
+        }
+    }
+
+    @Override
+    public void OnUserCreated(boolean hasFailed) {
 
     }
 

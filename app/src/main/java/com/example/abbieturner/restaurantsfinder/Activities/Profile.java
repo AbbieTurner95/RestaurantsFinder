@@ -197,6 +197,16 @@ public class Profile extends BaseActivity
 
     }
 
+    @Override
+    public void OnUserExists(boolean exists, boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUserCreated(boolean hasFailed) {
+
+    }
+
     private void displayUserData(){
         UserFirebaseModel user = UserInstance.getInstance().getUser();
         if(user != null){

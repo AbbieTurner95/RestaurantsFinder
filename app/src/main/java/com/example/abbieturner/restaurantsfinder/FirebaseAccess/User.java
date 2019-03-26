@@ -55,6 +55,7 @@ public class User {
         });
     }
 
+
     public void getUsers(final String searchTerm) {
         final Query query = usersRef.orderByChild("email").startAt(searchTerm);
         query.addValueEventListener(new ValueEventListener() {
@@ -159,6 +160,47 @@ public class User {
         });
     }
 
+    public void doesProfileExists(String userId){
+        final DatabaseReference u = usersRef.child(userId);
+
+        u.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserFirebaseModel user = dataSnapshot.getValue(UserFirebaseModel.class);
+
+                if (user == null) {
+                    callback.OnUserExists(false, false);
+                }else{
+                    callback.OnUserExists(true, false);
+                }
+
+                u.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.OnUserExists(false, true);
+                u.removeEventListener(this);
+            }
+        });
+    }
+
+    public void createProfile(String userId, String userName){
+        usersRef
+            .child(userId)
+            .setValue(createUserHash(new UserFirebaseModel(userId, userName)))
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    callback.OnUserCreated(false);
+                }else{
+                    callback.OnUserCreated(true);
+                }
+                }
+            });
+    }
+
     public void createProfileIfDoesNotExist(final String userId) {
         final DatabaseReference u = usersRef.child(userId);
         u.addValueEventListener(new ValueEventListener() {
@@ -187,11 +229,7 @@ public class User {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful()){
-//
-//                }else{
-//
-//                }
+
                     }
                 });
     }

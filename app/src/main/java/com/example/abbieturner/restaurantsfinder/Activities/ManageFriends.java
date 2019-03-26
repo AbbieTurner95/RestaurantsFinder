@@ -188,6 +188,16 @@ public class ManageFriends extends BaseActivity implements
         }
     }
 
+    @Override
+    public void OnUserExists(boolean exists, boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUserCreated(boolean hasFailed) {
+
+    }
+
     private void removeFriendsAndSelf(List<Friend> users){
         String email = mAuth.getCurrentUser().getEmail();
 

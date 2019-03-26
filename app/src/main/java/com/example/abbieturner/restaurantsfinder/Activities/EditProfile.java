@@ -192,6 +192,16 @@ public class EditProfile extends BaseActivity implements UserListener {
     }
 
     @Override
+    public void OnUserExists(boolean exists, boolean hasFailed) {
+
+    }
+
+    @Override
+    public void OnUserCreated(boolean hasFailed) {
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

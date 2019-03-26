@@ -24,6 +24,14 @@ public class UserFirebaseModel {
         this.pictureUrl = "";
     }
 
+    public UserFirebaseModel(String id, String name){
+        this.id = id;
+        this.name = name;
+        this.memberSince = DateCreated.getInstance().GetDateCreated();
+        this.numberOfReviews = 0;
+        this.pictureUrl = "";
+    }
+
     public String getId() {
         return id;
     }
