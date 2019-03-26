@@ -126,9 +126,9 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         for(Friend friend : this.friends){
             progressBarFriends.setVisibility(View.VISIBLE);
             if(restaurant.isFirebaseRestaurant()){
-                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl());
+                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl(), friend.getToken());
             }else{
-                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url");
+                recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url", friend.getToken());
             }
         }
     }
