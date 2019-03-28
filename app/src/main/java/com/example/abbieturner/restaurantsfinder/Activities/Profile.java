@@ -2,6 +2,11 @@ package com.example.abbieturner.restaurantsfinder.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +39,10 @@ import com.example.abbieturner.restaurantsfinder.PicassoLoader;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.UserInstance;
 import com.example.abbieturner.restaurantsfinder.StartSnapHelper;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +55,8 @@ import butterknife.ButterKnife;
 public class Profile extends BaseActivity
         implements UserListener, UserReviewsAdapter.UserReviewItemClick,
         Reviews.ReviewsListener, FriendsAdapter.FriendItemClick,
-        FriendsListener {
+        FriendsListener,
+        NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.avatar_personal_photo)
     AvatarView avatarPersonalPhoto;
@@ -69,6 +78,10 @@ public class Profile extends BaseActivity
     LinearLayout reviewsEmptyView;
     @BindView(R.id.pb_reviews)
     ProgressBar reviewsProgressBar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @BindView(R.id.friends_recycler_view)
     EmptyRecyclerView friendsRV;
@@ -89,6 +102,7 @@ public class Profile extends BaseActivity
     private FirebaseAuth mAuth;
     private UserReviewPictureDialog pictureDialog;
     private Friends friendsDataAccess;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +114,16 @@ public class Profile extends BaseActivity
         setUpToolbar();
         setUpReviewsRecyclerView();
         setUpFriendsRecyclerView();
+        setUpNavigationDrawer();
+    }
+
+    private void setUpNavigationDrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -142,6 +166,7 @@ public class Profile extends BaseActivity
         loadingDialog.setTitle(loadingDialogTitle);
         reviewsDataAccess = new Reviews(this);
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         pictureDialog = new UserReviewPictureDialog(this);
         friendsDataAccess = new Friends(this);
     }
@@ -317,5 +342,79 @@ public class Profile extends BaseActivity
     @Override
     public void onRemoveFriendCompleted(String friendId, boolean hasFailed) {
 
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_home) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_fave) {
+            Intent intent = new Intent(this, FavouritesActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_share) {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hey check out this cool restaurant finder app!";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Restaurant Finder!");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+        } else if (id == R.id.nav_contact) {
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
+                    .setTopColorRes(R.color.colorPrimaryDark)
+                    .setButtonsColorRes(R.color.white)
+                    .setIcon(R.drawable.ic_phone_white_24dp)
+                    .setTitle("Select a contact method.")
+                    .setMessage("How do you wish to contact us?")
+                    .setButtonsColor(getResources().getColor(R.color.colorPrimary))
+                    .setPositiveButton("Email", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                    "mailto", "info@restaurantfinder.com", null));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                            startActivity(Intent.createChooser(emailIntent, "Send us an Email"));
+
+                        }
+                    })
+                    .setNegativeButton("Phone Us", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:01145627382"));
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+        } else if (id == R.id.nav_loginout) {
+            if (mAuth != null) {
+                finish();
+                mAuth.signOut();
+                AuthUI.getInstance().signOut(getApplicationContext());
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.action_settings) {
+            Intent intent = new Intent(Profile.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
+                Intent intent = new Intent(Profile.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            } else {
+                Toast.makeText(Profile.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

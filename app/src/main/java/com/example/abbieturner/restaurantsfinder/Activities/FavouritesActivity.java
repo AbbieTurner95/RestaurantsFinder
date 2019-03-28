@@ -142,9 +142,9 @@ public class FavouritesActivity extends BaseActivity implements FavouriteAdapter
 
         } else if (id == R.id.nav_contact) {
             new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.VERTICAL)
-                    .setTopColorRes(R.color.design_default_color_primary)
+                    .setTopColorRes(R.color.colorPrimaryDark)
                     .setButtonsColorRes(R.color.white)
-                    .setIcon(R.drawable.phone_black_24dp)
+                    .setIcon(R.drawable.ic_phone_white_24dp)
                     .setTitle("Select a contact method.")
                     .setMessage("How do you wish to contact us?")
                     .setButtonsColor(getResources().getColor(R.color.colorPrimary))
