@@ -39,7 +39,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.LogInActivity">
+        <activity
+            android:name=".Activities.LogInActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -92,9 +95,18 @@
 
         <service android:name=".Services.LocationService" />
 
-        <activity android:name=".Activities.Profile" />
-        <activity android:name=".Activities.EditProfile" />
-        <activity android:name=".Activities.ManageFriends"/>
+        <activity
+            android:name=".Activities.Profile"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.EditProfile"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ManageFriends"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".FCM.MessageService">
             <intent-filter>
