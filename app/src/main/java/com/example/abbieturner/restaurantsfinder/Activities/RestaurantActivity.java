@@ -283,6 +283,11 @@ public class RestaurantActivity extends BaseActivity
             }
         } else {
             toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
+            if(!restaurant.getZomatoRestaurant().getPhotos_url().isEmpty()){
+                imageProgressBar.setVisibility(View.VISIBLE);
+                new DownloadImageTask(mainPhoto, imageProgressBar)
+                        .execute(restaurant.getZomatoRestaurant().getPhotos_url());
+            }
         }
         restaurantInfoInterface.sendRestaurant(restaurant);
         restaurantMapInterface.sendRestaurant(restaurant);
