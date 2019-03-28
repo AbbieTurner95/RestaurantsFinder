@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
-    android:backgroundTint="@color/colorPrimary"
+    android:backgroundTint="@color/colorPrimaryLight"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -25,10 +25,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="@dimen/eighteen_TS"
-        android:textStyle="bold" />
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="24sp"
+        android:textColor="@color/white" />
 
 </LinearLayout>
