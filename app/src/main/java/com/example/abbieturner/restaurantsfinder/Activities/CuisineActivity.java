@@ -28,6 +28,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
@@ -48,7 +49,9 @@ public class CuisineActivity extends BaseActivity implements CuisineAdapter.Cuis
 
     private CuisineAdapter cuisineAdapter;
     private LinearLayoutManager layoutManager;
+    private String TAG_USER_ID;
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,9 @@ public class CuisineActivity extends BaseActivity implements CuisineAdapter.Cuis
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
+        currentUser = mAuth.getCurrentUser();
 
         navigationView.setNavigationItemSelectedListener(this);
         layoutManager = new LinearLayoutManager(this);
@@ -189,6 +195,14 @@ public class CuisineActivity extends BaseActivity implements CuisineAdapter.Cuis
             Intent intent = new Intent(CuisineActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.nav_profile){
+                if(currentUser != null){
+                    Intent intent = new Intent(CuisineActivity.this, Profile.class);
+                    intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(CuisineActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+                }
         }
 
         drawer.closeDrawer(GravityCompat.START);

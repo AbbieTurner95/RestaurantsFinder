@@ -44,6 +44,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Adapters.RestaurantPagerAdapter;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -84,6 +85,8 @@ public class RestaurantActivity extends BaseActivity
     private boolean isFirebaseReviewLoaded, isZomatoReviewLoaded, isFirebaseRestaurant;
 
     private ProgressDialog loadingDialog;
+    private String TAG_USER_ID;
+    private FirebaseUser currentUser;
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -108,6 +111,9 @@ public class RestaurantActivity extends BaseActivity
         setContentView(R.layout.nav_bar_rest);
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
+
+        TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
+        currentUser = mAuth.getCurrentUser();
 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -451,6 +457,14 @@ public class RestaurantActivity extends BaseActivity
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
+                Intent intent = new Intent(RestaurantActivity.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            } else {
+                Toast.makeText(RestaurantActivity.this, "Login required!", Toast.LENGTH_LONG).show();
             }
         } else if (id == R.id.action_settings) {
             Intent intent = new Intent(RestaurantActivity.this, SettingsActivity.class);

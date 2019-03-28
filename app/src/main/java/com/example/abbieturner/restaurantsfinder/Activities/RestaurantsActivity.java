@@ -31,6 +31,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Singletons.DeviceLocation;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -64,6 +65,8 @@ public class RestaurantsActivity extends BaseActivity implements
     ProgressBar pbRestaurantsLoading;
 
     private int cuisineID;
+    private String TAG_USER_ID;
+    private FirebaseUser currentUser;
     private RestaurantsAdapter restaurantsAdapter;
     private API.ZomatoApiCalls service;
     private String TAG_RESTAURANT_ID, TAG_IS_FIREBASE_RESTAURANT, name;
@@ -83,6 +86,9 @@ public class RestaurantsActivity extends BaseActivity implements
 
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
+
+        TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
+        currentUser = mAuth.getCurrentUser();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -281,6 +287,14 @@ public class RestaurantsActivity extends BaseActivity implements
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Not Logged In.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
+                Intent intent = new Intent(RestaurantsActivity.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            } else {
+                Toast.makeText(RestaurantsActivity.this, "Login required!", Toast.LENGTH_LONG).show();
             }
         } else if (id == R.id.action_settings) {
             Intent intent = new Intent(RestaurantsActivity.this, SettingsActivity.class);

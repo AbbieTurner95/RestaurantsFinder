@@ -23,6 +23,7 @@ import com.example.abbieturner.restaurantsfinder.Database.AppDatabase;
 import com.example.abbieturner.restaurantsfinder.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -43,6 +44,8 @@ public class FavouritesActivity extends BaseActivity implements FavouriteAdapter
 
     Toolbar toolbar;
     private FirebaseAuth mAuth;
+    private String TAG_USER_ID;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class FavouritesActivity extends BaseActivity implements FavouriteAdapter
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
         mAuth = FirebaseAuth.getInstance();
+
+        TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
+        currentUser = mAuth.getCurrentUser();
 
         AppDatabase database = AppDatabase.getInstance(this);
         ModelConverter converter = ModelConverter.getInstance();
@@ -176,6 +182,14 @@ public class FavouritesActivity extends BaseActivity implements FavouriteAdapter
             Intent intent = new Intent(FavouritesActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.nav_profile){
+            if(currentUser != null){
+                Intent intent = new Intent(FavouritesActivity.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            }else{
+                Toast.makeText(FavouritesActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
         }
 
 
