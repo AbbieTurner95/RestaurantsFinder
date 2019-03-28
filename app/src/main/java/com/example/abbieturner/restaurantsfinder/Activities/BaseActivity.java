@@ -15,7 +15,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(changeLang(new SharedPref(newBase).getLang(),newBase));
+        super.attachBaseContext(changeLang(new SharedPref(newBase).getLang(), newBase));
     }
 
     public static Context changeLang(String language, Context context) {

@@ -247,7 +247,7 @@ public class CreateRestaurantActivity extends BaseActivity implements
 
     private void openCloseConformationDialog() {
         closeConfirmationDialog.showDialog();
-}
+    }
 
     private void handleSave() {
         getDataFromUI();

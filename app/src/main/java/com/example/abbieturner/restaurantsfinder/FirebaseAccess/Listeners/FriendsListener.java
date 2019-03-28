@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface FriendsListener {
     void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed);
+
     void onCreateFriendCompletes(boolean hasFailed);
+
     void onRemoveFriendCompleted(String friendId, boolean hasFailed);
 }

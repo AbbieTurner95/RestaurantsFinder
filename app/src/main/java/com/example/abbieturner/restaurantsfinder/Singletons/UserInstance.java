@@ -11,18 +11,18 @@ public class UserInstance {
     private UserFirebaseModel user = null;
     private List<Friend> friends = new ArrayList<>();
 
-    public static UserInstance getInstance(){
+    public static UserInstance getInstance() {
         if (theSingleton == null) {
             theSingleton = new UserInstance();
         }
         return theSingleton;
     }
 
-    public void setUser(UserFirebaseModel _user){
+    public void setUser(UserFirebaseModel _user) {
         user = _user;
     }
 
-    public UserFirebaseModel getUser(){
+    public UserFirebaseModel getUser() {
         return user;
     }
 

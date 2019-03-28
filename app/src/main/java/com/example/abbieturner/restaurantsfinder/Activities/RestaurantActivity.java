@@ -104,7 +104,6 @@ public class RestaurantActivity extends BaseActivity
     ProgressBar imageProgressBar;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -268,8 +267,8 @@ public class RestaurantActivity extends BaseActivity
         }
     }
 
-    private void hideLoadingDialog(){
-        if(loadingDialog.isShowing()){
+    private void hideLoadingDialog() {
+        if (loadingDialog.isShowing()) {
             loadingDialog.dismiss();
         }
     }
@@ -277,7 +276,7 @@ public class RestaurantActivity extends BaseActivity
     private void displayRestaurantData() {
         if (restaurant.isFirebaseRestaurant()) {
             toolbar.setTitle(restaurant.getFirebaseRestaurant().getName());
-            if(restaurant.getFirebaseRestaurant().hasPictureUrl()){
+            if (restaurant.getFirebaseRestaurant().hasPictureUrl()) {
                 imageProgressBar.setVisibility(View.VISIBLE);
                 new DownloadImageTask(mainPhoto, imageProgressBar)
                         .execute(restaurant.getFirebaseRestaurant().getPictureUrl());

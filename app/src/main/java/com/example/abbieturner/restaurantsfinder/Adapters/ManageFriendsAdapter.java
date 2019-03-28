@@ -14,7 +14,7 @@ import com.example.abbieturner.restaurantsfinder.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdapter.FriendViewHolder>{
+public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdapter.FriendViewHolder> {
     private List<Friend> friendsList;
     private final Context context;
     private final FriendItemClick listener;
@@ -28,7 +28,7 @@ public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdap
     }
 
     public void setList(List<Friend> friends) {
-        if(friends != null){
+        if (friends != null) {
             friendsList.clear();
             friendsList.addAll(friends);
             notifyDataSetChanged();
@@ -38,9 +38,9 @@ public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdap
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-        if(isFriend){
+        if (isFriend) {
             view = LayoutInflater.from(context).inflate(R.layout.manage_friend_item, parent, false);
-        }else{
+        } else {
             view = LayoutInflater.from(context).inflate(R.layout.manage_user_item, parent, false);
         }
         return new FriendViewHolder(view);
@@ -73,9 +73,9 @@ public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdap
 
         @Override
         public void onClick(View view) {
-            if(isFriend){
+            if (isFriend) {
                 listener.onFriendItemClick(friendsList.get(getAdapterPosition()));
-            }else{
+            } else {
                 listener.onUserItemClick(friendsList.get(getAdapterPosition()));
             }
 
@@ -84,6 +84,7 @@ public class ManageFriendsAdapter extends RecyclerView.Adapter<ManageFriendsAdap
 
     public interface FriendItemClick {
         void onFriendItemClick(Friend friend);
+
         void onUserItemClick(Friend friend);
     }
 }

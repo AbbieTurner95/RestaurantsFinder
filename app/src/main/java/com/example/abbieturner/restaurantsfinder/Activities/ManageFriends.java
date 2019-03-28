@@ -79,7 +79,7 @@ public class ManageFriends extends BaseActivity implements
         setUpListeners();
     }
 
-    private void setUpListeners(){
+    private void setUpListeners() {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,13 +88,13 @@ public class ManageFriends extends BaseActivity implements
         });
     }
 
-    private void handleSearch(){
+    private void handleSearch() {
         String searchTerm = searchInput.getText().toString();
 
         userDataAccess.getUsers(searchTerm);
     }
 
-    private void setUpToolBar(){
+    private void setUpToolBar() {
         toolbar.setTitle("Manage Friends");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -107,11 +107,11 @@ public class ManageFriends extends BaseActivity implements
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
     }
 
-    private void openCloseConformationDialog(){
+    private void openCloseConformationDialog() {
         closeConfirmationDialog.showDialog();
     }
 
-    private void createNewInstances(){
+    private void createNewInstances() {
         closeConfirmationDialog = new CloseActivityConfirmationDialog(this);
         userDataAccess = new User(this);
         mAuth = FirebaseAuth.getInstance();
@@ -121,18 +121,18 @@ public class ManageFriends extends BaseActivity implements
         loadingDialog = new ProgressDialog(this);
     }
 
-    private void openLoadingDialog(String msg){
+    private void openLoadingDialog(String msg) {
         loadingDialog.setTitle(msg);
         loadingDialog.show();
     }
 
-    private void hideLoadingDialog(){
-        if(loadingDialog.isShowing()){
+    private void hideLoadingDialog() {
+        if (loadingDialog.isShowing()) {
             loadingDialog.dismiss();
         }
     }
 
-    private void setUpFriendsRecyclerView(){
+    private void setUpFriendsRecyclerView() {
         friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         friendsAdapter = new ManageFriendsAdapter(this, this, true);
         friendsAdapter.setList(UserInstance.getInstance().getFriends());
@@ -142,7 +142,7 @@ public class ManageFriends extends BaseActivity implements
         friendsRV.setAdapter(friendsAdapter);
     }
 
-    private void setUpUsersRecyclerView(){
+    private void setUpUsersRecyclerView() {
         usersLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         usersAdapter = new ManageFriendsAdapter(this, this, false);
         usersAdapter.setList(null);
@@ -176,10 +176,10 @@ public class ManageFriends extends BaseActivity implements
 
     @Override
     public void OnUsersLoaded(List<Friend> users, boolean hasFailed) {
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to get users.", Toast.LENGTH_LONG).show();
-        }else{
-            if(users != null){
+        } else {
+            if (users != null) {
                 removeFriendsAndSelf(users);
                 String toastMsg = users.size() == 1 ? "Found: " + users.size() + " user" : "Found: " + users.size() + " users";
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
@@ -198,21 +198,21 @@ public class ManageFriends extends BaseActivity implements
 
     }
 
-    private void removeFriendsAndSelf(List<Friend> users){
+    private void removeFriendsAndSelf(List<Friend> users) {
         String email = mAuth.getCurrentUser().getEmail();
 
         Friend f = null;
-        for(Friend user : users){
-            if(user.getEmail().equals(email)){
+        for (Friend user : users) {
+            if (user.getEmail().equals(email)) {
                 f = user;
             }
         }
         users.remove(f);
     }
 
-    private boolean containsUser(List<Friend> users, String email){
-        for(Friend user : users){
-            if(user.getEmail().equals(email)){
+    private boolean containsUser(List<Friend> users, String email) {
+        for (Friend user : users) {
+            if (user.getEmail().equals(email)) {
                 return true;
             }
         }
@@ -220,7 +220,7 @@ public class ManageFriends extends BaseActivity implements
         return false;
     }
 
-    private void removeUser(List<Friend> users, Friend friend){
+    private void removeUser(List<Friend> users, Friend friend) {
         Iterator<Friend> itr = users.iterator();
 
         while (itr.hasNext()) {
@@ -232,22 +232,22 @@ public class ManageFriends extends BaseActivity implements
         }
     }
 
-    private void addUserToFriends(Friend user){
+    private void addUserToFriends(Friend user) {
         String userId = mAuth.getUid();
         friendsDataAccess.addFriend(userId, user);
     }
 
-    private void removeFriend(Friend friend){
+    private void removeFriend(Friend friend) {
         friendsDataAccess.removeFriend(mAuth.getUid(), friend.getUserId());
     }
 
     @Override
     public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
         hideLoadingDialog();
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to load friends", Toast.LENGTH_LONG).show();
-        }else{
-            if(friends != null){
+        } else {
+            if (friends != null) {
                 UserInstance.getInstance().setFriends(friends);
                 friendsAdapter.setList(friends);
                 handleSearch();
@@ -258,9 +258,9 @@ public class ManageFriends extends BaseActivity implements
     @Override
     public void onCreateFriendCompletes(boolean hasFailed) {
         hideLoadingDialog();
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             openLoadingDialog("Loading friends...");
             friendsDataAccess.getFriends(mAuth.getUid());
         }
@@ -269,24 +269,24 @@ public class ManageFriends extends BaseActivity implements
     @Override
     public void onRemoveFriendCompleted(String friendId, boolean hasFailed) {
         hideLoadingDialog();
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Toast.makeText(this, "Friend removed", Toast.LENGTH_LONG).show();
             removeFriendFromLocal(friendId);
         }
     }
 
-    private void removeFriendFromLocal(String friendId){
+    private void removeFriendFromLocal(String friendId) {
         List<Friend> friends = UserInstance.getInstance().getFriends();
 
         Friend f = null;
-        for(Friend friend : friends){
-            if(friend.getUserId().equals(friendId)){
+        for (Friend friend : friends) {
+            if (friend.getUserId().equals(friendId)) {
                 f = friend;
             }
         }
-        if(f != null){
+        if (f != null) {
             friends.remove(f);
         }
 

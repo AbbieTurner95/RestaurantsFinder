@@ -81,7 +81,7 @@ public class EditProfile extends BaseActivity implements UserListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.action_confirm:
                 handleSave();
                 break;
@@ -89,7 +89,7 @@ public class EditProfile extends BaseActivity implements UserListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setListeners(){
+    private void setListeners() {
         btnClearPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +112,7 @@ public class EditProfile extends BaseActivity implements UserListener {
         });
     }
 
-    private void setUpToolBar(){
+    private void setUpToolBar() {
         toolbar.setTitle("Edit Profile");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -126,12 +126,12 @@ public class EditProfile extends BaseActivity implements UserListener {
 
     }
 
-    private void openCloseConformationDialog(){
+    private void openCloseConformationDialog() {
         closeConfirmationDialog.showDialog();
     }
 
 
-    private void createNewInstances(){
+    private void createNewInstances() {
         errorMsg = getResources().getString(R.string.error_message);
         userDataAccess = new User(this);
         user = UserInstance.getInstance().getUser();
@@ -141,30 +141,30 @@ public class EditProfile extends BaseActivity implements UserListener {
         saveDialog.setTitle("Saving changes...");
     }
 
-    private void loadDataToUI(){
-        if(user != null){
+    private void loadDataToUI() {
+        if (user != null) {
             et_name.setText(user.getName());
-            if(user.hasPicture()){
+            if (user.hasPicture()) {
                 btnChoosePhoto.setVisibility(View.GONE);
                 photoLayout.setVisibility(View.VISIBLE);
                 photoView.setImageBitmap(user.getPicture());
             }
-        }else{
+        } else {
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void handleSave(){
+    private void handleSave() {
         saveDialog.show();
         getDataFromUI();
         saveChanges();
     }
 
-    private void getDataFromUI(){
+    private void getDataFromUI() {
         user.setName(et_name.getText().toString());
     }
 
-    private void saveChanges(){
+    private void saveChanges() {
         userDataAccess.editUser(user);
     }
 
@@ -175,12 +175,12 @@ public class EditProfile extends BaseActivity implements UserListener {
 
     @Override
     public void OnUserUpdated(boolean hasFailed) {
-        if(saveDialog.isShowing()){
+        if (saveDialog.isShowing()) {
             saveDialog.dismiss();
         }
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             UserInstance.getInstance().setUser(user);
         }
         finish();
@@ -205,21 +205,18 @@ public class EditProfile extends BaseActivity implements UserListener {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                if(img != null){
+                if (img != null) {
                     btnChoosePhoto.setVisibility(View.GONE);
                     photoLayout.setVisibility(View.VISIBLE);
                     user.setPicture(img);
                     photoView.setImageBitmap(img);
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

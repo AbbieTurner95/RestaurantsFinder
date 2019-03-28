@@ -38,7 +38,7 @@ public class ReviewFirebase {
     }
 
     public String getPictureUrl() {
-            return pictureUrl;
+        return pictureUrl;
     }
 
     public void setPictureUrl(String pictureUrl) {

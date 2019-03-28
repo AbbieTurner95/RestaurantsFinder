@@ -54,14 +54,14 @@ public class EnterNameDialog implements UserListener {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String enteredName = name.getText().toString();
+                String enteredName = name.getText().toString();
 
-               if(!enteredName.isEmpty() && currentUser != null){
-                   pbCreateProfile.setVisibility(View.VISIBLE);
+                if (!enteredName.isEmpty() && currentUser != null) {
+                    pbCreateProfile.setVisibility(View.VISIBLE);
                     userDataAccess.createProfile(currentUser.getUid(), enteredName);
-               }else{
-                   Toast.makeText(context, "Please enter valid name.", Toast.LENGTH_LONG).show();
-               }
+                } else {
+                    Toast.makeText(context, "Please enter valid name.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -109,9 +109,9 @@ public class EnterNameDialog implements UserListener {
     @Override
     public void OnUserCreated(boolean hasFailed) {
         pbCreateProfile.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(context, "Something went wrong.", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             hideDialog();
             Toast.makeText(context, "Profile created.", Toast.LENGTH_LONG).show();
         }

@@ -78,7 +78,6 @@ public class Profile extends BaseActivity
     ProgressBar friendsProgressBar;
 
 
-
     private IImageLoader imageLoader;
     private String userId, TAG_USER_ID, loadingDialogTitle;
     private User userDataAccess;
@@ -121,7 +120,7 @@ public class Profile extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.action_edit:
                 Intent editIntent = new Intent(Profile.this, EditProfile.class);
                 startActivity(editIntent);
@@ -134,7 +133,7 @@ public class Profile extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void setNewInstances(){
+    private void setNewInstances() {
         imageLoader = new PicassoLoader();
         TAG_USER_ID = getResources().getString(R.string.TAG_USER_ID);
         userDataAccess = new User(this);
@@ -147,38 +146,38 @@ public class Profile extends BaseActivity
         friendsDataAccess = new Friends(this);
     }
 
-    private void setUpToolbar(){
+    private void setUpToolbar() {
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
 
     }
 
-    private void getUser(){
+    private void getUser() {
         userId = getIntent().getStringExtra(TAG_USER_ID);
-        if(userId != null){
+        if (userId != null) {
             loadingDialog.show();
             userDataAccess.getUserById(userId);
-        }else{
+        } else {
             Toast.makeText(this, "Failed to load user", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void OnUserLoaded(UserFirebaseModel user, boolean hasFailed) {
-        if(loadingDialog.isShowing()){
+        if (loadingDialog.isShowing()) {
             loadingDialog.dismiss();
         }
-        if(hasFailed || user == null){
+        if (hasFailed || user == null) {
             Toast.makeText(this, "Failed to load user", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             UserInstance.getInstance().setUser(user);
             displayUserData();
-            if(!isLoggedInProfile()){
+            if (!isLoggedInProfile()) {
                 MenuItem item = toolbar.getMenu().findItem(R.id.action_edit);
                 MenuItem item2 = toolbar.getMenu().findItem(R.id.action_add_friend);
                 item.setVisible(false);
                 item2.setVisible(false);
-            }else{
+            } else {
                 MenuItem item = toolbar.getMenu().findItem(R.id.action_edit);
                 MenuItem item2 = toolbar.getMenu().findItem(R.id.action_add_friend);
                 item.setVisible(true);
@@ -207,9 +206,9 @@ public class Profile extends BaseActivity
 
     }
 
-    private void displayUserData(){
+    private void displayUserData() {
         UserFirebaseModel user = UserInstance.getInstance().getUser();
-        if(user != null){
+        if (user != null) {
             tvUserName.setText(user.getName());
             tvSinceDate.setText(user.getMemberSince());
             tvStatus.setText(user.getMemberStatus());
@@ -218,11 +217,11 @@ public class Profile extends BaseActivity
         }
     }
 
-    private boolean isLoggedInProfile(){
+    private boolean isLoggedInProfile() {
         return UserInstance.getInstance().getUser().getId().equals(mAuth.getUid());
     }
 
-    private void setUpFriendsRecyclerView(){
+    private void setUpFriendsRecyclerView() {
         friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         friendsAdapter = new FriendsAdapter(this);
         friendsAdapter.setList(null);
@@ -235,7 +234,7 @@ public class Profile extends BaseActivity
         popularSnapHelper.attachToRecyclerView(friendsRV);
     }
 
-    private void setUpReviewsRecyclerView(){
+    private void setUpReviewsRecyclerView() {
         reviewsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         reviewsAdapter = new UserReviewsAdapter(this, this);
         reviewsAdapter.setReviews(null);
@@ -245,19 +244,19 @@ public class Profile extends BaseActivity
         reviewsRV.setAdapter(reviewsAdapter);
     }
 
-    private void loadReviews(){
+    private void loadReviews() {
         reviewsAdapter.setReviews(new ArrayList<UserReview>());
         userId = getIntent().getStringExtra(TAG_USER_ID);
-        if(userId != null || !userId.isEmpty()){
+        if (userId != null || !userId.isEmpty()) {
             reviewsProgressBar.setVisibility(View.VISIBLE);
             reviewsDataAccess.getUserReviews(userId);
         }
     }
 
-    private void loadFriends(){
+    private void loadFriends() {
         friendsAdapter.setList(new ArrayList<Friend>());
         userId = getIntent().getStringExtra(TAG_USER_ID);
-        if(userId != null || !userId.isEmpty()){
+        if (userId != null || !userId.isEmpty()) {
             friendsProgressBar.setVisibility(View.VISIBLE);
             friendsDataAccess.getFriends(userId);
         }
@@ -271,9 +270,9 @@ public class Profile extends BaseActivity
     @Override
     public void onUserReviewsLoaded(List<UserReview> userReviews, boolean hasFailed) {
         reviewsProgressBar.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to load reviews.", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             reviewsAdapter.setReviews(userReviews);
             String r = "Reviews Left - " + userReviews.size();
             tvReviews.setText(r);
@@ -299,10 +298,10 @@ public class Profile extends BaseActivity
     @Override
     public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
         friendsProgressBar.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to load friend", Toast.LENGTH_LONG).show();
-        }else{
-            if(friends != null){
+        } else {
+            if (friends != null) {
                 UserInstance.getInstance().setFriends(friends);
                 friendsAdapter.setList(friends);
                 String s = "Friends - " + friends.size();

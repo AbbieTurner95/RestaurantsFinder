@@ -205,7 +205,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     private void toggleFavoriteRestaurant(RestaurantModel restaurant, RestaurantsViewHolder holder) {
 
-        if(restaurant.isFirebaseRestaurant()){
+        if (restaurant.isFirebaseRestaurant()) {
             DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getFirebaseRestaurant());
 
             if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {
@@ -219,7 +219,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
                 Toast.makeText(context, "Restaurant " + restaurant.getName() + " added to favorite list.", Toast.LENGTH_LONG).show();
                 holder.favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
-        }else{
+        } else {
             DatabaseRestaurant convertedRestaurant = converter.convertToDatabaseRestaurant(restaurant.getZomatoRestaurant());
 
             if (database.restaurantsDAO().getRestaurant(restaurant.getId()) != null) {

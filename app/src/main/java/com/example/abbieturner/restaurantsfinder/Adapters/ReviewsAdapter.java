@@ -45,7 +45,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
             }
         }
 
-        if(reviewCounter != null){
+        if (reviewCounter != null) {
             reviewCounter.setText(Integer.toString(reviewsList.size()));
         }
 

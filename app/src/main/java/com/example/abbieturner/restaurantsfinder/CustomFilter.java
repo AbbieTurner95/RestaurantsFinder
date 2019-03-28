@@ -39,7 +39,6 @@ public class CustomFilter extends Filter {
                 RestaurantModel currentRestaurant = filterList.get(i);
 
                 if (mathesSearch(currentRestaurant, constraint)) {
-                    //ADD RESTAURANT TO FILTERED
                     filteredRestaurants.add(filterList.get(i));
                 }
             }
@@ -254,12 +253,6 @@ public class CustomFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-//        adapter.players= (List<Restaurant>) results.values;
-//
-//        //REFRESH
-//        adapter.notifyDataSetChanged();
-
         adapter.setRestaurants((List<RestaurantModel>) results.values);
     }
-
 }

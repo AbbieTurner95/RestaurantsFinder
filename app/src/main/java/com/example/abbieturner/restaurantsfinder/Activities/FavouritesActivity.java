@@ -182,12 +182,12 @@ public class FavouritesActivity extends BaseActivity implements FavouriteAdapter
             Intent intent = new Intent(FavouritesActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.nav_profile){
-            if(currentUser != null){
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
                 Intent intent = new Intent(FavouritesActivity.this, Profile.class);
                 intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
                 startActivity(intent);
-            }else{
+            } else {
                 Toast.makeText(FavouritesActivity.this, "Login required!", Toast.LENGTH_LONG).show();
             }
         }

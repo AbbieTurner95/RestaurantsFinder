@@ -47,9 +47,9 @@ public class PopularRestaurant {
     }
 
     public String getPictureUrl() {
-        if(pictureUrl == null || pictureUrl.isEmpty()){
+        if (pictureUrl == null || pictureUrl.isEmpty()) {
             return "url not set";
-        }else{
+        } else {
             return pictureUrl;
         }
     }

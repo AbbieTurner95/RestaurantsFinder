@@ -4,7 +4,7 @@ import com.example.abbieturner.restaurantsfinder.DatabaseModels.DatabaseRestaura
 
 public class Restaurant {
 
-    private String id,name, url, cuisines, currency, photos_url, menu_url, featured_image;
+    private String id, name, url, cuisines, currency, photos_url, menu_url, featured_image;
     private int average_cost_for_two, price_range, has_online_delivery;
     private RestaurantLocationData location;
     private RestaurantUserRating user_rating;
@@ -117,9 +117,9 @@ public class Restaurant {
     }
 
     public String getPhotos_url() {
-        if(photos_url == null || photos_url.isEmpty()){
+        if (photos_url == null || photos_url.isEmpty()) {
             return "url not set";
-        }else{
+        } else {
             return photos_url;
         }
     }

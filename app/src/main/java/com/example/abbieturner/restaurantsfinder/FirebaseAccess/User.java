@@ -160,7 +160,7 @@ public class User {
         });
     }
 
-    public void doesProfileExists(String userId){
+    public void doesProfileExists(String userId) {
         final DatabaseReference u = usersRef.child(userId);
 
         u.addValueEventListener(new ValueEventListener() {
@@ -170,7 +170,7 @@ public class User {
 
                 if (user == null) {
                     callback.OnUserExists(false, false);
-                }else{
+                } else {
                     callback.OnUserExists(true, false);
                 }
 
@@ -185,20 +185,20 @@ public class User {
         });
     }
 
-    public void createProfile(String userId, String userName){
+    public void createProfile(String userId, String userName) {
         usersRef
-            .child(userId)
-            .setValue(createUserHash(new UserFirebaseModel(userId, userName)))
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    callback.OnUserCreated(false);
-                }else{
-                    callback.OnUserCreated(true);
-                }
-                }
-            });
+                .child(userId)
+                .setValue(createUserHash(new UserFirebaseModel(userId, userName)))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            callback.OnUserCreated(false);
+                        } else {
+                            callback.OnUserCreated(true);
+                        }
+                    }
+                });
     }
 
     public void createProfileIfDoesNotExist(final String userId) {

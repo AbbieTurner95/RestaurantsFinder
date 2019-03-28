@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.abbieturner.restaurantsfinder.R;
 
 import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserReview;
@@ -14,7 +15,7 @@ import com.example.abbieturner.restaurantsfinder.FirebaseModels.UserReview;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserReviewsAdapter extends RecyclerView.Adapter<UserReviewsAdapter.UserReviewViewHolder>{
+public class UserReviewsAdapter extends RecyclerView.Adapter<UserReviewsAdapter.UserReviewViewHolder> {
     private List<UserReview> reviewsList;
     private final Context context;
     private final UserReviewItemClick listener;
@@ -26,7 +27,7 @@ public class UserReviewsAdapter extends RecyclerView.Adapter<UserReviewsAdapter.
     }
 
     public void setReviews(List<UserReview> firebaseReviews) {
-        if(firebaseReviews != null){
+        if (firebaseReviews != null) {
             reviewsList.clear();
             reviewsList.addAll(firebaseReviews);
             notifyDataSetChanged();
@@ -45,7 +46,7 @@ public class UserReviewsAdapter extends RecyclerView.Adapter<UserReviewsAdapter.
 
         holder.reviewMsg.setText(review.getReview());
 
-        if(review.hasPictureUrl()){
+        if (review.hasPictureUrl()) {
             holder.picture.setVisibility(View.VISIBLE);
         }
     }

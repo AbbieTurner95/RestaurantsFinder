@@ -60,7 +60,6 @@ public class RestaurantReviews extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant_reviews, container, false);
 
         ButterKnife.bind(this, view);
@@ -76,9 +75,9 @@ public class RestaurantReviews extends Fragment {
         btnAddReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isUserLoggedIn()){
+                if (isUserLoggedIn()) {
                     reviewDialog.showDialog();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Login required!", Toast.LENGTH_LONG).show();
                 }
             }
@@ -90,7 +89,7 @@ public class RestaurantReviews extends Fragment {
         return view;
     }
 
-    private boolean isUserLoggedIn(){
+    private boolean isUserLoggedIn() {
         return currentUser != null;
     }
 

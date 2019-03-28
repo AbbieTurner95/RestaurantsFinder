@@ -195,14 +195,14 @@ public class CuisineActivity extends BaseActivity implements CuisineAdapter.Cuis
             Intent intent = new Intent(CuisineActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.nav_profile){
-                if(currentUser != null){
-                    Intent intent = new Intent(CuisineActivity.this, Profile.class);
-                    intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(CuisineActivity.this, "Login required!", Toast.LENGTH_LONG).show();
-                }
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
+                Intent intent = new Intent(CuisineActivity.this, Profile.class);
+                intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            } else {
+                Toast.makeText(CuisineActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);

@@ -35,7 +35,7 @@ public class DatabaseRestaurant {
 
     }
 
-    public DatabaseRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant){
+    public DatabaseRestaurant(com.example.abbieturner.restaurantsfinder.FirebaseModels.Restaurant restaurant) {
         this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.url = restaurant.getWeb();

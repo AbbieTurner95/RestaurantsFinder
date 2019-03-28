@@ -5,7 +5,7 @@ public class RecommendedRestaurant {
     private String restaurantName;
     private String pictureUrl;
 
-    public RecommendedRestaurant(){
+    public RecommendedRestaurant() {
 
     }
 

@@ -112,7 +112,7 @@ public class LogInActivity extends BaseActivity {
 
     private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
-        sharedPref=new SharedPref(this);
+        sharedPref = new SharedPref(this);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

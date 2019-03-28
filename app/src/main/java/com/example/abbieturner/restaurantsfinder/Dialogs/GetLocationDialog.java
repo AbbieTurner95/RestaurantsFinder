@@ -68,11 +68,11 @@ public class GetLocationDialog implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 locationSingleton.setLocation(location);
-                if(isSettingActivity){
-                    ((SettingsActivity)context).locationSetFromUser(location);
+                if (isSettingActivity) {
+                    ((SettingsActivity) context).locationSetFromUser(location);
                     hideDialog();
-                }else{
-                    ((HomeActivity)context).locationSetFromUser(location);
+                } else {
+                    ((HomeActivity) context).locationSetFromUser(location);
                     hideDialog();
                 }
             }

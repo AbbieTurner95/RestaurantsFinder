@@ -39,14 +39,14 @@ public class SharedPref {
         return sharedPreferences.getString(USER_TOKEN, "");
     }
 
-    public void setUserLogin(Boolean isLogged){
+    public void setUserLogin(Boolean isLogged) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_KEY, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(USER_LOGIN, isLogged);
         editor.apply();
     }
 
-    public Boolean isUserLogged(){
+    public Boolean isUserLogged() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_KEY, 0);
         return sharedPreferences.getBoolean(USER_LOGIN, false);
     }

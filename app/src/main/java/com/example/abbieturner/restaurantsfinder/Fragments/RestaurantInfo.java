@@ -59,7 +59,7 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         view = inflater.inflate(R.layout.fragment_restaurant_info, container, false);
 
         tvAddress = view.findViewById(R.id.tv_address);
@@ -127,9 +127,9 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnRecommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isUserLoggedIn()){
+                if (isUserLoggedIn()) {
                     openRecommendDialog();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Login reqired", Toast.LENGTH_LONG).show();
                 }
             }
@@ -137,10 +137,10 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(restaurant.isMenuSet()){
+                if (restaurant.isMenuSet()) {
                     Intent menuIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getMenuUrl()));
                     startActivity(menuIntent);
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Menu not set", Toast.LENGTH_LONG).show();
                 }
             }
@@ -148,17 +148,17 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         btnWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(restaurant.isWebUrlSet()){
+                if (restaurant.isWebUrlSet()) {
                     Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getWebUrl()));
                     startActivity(webIntent);
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Web address not set", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private boolean isUserLoggedIn(){
+    private boolean isUserLoggedIn() {
         return mAuth.getCurrentUser() != null;
     }
 
@@ -188,7 +188,6 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
                 btnFavourites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
         }
-
 
 
         tvStepFreeAccess.setText(restaurant.getStepFreeAccess());
@@ -256,8 +255,8 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestCallPermission(){
-        ActivityCompat.requestPermissions(getActivity(), PERMISSION , 1);
+    private void requestCallPermission() {
+        ActivityCompat.requestPermissions(getActivity(), PERMISSION, 1);
     }
 
     private void toggleFavouriteRestaurant() {
@@ -309,10 +308,11 @@ public class RestaurantInfo extends Fragment implements ISendRestaurant, Popular
         displayRestaurantData();
     }
 
-    private void openRecommendDialog(){
+    private void openRecommendDialog() {
         recommendedDialog.showDialog(restaurant);
     }
-    private void hideRecommendDialog(){
+
+    private void hideRecommendDialog() {
         recommendedDialog.hideDialog();
     }
 }

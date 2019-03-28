@@ -215,7 +215,7 @@ public class HomeActivity extends BaseActivity
         return converter.convertToRestaurants(database.restaurantsDAO().getRestaurants());
     }
 
-    private void setUpRecommendedRecyclerView(){
+    private void setUpRecommendedRecyclerView() {
         recommendedLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recommendedAdapter = new RecommendedAdapter(this);
         recommendedAdapter.setList(null);
@@ -389,8 +389,8 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    private void getRecommendedRestaurants(){
-        if(isNetworkAvailable() && isUserLoggedIn()){
+    private void getRecommendedRestaurants() {
+        if (isNetworkAvailable() && isUserLoggedIn()) {
             pbRecommendedRestaurants.setVisibility(View.VISIBLE);
             recommendedRestaurantsDataAccess.getRecommendedRestaurants(mAuth.getUid());
         }
@@ -406,10 +406,10 @@ public class HomeActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_create_restaurant) {
-            if(currentUser != null){
+            if (currentUser != null) {
                 Intent intent = new Intent(HomeActivity.this, CreateRestaurantActivity.class);
                 startActivity(intent);
-            }else{
+            } else {
                 Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
             }
             return true;
@@ -477,12 +477,12 @@ public class HomeActivity extends BaseActivity
             Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.nav_profile){
-            if(currentUser != null){
+        } else if (id == R.id.nav_profile) {
+            if (currentUser != null) {
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
                 intent.putExtra(TAG_USER_ID, mAuth.getCurrentUser().getUid());
                 startActivity(intent);
-            }else{
+            } else {
                 Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
             }
         }
@@ -546,7 +546,7 @@ public class HomeActivity extends BaseActivity
         startActivity(intent);
     }
 
-    private boolean isFirebaseRestaurantId(String restaurantId){
+    private boolean isFirebaseRestaurantId(String restaurantId) {
         final int uuidLength = 36;
         return restaurantId.length() == uuidLength;
     }
@@ -561,7 +561,7 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    private void saveLocationToSharedPreferences(LatLng location){
+    private void saveLocationToSharedPreferences(LatLng location) {
         locationSharedPreferences.setLocation(location);
 
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -604,9 +604,8 @@ public class HomeActivity extends BaseActivity
         locationSingleton.setLocation(null);
     }
 
-    private void setUpProfile(){
-        if(currentUser != null){
-            //userDataAccess.createProfileIfDoesNotExist(currentUser.getUid());
+    private void setUpProfile() {
+        if (currentUser != null) {
             userDataAccess.doesProfileExists(currentUser.getUid());
         }
     }
@@ -628,13 +627,13 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void OnUserExists(boolean exists, boolean hasFailed) {
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(HomeActivity.this, "Failed to get account.", Toast.LENGTH_LONG).show();
 
             mAuth.signOut();
             finish();
-        }else{
-            if(!exists){
+        } else {
+            if (!exists) {
                 enterNameDialog.showDialog();
             }
         }
@@ -653,9 +652,9 @@ public class HomeActivity extends BaseActivity
     @Override
     public void OnGetRecommendedRestaurantsCompleted(List<RecommendedRestaurant> restaurants, boolean hasFailed) {
         pbRecommendedRestaurants.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             Toast.makeText(this, "Failed to load recommended restaurants", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             recommendedAdapter.setList(restaurants);
         }
     }

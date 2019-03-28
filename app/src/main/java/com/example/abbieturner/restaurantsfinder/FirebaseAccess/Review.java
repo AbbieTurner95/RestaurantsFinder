@@ -49,7 +49,7 @@ public class Review {
         }
     }
 
-    private void uploadPicture(final ReviewFirebase newReview, final String restaurantId,final String restaurantName) {
+    private void uploadPicture(final ReviewFirebase newReview, final String restaurantId, final String restaurantName) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         newReview.getPicture().compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
@@ -99,11 +99,11 @@ public class Review {
         });
     }
 
-    private void createUserReview(ReviewFirebase review, String restaurantId, String restaurantName){
-        if(mAuth != null){
+    private void createUserReview(ReviewFirebase review, String restaurantId, String restaurantName) {
+        if (mAuth != null) {
             String userId = mAuth.getUid();
 
-            if(userId != null && !userId.isEmpty()){
+            if (userId != null && !userId.isEmpty()) {
                 userReviewsRef.child(userId).child(review.getId()).setValue(createUserReviewHashMap(review, restaurantId, restaurantName));
             }
         }
@@ -123,7 +123,7 @@ public class Review {
         return hm;
     }
 
-    private HashMap createUserReviewHashMap(ReviewFirebase newReview, String restaurantId, String restaurantName){
+    private HashMap createUserReviewHashMap(ReviewFirebase newReview, String restaurantId, String restaurantName) {
         HashMap hm = new HashMap();
 
         hm.put("reviewId", newReview.getId());

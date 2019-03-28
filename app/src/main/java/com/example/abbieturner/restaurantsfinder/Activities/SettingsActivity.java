@@ -128,7 +128,6 @@ public class SettingsActivity extends BaseActivity {
         locationDialog = new GetLocationDialog(this, true);
         DeviceLocation locationSingleton = DeviceLocation.getInstance();
         gson = new Gson();
-        //sharedPreferences = getPreferences(MODE_PRIVATE);
         sharedPreferences = this.getSharedPreferences(location_shared_preferences_name, Context.MODE_PRIVATE);
         locationSharedPreferences = LocationSharedPreferences.getInstance();
         SHARED_PREFERENCES_DEFAULT_LOCATION = getResources().getString(R.string.SHARED_PREFERENCES_DEFAULT_LOCATION);
@@ -165,12 +164,12 @@ public class SettingsActivity extends BaseActivity {
                     case 3:
                         sharedPref.setLang("it");
                         finish();
-                        startActivity(new Intent(getApplicationContext(),CuisineActivity.class));
+                        startActivity(new Intent(getApplicationContext(), CuisineActivity.class));
                         break;
                     case 4:
                         sharedPref.setLang("es");
                         finish();
-                        startActivity(new Intent(getApplicationContext(),CuisineActivity.class));
+                        startActivity(new Intent(getApplicationContext(), CuisineActivity.class));
                         break;
                 }
             }

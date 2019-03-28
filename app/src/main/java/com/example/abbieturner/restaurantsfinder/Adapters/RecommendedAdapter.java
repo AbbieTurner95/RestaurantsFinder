@@ -16,7 +16,7 @@ import java.util.List;
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 
-public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.RecommendRestaurantViewHolder>{
+public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.RecommendRestaurantViewHolder> {
     private List<RecommendedRestaurant> restaurantsList;
     private final RecommendRestaurantClick listener;
 
@@ -26,7 +26,7 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
     }
 
     public void setList(List<RecommendedRestaurant> restaurantsList) {
-        if(restaurantsList != null){
+        if (restaurantsList != null) {
             this.restaurantsList.clear();
             this.restaurantsList.addAll(restaurantsList);
             notifyDataSetChanged();

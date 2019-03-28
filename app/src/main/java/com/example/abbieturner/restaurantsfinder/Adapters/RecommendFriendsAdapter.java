@@ -16,7 +16,7 @@ import java.util.List;
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 
-public class RecommendFriendsAdapter extends RecyclerView.Adapter<RecommendFriendsAdapter.RecommendFriendViewHolder>{
+public class RecommendFriendsAdapter extends RecyclerView.Adapter<RecommendFriendsAdapter.RecommendFriendViewHolder> {
     private List<Friend> friendsList;
     private final RecommendFriendItemClick listener;
 
@@ -26,7 +26,7 @@ public class RecommendFriendsAdapter extends RecyclerView.Adapter<RecommendFrien
     }
 
     public void setList(List<Friend> friendsList) {
-        if(friendsList != null){
+        if (friendsList != null) {
             this.friendsList.clear();
             this.friendsList.addAll(friendsList);
             notifyDataSetChanged();

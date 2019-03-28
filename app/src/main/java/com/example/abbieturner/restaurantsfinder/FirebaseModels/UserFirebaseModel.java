@@ -12,11 +12,11 @@ public class UserFirebaseModel {
     private Bitmap picture;
     private String pictureUrl;
 
-    public UserFirebaseModel(){
+    public UserFirebaseModel() {
 
     }
 
-    public UserFirebaseModel(String id){
+    public UserFirebaseModel(String id) {
         this.id = id;
         this.name = "";
         this.memberSince = DateCreated.getInstance().GetDateCreated();
@@ -24,7 +24,7 @@ public class UserFirebaseModel {
         this.pictureUrl = "";
     }
 
-    public UserFirebaseModel(String id, String name){
+    public UserFirebaseModel(String id, String name) {
         this.id = id;
         this.name = name;
         this.memberSince = DateCreated.getInstance().GetDateCreated();
@@ -41,7 +41,7 @@ public class UserFirebaseModel {
     }
 
     public String getName() {
-        if(name == null || name.isEmpty()){
+        if (name == null || name.isEmpty()) {
             return "Name not set";
         }
         return name;
@@ -76,7 +76,7 @@ public class UserFirebaseModel {
     }
 
     public String getPictureUrl() {
-        if(pictureUrl == null || pictureUrl.isEmpty()){
+        if (pictureUrl == null || pictureUrl.isEmpty()) {
             return "url not set";
         }
         return pictureUrl;
@@ -86,17 +86,17 @@ public class UserFirebaseModel {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getMemberStatus(){
-        if(numberOfReviews < 5){
+    public String getMemberStatus() {
+        if (numberOfReviews < 5) {
             return "Bronze";
-        }else if(numberOfReviews < 10){
+        } else if (numberOfReviews < 10) {
             return "Silver";
-        }else{
+        } else {
             return "Gold";
         }
     }
 
-    public boolean hasPicture(){
+    public boolean hasPicture() {
         return picture != null;
     }
 }

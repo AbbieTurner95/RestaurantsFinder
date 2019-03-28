@@ -122,12 +122,12 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
         dialog.hide();
     }
 
-    private void sendRestaurantToAllFriends(){
-        for(Friend friend : this.friends){
+    private void sendRestaurantToAllFriends() {
+        for (Friend friend : this.friends) {
             progressBarFriends.setVisibility(View.VISIBLE);
-            if(restaurant.isFirebaseRestaurant()){
+            if (restaurant.isFirebaseRestaurant()) {
                 recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), restaurant.getFirebaseRestaurant().getPictureUrl(), friend.getToken());
-            }else{
+            } else {
                 recommendedRestaurantsDataAccess.addRecommendedRestaurant(friend.getUserId(), restaurant.getId(), restaurant.getName(), "No url", friend.getToken());
             }
         }
@@ -146,12 +146,12 @@ public class RecommendRestaurantDialog implements RecommendFriendsAdapter.Recomm
     @Override
     public void onGetFriendsCompleted(List<Friend> friends, boolean hasFailed) {
         progressBarFriends.setVisibility(View.GONE);
-        if(hasFailed){
+        if (hasFailed) {
             this.friends = new ArrayList<Friend>();
             Toast.makeText(this.context, "Failed to load friends", Toast.LENGTH_LONG).show();
         } else {
             friendsAdapter.setList(friends);
-            if(friends != null && friends.size() > 0){
+            if (friends != null && friends.size() > 0) {
                 this.friends = friends;
                 btnSendAll.setVisibility(View.VISIBLE);
             }

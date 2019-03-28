@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface RecommendedRestaurantsListener {
     void OnAddRecommendedRestaurantCompleted(boolean hasFailed);
+
     void OnGetRecommendedRestaurantsCompleted(List<RecommendedRestaurant> restaurants, boolean hasFailed);
 }

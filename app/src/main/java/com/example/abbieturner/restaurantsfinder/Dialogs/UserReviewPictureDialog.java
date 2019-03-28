@@ -21,16 +21,16 @@ public class UserReviewPictureDialog {
     private ProgressBar progressBar;
     private TextView title;
 
-    public UserReviewPictureDialog(Context context){
+    public UserReviewPictureDialog(Context context) {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         createDialog();
     }
 
-    private void createDialog(){
+    private void createDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView= inflater.inflate(R.layout.dialog_review_picture, null);
+        View mView = inflater.inflate(R.layout.dialog_review_picture, null);
 
         picture = mView.findViewById(R.id.img_picture);
         progressBar = mView.findViewById(R.id.pb_picture);
@@ -43,30 +43,30 @@ public class UserReviewPictureDialog {
         dialog.setCancelable(true);
     }
 
-    public void showDialog(UserReview review){
+    public void showDialog(UserReview review) {
         dialog.show();
 
         displayPicture(review);
     }
-    public void hideDialog(){
+
+    public void hideDialog() {
         dialog.hide();
     }
 
-    private void displayPicture(UserReview review){
+    private void displayPicture(UserReview review) {
         picture.setImageResource(android.R.color.transparent);
         title.setText(review.getRestaurantName());
 
-        if(review.hasPicture()){
+        if (review.hasPicture()) {
             picture.setImageBitmap(review.getPicture());
             picture.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-        }
-        else if(review.hasPictureUrl()){
+        } else if (review.hasPictureUrl()) {
             picture.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
             new DownloadImageTask(picture, progressBar)
                     .execute(review.getPictureUrl());
-        }else{
+        } else {
             Toast.makeText(context, "Review does not have picture.", Toast.LENGTH_LONG).show();
             hideDialog();
         }

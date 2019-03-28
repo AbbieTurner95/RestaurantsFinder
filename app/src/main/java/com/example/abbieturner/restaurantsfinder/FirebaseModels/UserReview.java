@@ -11,7 +11,7 @@ public class UserReview {
     private String userId;
     private Bitmap picture;
 
-    public UserReview(){
+    public UserReview() {
 
     }
 
@@ -63,7 +63,7 @@ public class UserReview {
         this.userId = userId;
     }
 
-    public boolean hasPictureUrl(){
+    public boolean hasPictureUrl() {
         return pictureUrl != null && !pictureUrl.isEmpty();
     }
 
@@ -75,7 +75,7 @@ public class UserReview {
         this.picture = picture;
     }
 
-    public boolean hasPicture(){
+    public boolean hasPicture() {
         return picture != null;
     }
 }

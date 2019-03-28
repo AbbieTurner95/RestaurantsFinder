@@ -28,39 +28,38 @@ public class MessageService extends FirebaseMessagingService {
 
     private SharedPref sharedPref;
     private DatabaseReference mRoofRef;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        sharedPref=new SharedPref(this);
+        sharedPref = new SharedPref(this);
 
-        mRoofRef=FirebaseDatabase.getInstance().getReference();
+        mRoofRef = FirebaseDatabase.getInstance().getReference();
 
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.e(getClass().getSimpleName(),new Gson().toJson(remoteMessage.getNotification()));
-        Log.e(getClass().getSimpleName(),new Gson().toJson(remoteMessage.getData()));
+        Log.e(getClass().getSimpleName(), new Gson().toJson(remoteMessage.getNotification()));
+        Log.e(getClass().getSimpleName(), new Gson().toJson(remoteMessage.getData()));
 
-        if (remoteMessage.getData()!=null){
+        if (remoteMessage.getData() != null) {
             buildNotification(remoteMessage.getData());
         }
     }
 
     private void buildNotification(Map<String, String> messageData) {
 
-        Log.e(getClass().getSimpleName(),new Gson().toJson(messageData));
-        String msg=messageData.get("msg");
-        String title=messageData.get("title");
+        Log.e(getClass().getSimpleName(), new Gson().toJson(messageData));
+        String msg = messageData.get("msg");
+        String title = messageData.get("title");
 
 
-
-
-        Intent intent=new Intent(getApplicationContext(), HomeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 ,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = "NOTIFICATION_CHANNEL_NAME";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -89,7 +88,7 @@ public class MessageService extends FirebaseMessagingService {
         }
 
         assert notificationManager != null;
-        notificationManager.notify(0 , notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
 
 

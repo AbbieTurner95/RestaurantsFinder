@@ -34,6 +34,7 @@ public class Reviews {
 
     public interface ReviewsListener {
         void onReviewsLoaded(List<ReviewFirebase> reviews, boolean hasFailed);
+
         void onUserReviewsLoaded(List<UserReview> userReviews, boolean hasFailed);
     }
 
@@ -60,7 +61,7 @@ public class Reviews {
         });
     }
 
-    public void getUserReviews(String userId){
+    public void getUserReviews(String userId) {
         final DatabaseReference ref = userReviewsRef.child(userId);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
