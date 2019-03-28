@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.abbieturner.restaurantsfinder.R;
 import com.example.abbieturner.restaurantsfinder.Services.LocationService;
+import com.example.abbieturner.restaurantsfinder.Utils.SharedPref;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -67,6 +68,8 @@ public class LogInActivity extends BaseActivity {
     private ProgressDialog progressDialog;
     private GoogleSignInOptions gso;
 
+    private SharedPref sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +112,7 @@ public class LogInActivity extends BaseActivity {
 
     private void setNewInstances() {
         mAuth = FirebaseAuth.getInstance();
+        sharedPref=new SharedPref(this);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -138,9 +142,11 @@ public class LogInActivity extends BaseActivity {
 
             if (resultCode == RESULT_OK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    sharedPref.setUserLogin(true);
                     finish();
                     setEnterExitTransition(new Intent(LogInActivity.this, HomeActivity.class));
                 } else {
+                    sharedPref.setUserLogin(true);
                     finish();
                     startActivity(new Intent(LogInActivity.this, HomeActivity.class));
                 }
@@ -180,10 +186,11 @@ public class LogInActivity extends BaseActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sharedPref.setUserLogin(true);
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                 startActivity(intent);
             } else {
-
+                sharedPref.setUserLogin(true);
                 startActivity(new Intent(LogInActivity.this, HomeActivity.class));
             }
         }
@@ -226,6 +233,7 @@ public class LogInActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            sharedPref.setUserLogin(true);
                             startActivity(new Intent(LogInActivity.this, HomeActivity.class));
                             hideLoginProgressDialog();
                         } else {
