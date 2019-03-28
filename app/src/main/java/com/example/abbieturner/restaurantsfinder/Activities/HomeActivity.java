@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,6 +115,15 @@ public class HomeActivity extends BaseActivity
     ProgressBar pbPopularRestaurants;
     @BindView(R.id.pb_load_cuisines)
     ProgressBar pbLoadCuisines;
+    @BindView(R.id.tv_recommended_login_required)
+    TextView recommendedLoginRequired;
+    @BindView(R.id.tv_favourite_login_required)
+    TextView favouriteLoginRequired;
+
+    @BindView(R.id.favourites_empty_view)
+    LinearLayout favouritesEmptyView;
+    @BindView(R.id.rl_favourites)
+    RelativeLayout rlFavourites;
 
 
     @BindView(R.id.home_recommended_recycler_view)
@@ -234,7 +244,7 @@ public class HomeActivity extends BaseActivity
         favouriteAdapter.setCuisineList(favoritesRestaurants);
         favouritesRecyclerView.setLayoutManager(favouriteLayoutManager);
 
-        View favouritesEmptyView = findViewById(R.id.favourites_empty_view);
+        favouritesEmptyView = findViewById(R.id.favourites_empty_view);
         favouritesRecyclerView.setEmptyView(favouritesEmptyView);
         favouritesRecyclerView.setAdapter(favouriteAdapter);
 
@@ -323,10 +333,25 @@ public class HomeActivity extends BaseActivity
     public void onResume() {
         super.onResume();
 
-        favoritesRestaurants = getFavouriteRestaurants();
-        favouriteAdapter.setCuisineList(favoritesRestaurants);
+
+
+
         getPopularRestaurants();
-        getRecommendedRestaurants();
+
+        if(isUserLoggedIn()){
+            getRecommendedRestaurants();
+
+            favoritesRestaurants = getFavouriteRestaurants();
+            favouriteAdapter.setCuisineList(favoritesRestaurants);
+        }else{
+            recommendedLoginRequired.setVisibility(View.VISIBLE);
+            recommendedEmptyView.setVisibility(View.GONE);
+
+            favouriteLoginRequired.setVisibility(View.VISIBLE);
+            rlFavourites.setVisibility(View.GONE);
+            btnManageFavourites.setVisibility(View.GONE);
+        }
+
 
         if (isDeviceLocationSet()) {
             pbLoadCuisines.setVisibility(View.VISIBLE);
@@ -425,8 +450,13 @@ public class HomeActivity extends BaseActivity
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_fave) {
-            Intent intent = new Intent(this, FavouritesActivity.class);
-            startActivity(intent);
+            if(isUserLoggedIn()){
+                Intent intent = new Intent(this, FavouritesActivity.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(HomeActivity.this, "Login required!", Toast.LENGTH_LONG).show();
+            }
+
         } else if (id == R.id.nav_share) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
