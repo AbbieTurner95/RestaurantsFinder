@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -51,19 +50,21 @@
             android:id="@+id/ll_choose_photo"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="vertical"
+            android:background="@drawable/my_border"
             android:gravity="center"
-            android:background="@drawable/my_border">
+            android:orientation="vertical">
+
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                app:srcCompat="@drawable/ic_photo_camera_24dp"/>
+                app:srcCompat="@drawable/ic_photo_camera_24dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/click_to_choose_photo"
                 android:fontFamily="@font/roboto_medium"
-                android:textSize="18sp"/>
+                android:text="@string/click_to_choose_photo"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -71,14 +72,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
+
             <ImageView
                 android:id="@+id/iv_clear_photo"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/ic_close_white_24dp"
-                android:background="@color/colorPrimary"/>
+                android:layout_alignParentRight="true"
+                android:background="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_close_white_24dp" />
+
             <ImageView
                 android:id="@+id/iv_photo"
                 android:layout_width="match_parent"

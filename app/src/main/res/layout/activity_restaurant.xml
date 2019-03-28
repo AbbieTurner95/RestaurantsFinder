@@ -41,9 +41,9 @@
                     android:id="@+id/image_progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     android:background="@color/progress_bar_background"
-                    android:padding="30dp"/>
+                    android:padding="30dp"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"

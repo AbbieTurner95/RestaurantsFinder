@@ -552,7 +552,6 @@ public class HomeActivity extends BaseActivity
     }
 
     public void locationSetFromUser(LatLng location) {
-
         saveLocationToSharedPreferences(location);
 
         if (isDeviceLocationSet()) {

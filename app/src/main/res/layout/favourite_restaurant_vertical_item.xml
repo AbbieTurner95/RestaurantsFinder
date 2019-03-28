@@ -20,8 +20,8 @@
             android:id="@+id/avatar_view"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             app:av_border_color="@color/avatar_border"
             app:av_border_width="2dp"
             app:av_text_size_percentage="35" />
@@ -30,19 +30,19 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/favourite_restaurant_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="3"
                 android:gravity="start"
                 android:text="@string/name"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -56,8 +56,8 @@
             android:id="@+id/btn_favourites"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_margin="10dp"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
     </LinearLayout>
