@@ -283,7 +283,8 @@ public class RestaurantActivity extends BaseActivity
             }
         } else {
             toolbar.setTitle(restaurant.getZomatoRestaurant().getName());
-            if(!restaurant.getZomatoRestaurant().getPhotos_url().isEmpty()){
+            if(!restaurant.getZomatoRestaurant().getPhotos_url().isEmpty() &&
+                    !restaurant.getZomatoRestaurant().getPhotos_url().startsWith("https://www.zomato") ){
                 imageProgressBar.setVisibility(View.VISIBLE);
                 new DownloadImageTask(mainPhoto, imageProgressBar)
                         .execute(restaurant.getZomatoRestaurant().getPhotos_url());
